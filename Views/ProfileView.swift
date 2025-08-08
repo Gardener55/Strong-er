@@ -10,7 +10,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @State private var profile = UserProfile()
+    @EnvironmentObject var userProfileService: UserProfileService
     @State private var showingSettings = false
     
     var body: some View {
@@ -28,21 +28,21 @@ struct ProfileView: View {
                                     .foregroundColor(.white)
                             )
                         
-                        Text(profile.name.isEmpty ? "Your Name" : profile.name)
+                        Text(userProfileService.userProfile.name.isEmpty ? "Your Name" : userProfileService.userProfile.name)
                             .font(.title2)
                             .fontWeight(.semibold)
                         
-                        Text(profile.fitnessLevel.rawValue)
+                        Text(userProfileService.userProfile.fitnessLevel.rawValue)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                     
                     // Stats Cards
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                        ProfileStatCard(title: "Weight", value: String(format: "%.1f", profile.weight) + " kg", icon: "scalemass")
-                        ProfileStatCard(title: "Height", value: String(format: "%.0f", profile.height) + " cm", icon: "ruler")
-                        ProfileStatCard(title: "Age", value: "\(profile.age)", icon: "calendar")
-                        ProfileStatCard(title: "Weekly Goals", value: "\(profile.workoutDaysPerWeek) days", icon: "target")
+                        ProfileStatCard(title: "Weight", value: String(format: "%.1f", userProfileService.userProfile.weight) + " kg", icon: "scalemass")
+                        ProfileStatCard(title: "Height", value: String(format: "%.0f", userProfileService.userProfile.height) + " cm", icon: "ruler")
+                        ProfileStatCard(title: "Age", value: "\(userProfileService.userProfile.age)", icon: "calendar")
+                        ProfileStatCard(title: "Weekly Goals", value: "\(userProfileService.userProfile.workoutDaysPerWeek) days", icon: "target")
                     }
                     
                     // Goals Section
@@ -51,7 +51,7 @@ struct ProfileView: View {
                             .font(.headline)
                         
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 8) {
-                            ForEach(profile.goals, id: \.self) { goal in
+                            ForEach(userProfileService.userProfile.goals, id: \.self) { goal in
                                 Text(goal.rawValue)
                                     .font(.caption)
                                     .padding(.horizontal, 12)
@@ -75,7 +75,7 @@ struct ProfileView: View {
                 }
             }
             .sheet(isPresented: $showingSettings) {
-                ProfileEditView(profile: $profile)
+                ProfileEditView(profile: $userProfileService.userProfile)
             }
         }
     }
@@ -187,15 +187,8 @@ struct ProfileEditView: View {
             .navigationTitle("Edit Profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        // Save profile
+                    Button("Done") {
                         dismiss()
                     }
                 }
