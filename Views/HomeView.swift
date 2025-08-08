@@ -12,6 +12,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var showingAIWorkout = false
+    @State private var showingSettings = false
     
     var body: some View {
         NavigationView {
@@ -36,8 +37,20 @@ struct HomeView: View {
                 .padding()
             }
             .navigationTitle("Fitness Tracker")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingSettings = true
+                    }) {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
             .sheet(isPresented: $showingAIWorkout) {
                 AIWorkoutView()
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
             }
         }
     }
