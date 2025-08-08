@@ -1,0 +1,196 @@
+//
+//  WorkoutListView.swift
+//  FitnessTracker
+//
+//  Created by Evan Cohen on 8/8/25.
+//
+
+
+// Views/WorkoutListView.swift
+import SwiftUI
+
+struct WorkoutListView: View {
+    @EnvironmentObject var workoutManager: WorkoutManager
+    @State private var showingCreateWorkout = false
+    
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(workoutManager.workoutHistory) { workout in
+                    NavigationLink(destination: WorkoutDetailView(workout: workout)) {
+                        WorkoutListRow(workout: workout)
+                    }
+                }
+                .onDelete(perform: deleteWorkouts)
+            }
+            .navigationTitle("Workouts")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showingCreateWorkout = true }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $showingCreateWorkout) {
+                CreateWorkoutView()
+            }
+        }
+    }
+    
+    private func deleteWorkouts(at offsets: IndexSet) {
+        for index in offsets {
+            let workout = workoutManager.workoutHistory[index]
+            workoutManager.deleteWorkout(workout)
+        }
+    }
+}
+
+struct WorkoutListRow: View {
+    let workout: Workout
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(workout.name)
+                .font(.headline)
+            
+            Text(workout.date, style: .date)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            HStack {
+                Text("\(workout.exercises.count) exercises")
+                
+                if let duration = workout.duration {
+                    Text("• \(formatDuration(duration))")
+                }
+                
+                Spacer()
+                
+                if workout.isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                }
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 2)
+    }
+    
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .abbreviated
+        return formatter.string(from: duration) ?? ""
+    }
+}
+
+struct WorkoutDetailView: View {
+    let workout: Workout
+    @EnvironmentObject var workoutManager: WorkoutManager
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Workout Info
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(workout.name)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    
+                    Text(workout.date, style: .date)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
+                    if let duration = workout.duration {
+                        Text("Duration: \(formatDuration(duration))")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                // Exercises
+                LazyVStack(spacing: 12) {
+                    ForEach(workout.exercises) { exercise in
+                        WorkoutExerciseDetailView(workoutExercise: exercise)
+                    }
+                }
+                
+                // Notes
+                if !workout.notes.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Notes")
+                            .font(.headline)
+                        
+                        Text(workout.notes)
+                            .font(.body)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+                    }
+                }
+            }
+            .padding()
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Repeat") {
+                    workoutManager.startWorkout(workout)
+                }
+            }
+        }
+    }
+    
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .full
+        return formatter.string(from: duration) ?? ""
+    }
+}
+
+struct WorkoutExerciseDetailView: View {
+    let workoutExercise: WorkoutExercise
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(workoutExercise.exercise.name)
+                .font(.headline)
+            
+            ForEach(Array(workoutExercise.sets.enumerated()), id: \.offset) { index, set in
+                HStack {
+                    Text("Set \(index + 1):")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Text("\(set.reps) reps")
+                        .font(.caption)
+                    
+                    if let weight = set.weight, weight > 0 {
+                        Text("@ \(weight, specifier: "%.1f") kg")
+                            .font(.caption)
+                    }
+                    
+                    Spacer()
+                    
+                    if set.completed {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .font(.caption)
+                    }
+                }
+            }
+            
+            if !workoutExercise.notes.isEmpty {
+                Text(workoutExercise.notes)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .italic()
+            }
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(8)
+    }
+}

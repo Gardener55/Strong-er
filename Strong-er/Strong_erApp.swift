@@ -18,3 +18,4 @@ struct Strong_erApp: App {
         }
     }
 }
+import SwiftUI
