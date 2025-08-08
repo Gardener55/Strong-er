@@ -39,8 +39,8 @@ struct ProfileView: View {
                     
                     // Stats Cards
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                        ProfileStatCard(title: "Weight", value: "\(profile.weight, specifier: "%.1f") kg", icon: "scalemass")
-                        ProfileStatCard(title: "Height", value: "\(profile.height, specifier: "%.0f") cm", icon: "ruler")
+                        ProfileStatCard(title: "Weight", value: String(format: "%.1f", profile.weight) + " kg", icon: "scalemass")
+                        ProfileStatCard(title: "Height", value: String(format: "%.0f", profile.height) + " cm", icon: "ruler")
                         ProfileStatCard(title: "Age", value: "\(profile.age)", icon: "calendar")
                         ProfileStatCard(title: "Weekly Goals", value: "\(profile.workoutDaysPerWeek) days", icon: "target")
                     }

@@ -58,6 +58,9 @@
 		F05104622E465D7B00BC0247 /* ExerciseLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104442E465D7B00BC0247 /* ExerciseLibraryView.swift */; };
 		F05104632E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104412E465D7B00BC0247 /* AddExerciseToWorkoutView.swift */; };
 		F05104642E465D7B00BC0247 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104452E465D7B00BC0247 /* HomeView.swift */; };
+		F05104662E46707300BC0247 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104652E46707300BC0247 /* ItemListView.swift */; };
+		F05104672E46707300BC0247 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104652E46707300BC0247 /* ItemListView.swift */; };
+		F05104682E46707300BC0247 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104652E46707300BC0247 /* ItemListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +101,7 @@
 		F05104472E465D7B00BC0247 /* TemplatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesView.swift; sourceTree = "<group>"; };
 		F05104482E465D7B00BC0247 /* WorkoutHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryView.swift; sourceTree = "<group>"; };
 		F05104492E465D7B00BC0247 /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
+		F05104652E46707300BC0247 /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -191,6 +195,7 @@
 		F05104202E465D1800BC0247 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F05104652E46707300BC0247 /* ItemListView.swift */,
 				F05104412E465D7B00BC0247 /* AddExerciseToWorkoutView.swift */,
 				F05104422E465D7B00BC0247 /* AIWorkoutView.swift */,
 				F05104432E465D7B00BC0247 /* CreateWorkoutView.swift */,
@@ -353,6 +358,7 @@
 				F05104302E465D4A00BC0247 /* WorkoutExercise.swift in Sources */,
 				F05104312E465D4A00BC0247 /* Workout.swift in Sources */,
 				F05104382E465D6E00BC0247 /* ExerciseDatabase.swift in Sources */,
+				F05104662E46707300BC0247 /* ItemListView.swift in Sources */,
 				F05104392E465D6E00BC0247 /* AIWorkoutGenerator.swift in Sources */,
 				F05104532E465D7B00BC0247 /* WorkoutHistoryView.swift in Sources */,
 				F05104542E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
@@ -377,6 +383,7 @@
 				F051043D2E465D6E00BC0247 /* WorkoutManager.swift in Sources */,
 				F05104262E465D4A00BC0247 /* WorkoutSet.swift in Sources */,
 				F05104272E465D4A00BC0247 /* UserProfile.swift in Sources */,
+				F05104672E46707300BC0247 /* ItemListView.swift in Sources */,
 				F051044A2E465D7B00BC0247 /* WorkoutHistoryView.swift in Sources */,
 				F051044B2E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
 				F051044C2E465D7B00BC0247 /* ProfileView.swift in Sources */,
@@ -410,6 +417,7 @@
 				F05104602E465D7B00BC0247 /* CreateWorkoutView.swift in Sources */,
 				F05104612E465D7B00BC0247 /* TemplatesView.swift in Sources */,
 				F05104622E465D7B00BC0247 /* ExerciseLibraryView.swift in Sources */,
+				F05104682E46707300BC0247 /* ItemListView.swift in Sources */,
 				F05104632E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */,
 				F05104642E465D7B00BC0247 /* HomeView.swift in Sources */,
 				F05104342E465D5C00BC0247 /* Exercise.swift in Sources */,
