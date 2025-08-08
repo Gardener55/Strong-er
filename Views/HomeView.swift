@@ -100,7 +100,7 @@ struct QuickActionsView: View {
                 QuickActionButton(
                     title: "AI Workout",
                     icon: "brain.head.profile",
-                    color: .purple
+                    color: Color("ActionPurple")
                 ) {
                     showingAIWorkout = true
                 }
@@ -108,7 +108,7 @@ struct QuickActionsView: View {
                 QuickActionButton(
                     title: "Create Workout",
                     icon: "plus.circle",
-                    color: .blue
+                    color: Color("ActionBlue")
                 ) {
                     showingCreateWorkout = true
                 }
@@ -116,7 +116,7 @@ struct QuickActionsView: View {
                 QuickActionButton(
                     title: "Quick Start",
                     icon: "play.circle",
-                    color: .green
+                    color: Color("ActionGreen")
                 ) {
                     // Quick start action
                 }
@@ -124,7 +124,7 @@ struct QuickActionsView: View {
                 QuickActionButton(
                     title: "Templates",
                     icon: "folder",
-                    color: .orange
+                    color: Color("ActionOrange")
                 ) {
                     // Navigate to templates
                 }
@@ -178,14 +178,14 @@ struct WorkoutStatsView: View {
                     title: "Total Workouts",
                     value: "\(stats.totalWorkouts)",
                     icon: "chart.bar.fill",
-                    color: .blue
+                    color: Color("ActionBlue")
                 )
                 
                 StatCard(
                     title: "This Week",
                     value: "\(stats.thisWeekWorkouts)",
                     icon: "calendar",
-                    color: .green
+                    color: Color("ActionGreen")
                 )
             }
         }
