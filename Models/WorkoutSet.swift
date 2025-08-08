@@ -9,7 +9,7 @@
 // Models/WorkoutSet.swift
 import Foundation
 
-struct WorkoutSet: Identifiable, Codable {
+struct WorkoutSet: Identifiable, Codable, Equatable {
     var id = UUID()
     var reps: Int
     var weight: Double?
