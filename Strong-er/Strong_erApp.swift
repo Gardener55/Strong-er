@@ -11,12 +11,14 @@ import SwiftUI
 struct Strong_erApp: App {
     let persistenceController = PersistenceController.shared
     @StateObject private var themeManager = ThemeManager()
+    @StateObject private var userProfileService = UserProfileService()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(themeManager)
+                .environmentObject(userProfileService)
                 .preferredColorScheme(themeManager.selectedTheme.colorScheme)
         }
     }
