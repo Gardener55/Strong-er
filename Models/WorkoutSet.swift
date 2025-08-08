@@ -10,7 +10,7 @@
 import Foundation
 
 struct WorkoutSet: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     var reps: Int
     var weight: Double?
     var duration: TimeInterval?

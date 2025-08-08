@@ -10,7 +10,7 @@
 import Foundation
 
 struct Workout: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     var name: String
     var exercises: [WorkoutExercise]
     var date: Date

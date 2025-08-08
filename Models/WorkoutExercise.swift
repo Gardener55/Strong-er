@@ -10,8 +10,8 @@
 import Foundation
 
 struct WorkoutExercise: Identifiable, Codable {
-    let id = UUID()
-    let exercise: Exercise
+    var id = UUID()
+    var exercise: Exercise
     var sets: [WorkoutSet]
     var notes: String = ""
     
