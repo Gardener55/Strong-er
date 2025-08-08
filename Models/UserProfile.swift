@@ -20,13 +20,13 @@ struct UserProfile: Codable {
     var workoutDaysPerWeek: Int = 3
     var sessionDuration: Int = 60 // minutes
     
-    enum FitnessLevel: String, CaseIterable, Codable {
+    enum FitnessLevel: String, CaseIterable, Codable, Equatable {
         case beginner = "Beginner"
         case intermediate = "Intermediate"
         case advanced = "Advanced"
     }
     
-    enum FitnessGoal: String, CaseIterable, Codable {
+    enum FitnessGoal: String, CaseIterable, Codable, Equatable {
         case weightLoss = "Weight Loss"
         case muscleGain = "Muscle Gain"
         case strength = "Strength"
