@@ -61,6 +61,12 @@
 		F05104662E46707300BC0247 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104652E46707300BC0247 /* ItemListView.swift */; };
 		F05104672E46707300BC0247 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104652E46707300BC0247 /* ItemListView.swift */; };
 		F05104682E46707300BC0247 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104652E46707300BC0247 /* ItemListView.swift */; };
+		F051047D2E4683D700BC0247 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F051047C2E4683D700BC0247 /* ThemeManager.swift */; };
+		F051047E2E4683D700BC0247 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F051047C2E4683D700BC0247 /* ThemeManager.swift */; };
+		F051047F2E4683D700BC0247 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F051047C2E4683D700BC0247 /* ThemeManager.swift */; };
+		F05104812E4683F500BC0247 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104802E4683F500BC0247 /* SettingsView.swift */; };
+		F05104822E4683F500BC0247 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104802E4683F500BC0247 /* SettingsView.swift */; };
+		F05104832E4683F500BC0247 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104802E4683F500BC0247 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +108,8 @@
 		F05104482E465D7B00BC0247 /* WorkoutHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryView.swift; sourceTree = "<group>"; };
 		F05104492E465D7B00BC0247 /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		F05104652E46707300BC0247 /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
+		F051047C2E4683D700BC0247 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		F05104802E4683F500BC0247 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -188,6 +196,7 @@
 				F05104352E465D6E00BC0247 /* AIWorkoutGenerator.swift */,
 				F05104362E465D6E00BC0247 /* ExerciseDatabase.swift */,
 				F05104372E465D6E00BC0247 /* WorkoutManager.swift */,
+				F051047C2E4683D700BC0247 /* ThemeManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -205,6 +214,7 @@
 				F05104472E465D7B00BC0247 /* TemplatesView.swift */,
 				F05104482E465D7B00BC0247 /* WorkoutHistoryView.swift */,
 				F05104492E465D7B00BC0247 /* WorkoutListView.swift */,
+				F05104802E4683F500BC0247 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +363,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F051047D2E4683D700BC0247 /* ThemeManager.swift in Sources */,
 				F051042E2E465D4A00BC0247 /* WorkoutSet.swift in Sources */,
 				F051042F2E465D4A00BC0247 /* UserProfile.swift in Sources */,
 				F05104302E465D4A00BC0247 /* WorkoutExercise.swift in Sources */,
@@ -361,6 +372,7 @@
 				F05104662E46707300BC0247 /* ItemListView.swift in Sources */,
 				F05104392E465D6E00BC0247 /* AIWorkoutGenerator.swift in Sources */,
 				F05104532E465D7B00BC0247 /* WorkoutHistoryView.swift in Sources */,
+				F05104822E4683F500BC0247 /* SettingsView.swift in Sources */,
 				F05104542E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
 				F05104552E465D7B00BC0247 /* ProfileView.swift in Sources */,
 				F05104562E465D7B00BC0247 /* AIWorkoutView.swift in Sources */,
@@ -378,6 +390,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F05104832E4683F500BC0247 /* SettingsView.swift in Sources */,
 				F051043B2E465D6E00BC0247 /* ExerciseDatabase.swift in Sources */,
 				F051043C2E465D6E00BC0247 /* AIWorkoutGenerator.swift in Sources */,
 				F051043D2E465D6E00BC0247 /* WorkoutManager.swift in Sources */,
@@ -385,6 +398,7 @@
 				F05104272E465D4A00BC0247 /* UserProfile.swift in Sources */,
 				F05104672E46707300BC0247 /* ItemListView.swift in Sources */,
 				F051044A2E465D7B00BC0247 /* WorkoutHistoryView.swift in Sources */,
+				F051047F2E4683D700BC0247 /* ThemeManager.swift in Sources */,
 				F051044B2E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
 				F051044C2E465D7B00BC0247 /* ProfileView.swift in Sources */,
 				F051044D2E465D7B00BC0247 /* AIWorkoutView.swift in Sources */,
@@ -421,6 +435,8 @@
 				F05104632E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */,
 				F05104642E465D7B00BC0247 /* HomeView.swift in Sources */,
 				F05104342E465D5C00BC0247 /* Exercise.swift in Sources */,
+				F051047E2E4683D700BC0247 /* ThemeManager.swift in Sources */,
+				F05104812E4683F500BC0247 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
