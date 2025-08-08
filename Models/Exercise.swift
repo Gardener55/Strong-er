@@ -19,7 +19,7 @@ struct Exercise: Identifiable, Codable, Hashable {
     let instructions: [String]
     let difficulty: Difficulty
     
-    enum ExerciseCategory: String, CaseIterable, Codable {
+    enum ExerciseCategory: String, CaseIterable, Codable, Equatable {
         case strength = "Strength"
         case cardio = "Cardio"
         case flexibility = "Flexibility"
@@ -27,7 +27,7 @@ struct Exercise: Identifiable, Codable, Hashable {
         case plyometric = "Plyometric"
     }
     
-    enum MuscleGroup: String, CaseIterable, Codable {
+    enum MuscleGroup: String, CaseIterable, Codable, Equatable {
         case chest = "Chest"
         case back = "Back"
         case shoulders = "Shoulders"
@@ -40,7 +40,7 @@ struct Exercise: Identifiable, Codable, Hashable {
         case forearms = "Forearms"
     }
     
-    enum Equipment: String, CaseIterable, Codable {
+    enum Equipment: String, CaseIterable, Codable, Equatable {
         case bodyweight = "Bodyweight"
         case dumbbells = "Dumbbells"
         case barbell = "Barbell"
@@ -50,7 +50,7 @@ struct Exercise: Identifiable, Codable, Hashable {
         case cable = "Cable"
     }
     
-    enum Difficulty: String, CaseIterable, Codable {
+    enum Difficulty: String, CaseIterable, Codable, Equatable {
         case beginner = "Beginner"
         case intermediate = "Intermediate"
         case advanced = "Advanced"
