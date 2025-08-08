@@ -13,7 +13,7 @@ class AIWorkoutGenerator: ObservableObject {
     private let exerciseDatabase = ExerciseDatabase.shared
     
     func generateWorkout(for profile: UserProfile) -> Workout {
-        let duration = profile.sessionDuration
+        _ = profile.sessionDuration
         let fitnessLevel = profile.fitnessLevel
         let goals = profile.goals
         let equipment = profile.preferredEquipment
