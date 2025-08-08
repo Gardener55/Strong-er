@@ -7,15 +7,22 @@
 
 import SwiftUI
 
+enum ColorScheme: String, CaseIterable {
+    case light = "Light"
+    case dark = "Dark"
+    case system = "System"
+}
+
 @main
 struct Strong_erApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject private var workoutManager = WorkoutManager()
+    @AppStorage("colorScheme") private var colorScheme: ColorScheme = .system
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            HomeView()
+                .environmentObject(workoutManager)
+                .preferredColorScheme(colorScheme == .dark ? .dark : colorScheme == .light ? .light : nil)
         }
     }
 }
-import SwiftUI

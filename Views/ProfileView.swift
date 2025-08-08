@@ -107,13 +107,28 @@ struct ProfileStatCard: View {
     }
 }
 
+enum ColorScheme: String, CaseIterable {
+    case light = "Light"
+    case dark = "Dark"
+    case system = "System"
+}
+
 struct ProfileEditView: View {
     @Binding var profile: UserProfile
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("colorScheme") private var colorScheme: ColorScheme = .system
     
     var body: some View {
         NavigationView {
             Form {
+                Section("Appearance") {
+                    Picker("Theme", selection: $colorScheme) {
+                        ForEach(ColorScheme.allCases, id: \.self) { scheme in
+                            Text(scheme.rawValue).tag(scheme)
+                        }
+                    }
+                }
+
                 Section("Personal Information") {
                     TextField("Name", text: $profile.name)
                     
