@@ -26,7 +26,7 @@ class WorkoutImporter {
         }
     }
     
-    func importWorkouts(from url: URL, exerciseDatabase: ExerciseDatabase, workoutManager: WorkoutManager) throws {
+    func importWorkouts(from url: URL, exerciseDatabase: ExerciseDatabase, workoutManager: WorkoutManager, sourceUnit: UserProfile.WeightUnit) throws {
         let secured = url.startAccessingSecurityScopedResource()
         defer {
             if secured {
@@ -72,7 +72,12 @@ class WorkoutImporter {
                 throw ImportError.exerciseNotFound(name: exerciseName)
             }
             
-            let workoutSet = WorkoutSet(reps: reps, weight: weight)
+            var storedWeight = weight
+            if sourceUnit == .pounds {
+                storedWeight = weight / 2.20462 // Convert pounds to kilograms
+            }
+
+            let workoutSet = WorkoutSet(reps: reps, weight: storedWeight)
             
             if workoutsByDate[date] == nil {
                 let workoutName = rowData["Workout Name"] ?? "Imported Workout"
