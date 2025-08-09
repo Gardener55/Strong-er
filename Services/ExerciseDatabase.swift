@@ -157,7 +157,7 @@ class ExerciseDatabase: ObservableObject {
                 ],
                 difficulty: .intermediate
             ),
-
+            
             // Cardio Exercises
             Exercise(
                 name: "Running",
@@ -217,7 +217,7 @@ class ExerciseDatabase: ObservableObject {
             Exercise(name: "Bulgarian Split Squat", category: .strength, muscleGroups: [.legs, .glutes], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Cable Crunch", category: .strength, muscleGroups: [.core], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Cable Leg Extensions", category: .strength, muscleGroups: [.legs], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
-            Exercise(name: "Cable Pull Through", category: .strength, muscleGroups: [.glutes, .hamstrings], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
+            Exercise(name: "Cable Pull Through", category: .strength, muscleGroups: [.glutes], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Cable Twist", category: .strength, muscleGroups: [.core], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Calf Press on Leg Press", category: .strength, muscleGroups: [.calves], equipment: .machine, description: "", instructions: [], difficulty: .beginner),
             Exercise(name: "Chest Dip", category: .strength, muscleGroups: [.chest, .triceps], equipment: .bodyweight, description: "", instructions: [], difficulty: .intermediate),
