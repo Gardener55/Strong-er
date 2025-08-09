@@ -110,36 +110,36 @@ struct QuickActionsView: View {
                 .padding(.bottom, 8)
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
-                QuickActionButton(
-                    title: "AI Workout",
-                    icon: "brain.head.profile",
-                    color: Color("ActionPurple")
-                ) {
-                    showingAIWorkout = true
+                Button(action: { showingAIWorkout = true }) {
+                    QuickActionButton(
+                        title: "AI Workout",
+                        icon: "brain.head.profile",
+                        color: Color("ActionPurple")
+                    )
                 }
                 
-                QuickActionButton(
-                    title: "Create Workout",
-                    icon: "plus.circle",
-                    color: Color("ActionBlue")
-                ) {
-                    showingCreateWorkout = true
+                Button(action: { showingCreateWorkout = true }) {
+                    QuickActionButton(
+                        title: "Create Workout",
+                        icon: "plus.circle",
+                        color: Color("ActionBlue")
+                    )
                 }
                 
-                QuickActionButton(
-                    title: "Quick Start",
-                    icon: "play.circle",
-                    color: Color("ActionGreen")
-                ) {
-                    // Quick start action
+                Button(action: { /* Quick start action */ }) {
+                    QuickActionButton(
+                        title: "Quick Start",
+                        icon: "play.circle",
+                        color: Color("ActionGreen")
+                    )
                 }
                 
-                QuickActionButton(
-                    title: "Templates",
-                    icon: "folder",
-                    color: Color("ActionOrange")
-                ) {
-                    // Navigate to templates
+                NavigationLink(destination: TemplatesView()) {
+                    QuickActionButton(
+                        title: "Templates",
+                        icon: "folder",
+                        color: Color("ActionOrange")
+                    )
                 }
 
                 NavigationLink(destination: WorkoutHistoryView()) {
@@ -147,9 +147,7 @@ struct QuickActionsView: View {
                         title: "History",
                         icon: "calendar",
                         color: .red
-                    ) {
-                        // Action is handled by NavigationLink
-                    }
+                    )
                 }
             }
         }
@@ -163,25 +161,22 @@ struct QuickActionButton: View {
     let title: String
     let icon: String
     let color: Color
-    let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(color)
-                
-                Text(title)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(12)
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
+
+            Text(title)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
         }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
     }
 }
 
