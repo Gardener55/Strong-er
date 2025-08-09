@@ -206,7 +206,7 @@ class ExerciseDatabase: ObservableObject {
             Exercise(name: "Arnold Curls", category: .strength, muscleGroups: [.biceps], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Arnold Press (Dumbbell)", category: .strength, muscleGroups: [.shoulders], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Bent Over Deltoid Shrug", category: .strength, muscleGroups: [.back, .shoulders], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
-            Exercise(name: "Bent Over One Arm Row (Dumbbell)", category: .strength, muscleGroups: [.back, .biceps], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
+            Exercise(name: "Bent Over Row (Dumbbell)", category: .strength, muscleGroups: [.back, .biceps], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Bent Over Row (Barbell)", category: .strength, muscleGroups: [.back, .biceps], equipment: .barbell, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Bent Over Row - Underhand (Barbell)", category: .strength, muscleGroups: [.back, .biceps], equipment: .barbell, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Bent Over Shrug", category: .strength, muscleGroups: [.back], equipment: .barbell, description: "", instructions: [], difficulty: .intermediate),
@@ -231,6 +231,7 @@ class ExerciseDatabase: ObservableObject {
             Exercise(name: "Decline Crunch", category: .strength, muscleGroups: [.core], equipment: .bodyweight, description: "", instructions: [], difficulty: .beginner),
             Exercise(name: "Decline Fly", category: .strength, muscleGroups: [.chest], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Flat Leg Raise", category: .strength, muscleGroups: [.core], equipment: .bodyweight, description: "", instructions: [], difficulty: .beginner),
+            Exercise(name: "Face Pull (Cable)", category: .strength, muscleGroups: [.shoulders], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Front Raise (Cable)", category: .strength, muscleGroups: [.shoulders], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Front Raise (Dumbbell)", category: .strength, muscleGroups: [.shoulders], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Front Raise (Plate)", category: .strength, muscleGroups: [.shoulders], equipment: .barbell, description: "", instructions: [], difficulty: .intermediate),
@@ -306,6 +307,7 @@ class ExerciseDatabase: ObservableObject {
             Exercise(name: "Triceps Pushdown (Cable - Straight Bar)", category: .strength, muscleGroups: [.triceps], equipment: .cable, description: "", instructions: [], difficulty: .beginner),
             Exercise(name: "Upright Row (Cable)", category: .strength, muscleGroups: [.shoulders, .biceps], equipment: .cable, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Upright Row (Dumbbell)", category: .strength, muscleGroups: [.shoulders, .biceps], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate),
+            Exercise(name: "Upright Row (Barbell)", category: .strength, muscleGroups: [.shoulders, .biceps], equipment: .barbell, description: "", instructions: [], difficulty: .intermediate),
             Exercise(name: "Wrist Roller", category: .strength, muscleGroups: [.forearms], equipment: .bodyweight, description: "", instructions: [], difficulty: .intermediate)
         ]
     }
