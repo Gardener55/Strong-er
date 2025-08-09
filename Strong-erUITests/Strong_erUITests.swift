@@ -23,12 +23,21 @@ final class Strong_erUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testWeightUnitToggle() throws {
         let app = XCUIApplication()
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Navigate to home
+        app.tabBars.buttons["Home"].tap()
+
+        // Navigate to settings
+        app.navigationBars.buttons["gear"].tap()
+
+        // Tap the lbs option
+        app.buttons["lbs"].tap()
+
+        // Tap the kg option
+        app.buttons["kg"].tap()
     }
 
     @MainActor
