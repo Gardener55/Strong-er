@@ -139,6 +139,9 @@ class AchievementService {
     }
 
     private func updateRecord(exerciseName: String, recordType: PersonalRecord.RecordType, newValue: Double, date: Date, userProfile: inout UserProfile) {
+        // Do not record PRs for 0 values
+        guard newValue > 0 else { return }
+
         if let existingRecordIndex = userProfile.personalRecords.firstIndex(where: { $0.exerciseName == exerciseName && $0.recordType == recordType }) {
             // If record exists and new value is greater, update it
             if newValue > userProfile.personalRecords[existingRecordIndex].value {
