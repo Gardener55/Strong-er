@@ -61,25 +61,28 @@ struct CalendarView: View {
                     Button(action: {
                         if let workout = workoutManager.workoutHistory.first(where: { calendar.isDate($0.date, inSameDayAs: date) }) {
                             self.selectedWorkout = workout
-                            self.isShowingDetail = true
                         }
                     }) {
                         Text(getDayOfMonth(date: date))
                             .frame(maxWidth: .infinity, minHeight: 40)
                             .background(
-                                Circle()
-                                    .fill(backgroundColor(for: date))
+                                ZStack {
+                                    if workoutManager.workoutHistory.contains(where: { calendar.isDate($0.date, inSameDayAs: date) }) {
+                                        Circle()
+                                            .stroke(Color.accentColor, lineWidth: 2)
+                                    } else {
+                                        Circle()
+                                            .fill(Color.gray.opacity(0.2))
+                                    }
+                                }
                             )
-                            .cornerRadius(8)
                             .opacity(date < Date.distantPast ? 0 : 1)
                     }
                 }
             }
             .padding()
-            .sheet(isPresented: $isShowingDetail) {
-                if let workout = selectedWorkout {
-                    WorkoutDetailView(workout: workout)
-                }
+            .sheet(item: $selectedWorkout) { workout in
+                WorkoutDetailView(workout: workout)
             }
         }
     }
