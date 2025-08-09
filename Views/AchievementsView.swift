@@ -35,7 +35,8 @@ struct AchievementsView: View {
                                     HStack {
                                         Text(record.recordType.rawValue)
                                         Spacer()
-                                        Text("\(record.value, specifier: "%.1f")")
+                                        Text(formattedValue(for: record, unit: userProfile.weightUnit))
+                                            .fontWeight(.semibold)
                                     }
                                 }
                             }
@@ -50,22 +51,44 @@ struct AchievementsView: View {
     private var groupedRecords: [String: [PersonalRecord]] {
         Dictionary(grouping: userProfile.personalRecords, by: { $0.exerciseName })
     }
+
+    private func formattedValue(for record: PersonalRecord, unit: UserProfile.WeightUnit) -> String {
+        let value = record.value
+        let unitString = unit.rawValue
+
+        // The value is stored in the user's preferred unit, so no conversion is needed.
+        // We just need to format it and append the correct unit string.
+        return String(format: "%.1f %@", value, unitString)
+    }
 }
 
 struct AchievementsView_Previews: PreviewProvider {
     static var previews: some View {
-        // Create a sample user profile for previewing
-        var sampleProfile = UserProfile()
-        sampleProfile.achievements = [
-            Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill", isEarned: true),
-            Achievement(title: "Heavy Lifter", description: "Lifted over 5000 lbs in a single workout.", iconName: "scalemass.fill", isEarned: true)
+        // Create a sample user profile for previewing in KG
+        var sampleProfileKg = UserProfile()
+        sampleProfileKg.weightUnit = .kilograms
+        sampleProfileKg.achievements = [
+            Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill", isEarned: true)
         ]
-        sampleProfile.personalRecords = [
-            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 225.0, date: Date()),
-            PersonalRecord(exerciseName: "Bench Press", recordType: .maxWeight, value: 205.0, date: Date()),
-            PersonalRecord(exerciseName: "Squat", recordType: .oneRepMax, value: 315.0, date: Date())
+        sampleProfileKg.personalRecords = [
+            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()),
+            PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date())
         ]
 
-        return AchievementsView(userProfile: sampleProfile)
+        // Create a sample user profile for previewing in LBS
+        var sampleProfileLbs = UserProfile()
+        sampleProfileLbs.weightUnit = .pounds
+        sampleProfileLbs.personalRecords = [
+            // Assuming this value was entered as 220.5 lbs
+            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 220.5, date: Date()),
+            PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 264.6, date: Date())
+        ]
+
+        return Group {
+            AchievementsView(userProfile: sampleProfileKg)
+                .previewDisplayName("KG View")
+            AchievementsView(userProfile: sampleProfileLbs)
+                .previewDisplayName("LBS View")
+        }
     }
 }

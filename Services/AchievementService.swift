@@ -34,7 +34,8 @@ class AchievementService {
             Achievement(title: "Workout Warrior", description: "Completed 10 workouts.", iconName: "flame.fill"),
             Achievement(title: "Consistent Lifter", description: "Worked out for 3 days in a row.", iconName: "calendar"),
             Achievement(title: "Marathon Session", description: "Completed a workout longer than 90 minutes.", iconName: "clock.fill"),
-            Achievement(title: "Heavy Lifter", description: "Lifted over 5000 lbs in a single workout.", iconName: "scalemass.fill")
+            Achievement(title: "Heavy Lifter", description: "Lifted over 5000 lbs in a single workout.", iconName: "scalemass.fill"),
+            Achievement(title: "Monthly Warrior", description: "Completed 15 workouts in a calendar month.", iconName: "calendar.badge.plus")
         ]
     }
 
@@ -70,6 +71,16 @@ class AchievementService {
         // 5. Consistent Lifter (3 day streak)
         if hasWorkoutStreak(count: 3, allWorkouts: allWorkouts) {
             unlockAchievement(title: "Consistent Lifter", userProfile: &userProfile)
+        }
+
+        // 6. Monthly Warrior (15 workouts in a month)
+        let calendar = Calendar.current
+        let workoutsThisMonth = allWorkouts.filter {
+            calendar.isDate($0.date, equalTo: workout.date, toGranularity: .month)
+        }.count
+
+        if workoutsThisMonth >= 15 {
+            unlockAchievement(title: "Monthly Warrior", userProfile: &userProfile)
         }
     }
 
