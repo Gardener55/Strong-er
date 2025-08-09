@@ -5,6 +5,7 @@ struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var exerciseDatabase: ExerciseDatabase
+    @EnvironmentObject var userProfileService: UserProfileService
 
     @State private var isImporting = false
     @State private var importError: Error?
@@ -19,6 +20,15 @@ struct SettingsView: View {
                     Picker("Theme", selection: $themeManager.selectedTheme) {
                         ForEach(Theme.allCases) { theme in
                             Text(theme.rawValue.capitalized).tag(theme)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+
+                Section(header: Text("Units")) {
+                    Picker("Weight", selection: $userProfileService.userProfile.weightUnit) {
+                        ForEach(UserProfile.WeightUnit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue).tag(unit)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())

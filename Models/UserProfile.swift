@@ -19,6 +19,12 @@ struct UserProfile: Codable {
     var preferredEquipment: [Exercise.Equipment] = []
     var workoutDaysPerWeek: Int = 3
     var sessionDuration: Int = 60 // minutes
+    var weightUnit: WeightUnit = .kilograms
+
+    enum WeightUnit: String, CaseIterable, Codable, Equatable {
+        case kilograms = "kg"
+        case pounds = "lbs"
+    }
     
     enum FitnessLevel: String, CaseIterable, Codable, Equatable {
         case beginner = "Beginner"
