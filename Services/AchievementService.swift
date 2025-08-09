@@ -65,26 +65,36 @@ class AchievementService {
     private func hasWorkoutStreak(count: Int, allWorkouts: [Workout]) -> Bool {
         guard allWorkouts.count >= count else { return false }
 
-        let sortedDates = allWorkouts.map { $0.date }.sorted().reversed()
+        // Get unique workout days, sorted from most recent to oldest
+        let calendar = Calendar.current
+        let uniqueWorkoutDays = Set(allWorkouts.map { calendar.startOfDay(for: $0.date) })
+        let sortedDays = Array(uniqueWorkoutDays).sorted(by: >)
+
+        guard sortedDays.count >= count else { return false }
 
         var streak = 1
-        var lastDate = sortedDates.first!
+        // If the required streak is 1, it's always true if there's at least one workout.
+        if count == 1 && !sortedDays.isEmpty {
+            return true
+        }
 
-        for i in 1..<sortedDates.count {
-            let currentDate = sortedDates[i]
-            if let days = Calendar.current.dateComponents([.day], from: currentDate, to: lastDate).day, days == 1 {
+        for i in 0..<(sortedDays.count - 1) {
+            let currentDay = sortedDays[i]
+            let nextDay = sortedDays[i+1]
+
+            if let daysBetween = calendar.dateComponents([.day], from: nextDay, to: currentDay).day, daysBetween == 1 {
                 streak += 1
-            } else if let days = Calendar.current.dateComponents([.day], from: currentDate, to: lastDate).day, days > 1 {
-                streak = 1 // Reset streak
+            } else {
+                // Reset streak if the days are not consecutive
+                streak = 1
             }
 
             if streak >= count {
                 return true
             }
-            lastDate = currentDate
         }
 
-        return false
+        return streak >= count
     }
 
     func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile) {
