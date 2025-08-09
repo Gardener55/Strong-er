@@ -8,6 +8,24 @@ class AchievementService {
         return weight / (1.0278 - 0.0278 * Double(reps))
     }
 
+    // Recalculates all PRs and achievements from a full workout history
+    func recalculateAll(from allWorkouts: [Workout], for userProfile: inout UserProfile) {
+        // Reset all current PRs and achievements
+        userProfile.personalRecords = []
+        userProfile.achievements = AchievementService.allAchievements()
+
+        // Sort workouts by date to process them chronologically
+        let sortedWorkouts = allWorkouts.sorted { $0.date < $1.date }
+
+        var processedWorkouts: [Workout] = []
+
+        for workout in sortedWorkouts {
+            processedWorkouts.append(workout)
+            updatePersonalRecords(for: workout, userProfile: &userProfile)
+            checkAchievements(for: workout, allWorkouts: processedWorkouts, userProfile: &userProfile)
+        }
+    }
+
     // MARK: - Achievements
 
     private static func allAchievements() -> [Achievement] {
