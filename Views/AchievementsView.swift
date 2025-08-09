@@ -53,41 +53,44 @@ struct AchievementsView: View {
     }
 
     private func formattedValue(for record: PersonalRecord, unit: UserProfile.WeightUnit) -> String {
-        let value = record.value
-        let unitString = unit.rawValue
+        let storedValueKg = record.value
 
-        // The value is stored in the user's preferred unit, so no conversion is needed.
-        // We just need to format it and append the correct unit string.
-        return String(format: "%.1f %@", value, unitString)
+        switch unit {
+        case .kilograms:
+            return String(format: "%.1f kg", storedValueKg)
+        case .pounds:
+            let convertedValueLbs = storedValueKg * 2.20462
+            return String(format: "%.1f lbs", convertedValueLbs)
+        }
     }
 }
 
 struct AchievementsView_Previews: PreviewProvider {
     static var previews: some View {
-        // Create a sample user profile for previewing in KG
-        var sampleProfileKg = UserProfile()
-        sampleProfileKg.weightUnit = .kilograms
-        sampleProfileKg.achievements = [
+        // Create a sample user profile for previewing
+        // All PRs are stored in KG, regardless of the user's preference.
+        var sampleProfile = UserProfile()
+        sampleProfile.achievements = [
             Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill", isEarned: true)
         ]
-        sampleProfileKg.personalRecords = [
-            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()),
-            PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date())
+        sampleProfile.personalRecords = [
+            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()), // 100.0 kg
+            PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date())      // 120.0 kg
         ]
 
-        // Create a sample user profile for previewing in LBS
-        var sampleProfileLbs = UserProfile()
-        sampleProfileLbs.weightUnit = .pounds
-        sampleProfileLbs.personalRecords = [
-            // Assuming this value was entered as 220.5 lbs
-            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 220.5, date: Date()),
-            PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 264.6, date: Date())
-        ]
+        // Create a KG view
+        var kgProfile = sampleProfile
+        kgProfile.weightUnit = .kilograms
+
+        // Create an LBS view
+        var lbsProfile = sampleProfile
+        lbsProfile.weightUnit = .pounds
 
         return Group {
-            AchievementsView(userProfile: sampleProfileKg)
+            AchievementsView(userProfile: kgProfile)
                 .previewDisplayName("KG View")
-            AchievementsView(userProfile: sampleProfileLbs)
+
+            AchievementsView(userProfile: lbsProfile)
                 .previewDisplayName("LBS View")
         }
     }

@@ -21,7 +21,8 @@ class AchievementService {
 
         for workout in sortedWorkouts {
             processedWorkouts.append(workout)
-            updatePersonalRecords(for: workout, userProfile: &userProfile)
+            // Assumes the historical workout data is in the unit set in the user's profile
+            updatePersonalRecords(for: workout, userProfile: &userProfile, unit: userProfile.weightUnit)
             checkAchievements(for: workout, allWorkouts: processedWorkouts, userProfile: &userProfile)
         }
     }
@@ -126,25 +127,33 @@ class AchievementService {
         return streak >= count
     }
 
-    func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile) {
+    func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile, unit: UserProfile.WeightUnit) {
         for exercise in workout.exercises {
             let exerciseName = exercise.exercise.name
 
-            // Calculate metrics from the workout
-            let maxWeight = exercise.sets.compactMap { $0.weight }.max() ?? 0
-            let totalVolume = exercise.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) }
-            let estimatedOneRepMax = exercise.sets.compactMap { aSet -> Double? in
+            // Calculate metrics from the workout (these are in the user's selected unit)
+            var maxWeight = exercise.sets.compactMap { $0.weight }.max() ?? 0
+            var totalVolume = exercise.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) }
+            var estimatedOneRepMax = exercise.sets.compactMap { aSet -> Double? in
                 guard let weight = aSet.weight, aSet.reps > 0 else { return nil }
                 return calculateOneRepMax(weight: weight, reps: aSet.reps)
             }.max() ?? 0
 
-            // Update Max Weight PR
+            // If the user's unit is pounds, convert to KG for storage
+            if unit == .pounds {
+                let lbsToKg = 0.453592
+                maxWeight *= lbsToKg
+                totalVolume *= lbsToKg
+                estimatedOneRepMax *= lbsToKg
+            }
+
+            // Update Max Weight PR (now in KG)
             updateRecord(exerciseName: exerciseName, recordType: .maxWeight, newValue: maxWeight, date: workout.date, userProfile: &userProfile)
 
-            // Update Max Volume PR
+            // Update Max Volume PR (now in KG)
             updateRecord(exerciseName: exerciseName, recordType: .maxVolume, newValue: totalVolume, date: workout.date, userProfile: &userProfile)
 
-            // Update 1RM PR
+            // Update 1RM PR (now in KG)
             updateRecord(exerciseName: exerciseName, recordType: .oneRepMax, newValue: estimatedOneRepMax, date: workout.date, userProfile: &userProfile)
         }
     }
