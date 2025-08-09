@@ -141,6 +141,16 @@ struct QuickActionsView: View {
                 ) {
                     // Navigate to templates
                 }
+
+                NavigationLink(destination: WorkoutHistoryView()) {
+                    QuickActionButton(
+                        title: "History",
+                        icon: "calendar",
+                        color: .red
+                    ) {
+                        // Action is handled by NavigationLink
+                    }
+                }
             }
         }
         .sheet(isPresented: $showingCreateWorkout) {
