@@ -56,7 +56,7 @@ class WorkoutManager: ObservableObject {
         workout.duration = Date().timeIntervalSince(workout.date)
 
         // Process achievements and PRs
-        achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile)
+        achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile, unit: userProfileService.userProfile.weightUnit)
         achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile)
 
         // Save updated user profile
