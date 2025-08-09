@@ -64,6 +64,12 @@ class WorkoutManager: ObservableObject {
         saveData()
     }
     
+    func importWorkouts(_ importedWorkouts: [Workout]) {
+        workouts.append(contentsOf: importedWorkouts)
+        workoutHistory.append(contentsOf: importedWorkouts)
+        saveData()
+    }
+
     private func saveData() {
         if let workoutsData = try? JSONEncoder().encode(workouts) {
             userDefaults.set(workoutsData, forKey: workoutsKey)
