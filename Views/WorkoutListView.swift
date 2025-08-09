@@ -173,7 +173,7 @@ struct WorkoutExerciseDetailView: View {
             unitString = "lbs"
         }
 
-        return "@ \(convertedWeight, specifier: "%.1f") \(unitString)"
+        return String(format: "@ %.1f %@", convertedWeight, unitString)
     }
     
     var body: some View {
