@@ -35,6 +35,7 @@ class WorkoutManager: ObservableObject {
 
         // Recalculate all achievements and PRs from history on launch
         achievementService.recalculateAll(from: workoutHistory, for: &self.userProfileService.userProfile)
+        self.userProfileService.saveProfile() // Explicitly save after recalculation
     }
     
     func startWorkout(_ workout: Workout) {
@@ -93,6 +94,7 @@ class WorkoutManager: ObservableObject {
 
         // After importing, recalculate all achievements and PRs
         achievementService.recalculateAll(from: workoutHistory, for: &userProfileService.userProfile)
+        userProfileService.saveProfile() // Explicitly save after recalculation
     }
 
     private func saveData() {
