@@ -16,6 +16,13 @@ class WorkoutImporter {
     }
 
     func importWorkouts(from url: URL, exerciseDatabase: ExerciseDatabase, workoutManager: WorkoutManager) throws {
+        let secured = url.startAccessingSecurityScopedResource()
+        defer {
+            if secured {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+
         let data = try String(contentsOf: url)
         let rows = data.components(separatedBy: "\n").filter { !$0.isEmpty }
 
