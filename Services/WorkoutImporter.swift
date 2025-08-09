@@ -9,10 +9,21 @@ import Foundation
 
 class WorkoutImporter {
 
-    enum ImportError: Error {
+    enum ImportError: Error, LocalizedError {
         case invalidCSVFormat
         case exerciseNotFound(name: String)
         case invalidData(message: String)
+
+        var errorDescription: String? {
+            switch self {
+            case .invalidCSVFormat:
+                return "Invalid CSV Format. The file should contain a header and at least one row of data."
+            case .exerciseNotFound(let name):
+                return "Exercise not found: \(name). Please make sure all exercises in the CSV exist in the app's library."
+            case .invalidData(let message):
+                return "Invalid data in CSV: \(message)"
+            }
+        }
     }
 
     func importWorkouts(from url: URL, exerciseDatabase: ExerciseDatabase, workoutManager: WorkoutManager) throws {
@@ -24,7 +35,8 @@ class WorkoutImporter {
         }
 
         let data = try String(contentsOf: url)
-        let rows = data.components(separatedBy: "\n").filter { !$0.isEmpty }
+        let normalizedData = data.replacingOccurrences(of: "\r\n", with: "\n").replacingOccurrences(of: "\r", with: "\n")
+        let rows = normalizedData.components(separatedBy: "\n").filter { !$0.isEmpty }
 
         guard rows.count > 1 else {
             throw ImportError.invalidCSVFormat
