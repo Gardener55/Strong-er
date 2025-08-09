@@ -20,6 +20,8 @@ struct UserProfile: Codable {
     var workoutDaysPerWeek: Int = 3
     var sessionDuration: Int = 60 // minutes
     var weightUnit: WeightUnit = .pounds
+    var personalRecords: [PersonalRecord] = []
+    var achievements: [Achievement] = []
 
     enum WeightUnit: String, CaseIterable, Codable, Equatable {
         case kilograms = "kg"

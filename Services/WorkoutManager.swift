@@ -19,7 +19,18 @@ class WorkoutManager: ObservableObject {
     private let workoutsKey = "SavedWorkouts"
     private let templatesKey = "WorkoutTemplates"
     
-    init() {
+    private var achievementService: AchievementService
+    private var userProfileService: UserProfileService
+
+    // Default initializer
+    convenience init() {
+        self.init(achievementService: AchievementService(), userProfileService: UserProfileService())
+    }
+
+    // Initializer for dependency injection
+    init(achievementService: AchievementService, userProfileService: UserProfileService) {
+        self.achievementService = achievementService
+        self.userProfileService = userProfileService
         loadData()
     }
     
@@ -39,6 +50,14 @@ class WorkoutManager: ObservableObject {
     func completeWorkout() {
         guard var workout = currentWorkout else { return }
         workout.duration = Date().timeIntervalSince(workout.date)
+
+        // Process achievements and PRs
+        achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile)
+        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile)
+
+        // Save updated user profile
+        userProfileService.saveProfile()
+
         workouts.append(workout)
         workoutHistory.append(workout)
         currentWorkout = nil

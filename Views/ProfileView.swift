@@ -45,6 +45,20 @@ struct ProfileView: View {
                         ProfileStatCard(title: "Weekly Goals", value: "\(userProfileService.userProfile.workoutDaysPerWeek) days", icon: "target")
                     }
                     
+                    // Achievements Link
+                    NavigationLink(destination: AchievementsView(userProfile: userProfileService.userProfile)) {
+                        HStack {
+                            Image(systemName: "star.fill")
+                            Text("Achievements")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+
                     // Goals Section
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Fitness Goals")
