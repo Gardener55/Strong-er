@@ -89,7 +89,7 @@ class ExerciseDatabase: ObservableObject {
                 difficulty: .intermediate
             ),
             Exercise(
-                name: "Deadlifts (Barbell)",
+                name: "Deadlift (Barbell)",
                 category: .strength,
                 muscleGroups: [.back, .legs, .glutes],
                 equipment: .barbell,
