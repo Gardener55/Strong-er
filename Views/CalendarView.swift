@@ -126,16 +126,3 @@ struct CalendarView: View {
         }
     }
 }
-
-struct WorkoutDetailView: View {
-    let workout: Workout
-
-    var body: some View {
-        VStack {
-            Text(workout.name)
-                .font(.largeTitle)
-            Text(workout.date, style: .date)
-                .font(.title)
-        }
-    }
-}
