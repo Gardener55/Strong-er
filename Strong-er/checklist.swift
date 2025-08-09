@@ -8,7 +8,7 @@
 //  done - Additional workouts
 //  Workout video demos
 //  Charts
-//  Weight conversation lb/kg
+//  done - Weight conversation lb/kg
 //  Remove "items" from settings
 //  Optimization
 //  done - Import csv data from other workouts
