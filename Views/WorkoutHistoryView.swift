@@ -11,6 +11,7 @@ import SwiftUI
 
 struct WorkoutHistoryView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var userProfileService: UserProfileService
     @State private var selectedPeriod: TimePeriod = .all
     
     enum TimePeriod: String, CaseIterable {
