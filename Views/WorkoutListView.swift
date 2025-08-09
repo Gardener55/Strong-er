@@ -11,6 +11,7 @@ import SwiftUI
 
 struct WorkoutListView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var userProfileService: UserProfileService
     @State private var showingCreateWorkout = false
     
     var body: some View {
@@ -88,6 +89,7 @@ struct WorkoutListRow: View {
 struct WorkoutDetailView: View {
     let workout: Workout
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var userProfileService: UserProfileService
     
     var body: some View {
         ScrollView {
@@ -113,6 +115,7 @@ struct WorkoutDetailView: View {
                 LazyVStack(spacing: 12) {
                     ForEach(workout.exercises) { exercise in
                         WorkoutExerciseDetailView(workoutExercise: exercise)
+                            .environmentObject(userProfileService)
                     }
                 }
                 
@@ -152,6 +155,26 @@ struct WorkoutDetailView: View {
 
 struct WorkoutExerciseDetailView: View {
     let workoutExercise: WorkoutExercise
+    @EnvironmentObject var userProfileService: UserProfileService
+
+    private func weightString(for set: WorkoutSet) -> String {
+        guard let weight = set.weight, weight > 0 else { return "" }
+
+        let unit = userProfileService.userProfile.weightUnit
+        let convertedWeight: Double
+        let unitString: String
+
+        switch unit {
+        case .kilograms:
+            convertedWeight = weight
+            unitString = "kg"
+        case .pounds:
+            convertedWeight = weight * 2.20462
+            unitString = "lbs"
+        }
+
+        return "@ \(convertedWeight, specifier: "%.1f") \(unitString)"
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -167,10 +190,8 @@ struct WorkoutExerciseDetailView: View {
                     Text("\(set.reps) reps")
                         .font(.caption)
                     
-                    if let weight = set.weight, weight > 0 {
-                        Text("@ \(weight, specifier: "%.1f") kg")
-                            .font(.caption)
-                    }
+                    Text(weightString(for: set))
+                        .font(.caption)
                     
                     Spacer()
                     
