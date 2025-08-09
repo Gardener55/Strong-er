@@ -10,8 +10,19 @@ struct SettingsView: View {
     @State private var isImporting = false
     @State private var importError: Error?
     @State private var showError = false
+    @State private var showingUnitSelector = false
+    @State private var selectedFile: URL?
 
     private let workoutImporter = WorkoutImporter()
+
+    private func importWorkouts(from url: URL, as sourceUnit: UserProfile.WeightUnit) {
+        do {
+            try workoutImporter.importWorkouts(from: url, exerciseDatabase: exerciseDatabase, workoutManager: workoutManager, sourceUnit: sourceUnit)
+        } catch {
+            importError = error
+            showError = true
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -46,12 +57,30 @@ struct SettingsView: View {
                 allowedContentTypes: [UTType.commaSeparatedText],
                 allowsMultipleSelection: false
             ) { result in
-                do {
-                    guard let selectedFile: URL = try result.get().first else { return }
-                    try workoutImporter.importWorkouts(from: selectedFile, exerciseDatabase: exerciseDatabase, workoutManager: workoutManager)
-                } catch {
-                    importError = error
-                    showError = true
+                switch result {
+                case .success(let urls):
+                    guard let url = urls.first else { return }
+                    self.selectedFile = url
+                    self.showingUnitSelector = true
+                case .failure(let error):
+                    self.importError = error
+                    self.showError = true
+                }
+            }
+            .confirmationDialog(
+                "Select the weight unit of the data in your CSV file.",
+                isPresented: $showingUnitSelector,
+                titleVisibility: .visible
+            ) {
+                Button("Kilograms (kg)") {
+                    if let url = selectedFile {
+                        importWorkouts(from: url, as: .kilograms)
+                    }
+                }
+                Button("Pounds (lbs)") {
+                    if let url = selectedFile {
+                        importWorkouts(from: url, as: .pounds)
+                    }
                 }
             }
             .alert(isPresented: $showError) {
