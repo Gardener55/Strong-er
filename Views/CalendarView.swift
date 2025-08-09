@@ -9,42 +9,61 @@ import SwiftUI
 
 struct CalendarView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
-    @State private var year = Calendar.current.component(.year, from: Date())
-    @State private var month = Calendar.current.component(.month, from: Date())
     @State private var selectedWorkout: Workout?
-    @State private var isShowingDetail = false
 
+    private let calendar = Calendar.current
+    private var months: [Date] {
+        var dates: [Date] = []
+        let today = Date()
+        let twoYearsAgo = calendar.date(byAdding: .year, value: -2, to: today)!
+        let oneYearFromNow = calendar.date(byAdding: .year, value: 1, to: today)!
+
+        var date = twoYearsAgo
+        while date <= oneYearFromNow {
+            dates.append(date)
+            date = calendar.date(byAdding: .month, value: 1, to: date)!
+        }
+        return dates
+    }
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack {
+                    ForEach(months, id: \.self) { month in
+                        MonthCalendarView(selectedWorkout: $selectedWorkout, month: month)
+                            .id(month)
+                    }
+                }
+            }
+            .onAppear {
+                proxy.scrollTo(startOfMonth(for: Date()), anchor: .center)
+            }
+            .sheet(item: $selectedWorkout) { workout in
+                WorkoutDetailView(workout: workout)
+            }
+        }
+    }
+
+    private func startOfMonth(for date: Date) -> Date {
+        calendar.date(from: calendar.dateComponents([.year, .month], from: date))!
+    }
+}
+
+struct MonthCalendarView: View {
+    @EnvironmentObject var workoutManager: WorkoutManager
+    @Binding var selectedWorkout: Workout?
+
+    let month: Date
     private let calendar = Calendar.current
 
     var body: some View {
         VStack {
-            // Year and Month Selector
-            HStack {
-                Button(action: {
-                    self.month -= 1
-                    if self.month < 1 {
-                        self.month = 12
-                        self.year -= 1
-                    }
-                }) {
-                    Image(systemName: "chevron.left")
-                }
-
-                Text("\(calendar.monthSymbols[month - 1]) \(String(year))")
-                    .font(.title)
-                    .fontWeight(.bold)
-
-                Button(action: {
-                    self.month += 1
-                    if self.month > 12 {
-                        self.month = 1
-                        self.year += 1
-                    }
-                }) {
-                    Image(systemName: "chevron.right")
-                }
-            }
-            .padding()
+            // Month Header
+            Text(month, formatter: .monthYear)
+                .font(.title)
+                .fontWeight(.bold)
+                .padding()
 
             // Days of the week
             HStack {
@@ -81,20 +100,16 @@ struct CalendarView: View {
                 }
             }
             .padding()
-            .sheet(item: $selectedWorkout) { workout in
-                WorkoutDetailView(workout: workout)
-            }
         }
     }
 
     private func getDaysInMonth() -> [Date] {
-        var components = DateComponents()
-        components.year = year
-        components.month = month
-        let firstOfMonth = calendar.date(from: components)!
+        guard let monthInterval = calendar.dateInterval(of: .month, for: month) else {
+            return []
+        }
 
-        let range = calendar.range(of: .day, in: .month, for: firstOfMonth)!
-        let firstDayOfWeek = calendar.component(.weekday, from: firstOfMonth)
+        let firstDayOfMonth = monthInterval.start
+        let firstDayOfWeek = calendar.component(.weekday, from: firstDayOfMonth)
 
         var days: [Date] = []
 
@@ -102,8 +117,9 @@ struct CalendarView: View {
             days.append(Date.distantPast)
         }
 
+        let range = calendar.range(of: .day, in: .month, for: month)!
         for day in range {
-            let date = calendar.date(byAdding: .day, value: day - 1, to: firstOfMonth)!
+            let date = calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth)!
             days.append(date)
         }
 
@@ -117,15 +133,12 @@ struct CalendarView: View {
         let components = calendar.dateComponents([.day], from: date)
         return String(components.day!)
     }
+}
 
-    private func backgroundColor(for date: Date) -> Color {
-        if date == Date.distantPast {
-            return .clear
-        }
-        if workoutManager.workoutHistory.contains(where: { calendar.isDate($0.date, inSameDayAs: date) }) {
-            return .accentColor
-        } else {
-            return Color.gray.opacity(0.2)
-        }
-    }
+extension DateFormatter {
+    static let monthYear: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter
+    }()
 }
