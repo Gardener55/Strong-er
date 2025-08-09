@@ -60,7 +60,7 @@ struct MonthCalendarView: View {
     var body: some View {
         VStack {
             // Month Header
-            Text(month, formatter: .monthYear)
+            Text(month, formatter: DateFormatter.monthYear)
                 .font(.title)
                 .fontWeight(.bold)
                 .padding()
