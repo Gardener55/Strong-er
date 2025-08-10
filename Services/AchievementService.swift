@@ -31,12 +31,70 @@ class AchievementService {
 
     private static func allAchievements() -> [Achievement] {
         return [
+            // --- Consistency & Frequency ---
             Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill"),
+            Achievement(title: "Getting Started", description: "Completed 5 workouts.", iconName: "figure.walk.arrival"),
             Achievement(title: "Workout Warrior", description: "Completed 10 workouts.", iconName: "flame.fill"),
-            Achievement(title: "Consistent Lifter", description: "Worked out for 3 days in a row.", iconName: "calendar"),
+            Achievement(title: "Serious Contender", description: "Completed 25 workouts.", iconName: "figure.strengthtraining.traditional"),
+            Achievement(title: "Dedicated", description: "Completed 50 workouts.", iconName: "person.fill.checkmark"),
+            Achievement(title: "Centurion", description: "Completed 100 workouts.", iconName: "100.square.fill"),
+            Achievement(title: "Veteran", description: "Completed 250 workouts.", iconName: "shield.fill"),
+            Achievement(title: "Elite", description: "Completed 500 workouts.", iconName: "crown.fill"),
+
+            Achievement(title: "Warming Up", description: "Worked out for 3 days in a row.", iconName: "3.circle"),
+            Achievement(title: "On a Roll", description: "Worked out for 7 days in a row.", iconName: "7.circle"),
+            Achievement(title: "Unstoppable", description: "Worked out for 14 days in a row.", iconName: "14.circle"),
+            Achievement(title: "Legendary Streak", description: "Worked out for 30 days in a row.", iconName: "30.circle"),
+            Achievement(title: "Immortal", description: "Worked out for 100 days in a row.", iconName: "infinity.circle.fill"),
+
+            Achievement(title: "Monthly Regular", description: "Completed 10 workouts in a calendar month.", iconName: "calendar.badge.clock"),
+            Achievement(title: "Monthly Warrior", description: "Completed 15 workouts in a calendar month.", iconName: "calendar.badge.plus"),
+            Achievement(title: "Monthly Champion", description: "Completed 20 workouts in a calendar month.", iconName: "calendar.badge.exclamationmark"),
+
+            Achievement(title: "Perfect Week", description: "Completed a workout every day for a full week.", iconName: "calendar.circle.fill"),
+            Achievement(title: "Weekend Warrior", description: "Completed a workout on a Saturday and Sunday in the same week.", iconName: "w.square.fill"),
+            Achievement(title: "Two-a-Day", description: "Completed two workouts in a single day.", iconName: "2.square.fill"),
+            Achievement(title: "Loyalist", description: "You've been using the app for one year.", iconName: "1.circle.fill"),
+
+            // --- Volume & PRs ---
+            Achievement(title: "Light Lifter", description: "Lifted a total of 10,000 kg/lbs in a single workout.", iconName: "scalemass"),
+            Achievement(title: "Heavy Lifter", description: "Lifted a total of 25,000 kg/lbs in a single workout.", iconName: "scalemass.fill"),
+            Achievement(title: "Super Heavy Lifter", description: "Lifted a total of 50,000 kg/lbs in a single workout.", iconName: "bolt.fill"),
+
+            Achievement(title: "PR Setter", description: "Set your first Personal Record.", iconName: "trophy"),
+            Achievement(title: "Record Breaker", description: "Broke 10 of your existing Personal Records.", iconName: "trophy.fill"),
+            Achievement(title: "Goal Crusher", description: "Broke 50 of your existing Personal Records.", iconName: "crown"),
+
+            Achievement(title: "Millionaire Club", description: "Lifted a total of 1,000,000 kg/lbs over your lifetime.", iconName: "dollarsign.circle.fill"),
+            Achievement(title: "Multi-Millionaire", description: "Lifted a total of 5,000,000 kg/lbs over your lifetime.", iconName: "dollarsign.square.fill"),
+
+            // --- Duration & Time ---
+            Achievement(title: "Quick Start", description: "Completed a workout in under 30 minutes.", iconName: "hare.fill"),
+            Achievement(title: "Standard Session", description: "Completed a workout between 45 and 75 minutes.", iconName: "tortoise.fill"),
             Achievement(title: "Marathon Session", description: "Completed a workout longer than 90 minutes.", iconName: "clock.fill"),
-            Achievement(title: "Heavy Lifter", description: "Lifted over 5000 lbs in a single workout.", iconName: "scalemass.fill"),
-            Achievement(title: "Monthly Warrior", description: "Completed 15 workouts in a calendar month.", iconName: "calendar.badge.plus")
+            Achievement(title: "Endurance Master", description: "Your total workout time has exceeded 24 hours.", iconName: "24.circle"),
+            Achievement(title: "Time Lord", description: "Your total workout time has exceeded 100 hours.", iconName: "hourglass"),
+
+            Achievement(title: "Early Bird", description: "Completed 10 workouts before 7 AM.", iconName: "sunrise.fill"),
+            Achievement(title: "Night Owl", description: "Completed 10 workouts after 9 PM.", iconName: "moon.stars.fill"),
+
+            // --- Variety ---
+            Achievement(title: "Explorer", description: "Performed 10 different exercises.", iconName: "magnifyingglass"),
+            Achievement(title: "Adventurer", description: "Performed 25 different exercises.", iconName: "map.fill"),
+            Achievement(title: "Pioneer", description: "Performed 50 different exercises.", iconName: "globe.americas.fill"),
+
+            Achievement(title: "Well-Rounded", description: "Trained every major muscle group in a single week.", iconName: "figure.mind.and.body"),
+            Achievement(title: "Specialist", description: "Completed 10 workouts for the same muscle group.", iconName: "scope"),
+
+            Achievement(title: "Bodyweight Pro", description: "Completed 25 bodyweight workouts.", iconName: "figure.cooldown"),
+            Achievement(title: "Dumbbell Devotee", description: "Completed 25 workouts using dumbbells.", iconName: "dumbbell.fill"),
+            Achievement(title: "Barbell Boss", description: "Completed 25 workouts using a barbell.", iconName: "figure.strengthtraining.functional"),
+            Achievement(title: "Machine Master", description: "Completed 25 workouts using machines.", iconName: "gearshape.2.fill"),
+
+            // --- Special Days ---
+            Achievement(title: "New Year, New Me", description: "Completed a workout on January 1st.", iconName: "party.popper.fill"),
+            Achievement(title: "Holiday Hustle", description: "Completed a workout on Christmas Day (Dec 25th).", iconName: "gift.fill"),
+            Achievement(title: "The Comeback", description: "Completed a workout after more than a month of inactivity.", iconName: "arrow.uturn.backward.circle.fill")
         ]
     }
 
@@ -46,43 +104,68 @@ class AchievementService {
             userProfile.achievements = AchievementService.allAchievements()
         }
 
-        // 1. First Workout
-        if !allWorkouts.isEmpty {
-            unlockAchievement(title: "First Workout", userProfile: &userProfile)
-        }
+        // --- Consistency & Frequency ---
+        let totalWorkouts = allWorkouts.count
+        if totalWorkouts >= 1 { unlockAchievement(title: "First Workout", userProfile: &userProfile) }
+        if totalWorkouts >= 5 { unlockAchievement(title: "Getting Started", userProfile: &userProfile) }
+        if totalWorkouts >= 10 { unlockAchievement(title: "Workout Warrior", userProfile: &userProfile) }
+        if totalWorkouts >= 25 { unlockAchievement(title: "Serious Contender", userProfile: &userProfile) }
+        if totalWorkouts >= 50 { unlockAchievement(title: "Dedicated", userProfile: &userProfile) }
+        if totalWorkouts >= 100 { unlockAchievement(title: "Centurion", userProfile: &userProfile) }
+        if totalWorkouts >= 250 { unlockAchievement(title: "Veteran", userProfile: &userProfile) }
+        if totalWorkouts >= 500 { unlockAchievement(title: "Elite", userProfile: &userProfile) }
 
-        // 2. Workout Warrior (10 workouts)
-        if allWorkouts.count >= 10 {
-            unlockAchievement(title: "Workout Warrior", userProfile: &userProfile)
-        }
+        if hasWorkoutStreak(count: 3, allWorkouts: allWorkouts) { unlockAchievement(title: "Warming Up", userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 7, allWorkouts: allWorkouts) { unlockAchievement(title: "On a Roll", userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 14, allWorkouts: allWorkouts) { unlockAchievement(title: "Unstoppable", userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 30, allWorkouts: allWorkouts) { unlockAchievement(title: "Legendary Streak", userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 100, allWorkouts: allWorkouts) { unlockAchievement(title: "Immortal", userProfile: &userProfile) }
 
-        // 3. Marathon Session (> 90 minutes)
-        if let duration = workout.duration, duration > 5400 { // 90 minutes * 60 seconds
-            unlockAchievement(title: "Marathon Session", userProfile: &userProfile)
-        }
-
-        // 4. Heavy Lifter (> 5000 lbs)
-        let totalWeight = workout.exercises.reduce(0) { total, exercise in
-            total + exercise.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) }
-        }
-        if totalWeight > 5000 {
-            unlockAchievement(title: "Heavy Lifter", userProfile: &userProfile)
-        }
-
-        // 5. Consistent Lifter (3 day streak)
-        if hasWorkoutStreak(count: 3, allWorkouts: allWorkouts) {
-            unlockAchievement(title: "Consistent Lifter", userProfile: &userProfile)
-        }
-
-        // 6. Monthly Warrior (15 workouts in a month)
         let calendar = Calendar.current
-        let workoutsThisMonth = allWorkouts.filter {
-            calendar.isDate($0.date, equalTo: workout.date, toGranularity: .month)
-        }.count
+        let workoutsThisMonth = allWorkouts.filter { calendar.isDate($0.date, equalTo: workout.date, toGranularity: .month) }.count
+        if workoutsThisMonth >= 10 { unlockAchievement(title: "Monthly Regular", userProfile: &userProfile) }
+        if workoutsThisMonth >= 15 { unlockAchievement(title: "Monthly Warrior", userProfile: &userProfile) }
+        if workoutsThisMonth >= 20 { unlockAchievement(title: "Monthly Champion", userProfile: &userProfile) }
 
-        if workoutsThisMonth >= 15 {
-            unlockAchievement(title: "Monthly Warrior", userProfile: &userProfile)
+        // --- Volume & PRs ---
+        let singleWorkoutVolume = workout.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } }
+        if singleWorkoutVolume >= 10000 { unlockAchievement(title: "Light Lifter", userProfile: &userProfile) }
+        if singleWorkoutVolume >= 25000 { unlockAchievement(title: "Heavy Lifter", userProfile: &userProfile) }
+        if singleWorkoutVolume >= 50000 { unlockAchievement(title: "Super Heavy Lifter", userProfile: &userProfile) }
+
+        if !userProfile.personalRecords.isEmpty { unlockAchievement(title: "PR Setter", userProfile: &userProfile) }
+
+        // --- Duration & Time ---
+        if let duration = workout.duration {
+            if duration < 1800 { unlockAchievement(title: "Quick Start", userProfile: &userProfile) }
+            if duration >= 2700 && duration <= 4500 { unlockAchievement(title: "Standard Session", userProfile: &userProfile) }
+            if duration > 5400 { unlockAchievement(title: "Marathon Session", userProfile: &userProfile) }
         }
+
+        let totalWorkoutTime = allWorkouts.compactMap { $0.duration }.reduce(0, +)
+        if totalWorkoutTime > 86400 { unlockAchievement(title: "Endurance Master", userProfile: &userProfile) } // 24 hours
+        if totalWorkoutTime > 360000 { unlockAchievement(title: "Time Lord", userProfile: &userProfile) }     // 100 hours
+
+        let hour = calendar.component(.hour, from: workout.date)
+        if hour < 7 {
+            let earlyWorkouts = allWorkouts.filter { calendar.component(.hour, from: $0.date) < 7 }.count
+            if earlyWorkouts >= 10 { unlockAchievement(title: "Early Bird", userProfile: &userProfile) }
+        }
+        if hour >= 21 {
+            let lateWorkouts = allWorkouts.filter { calendar.component(.hour, from: $0.date) >= 21 }.count
+            if lateWorkouts >= 10 { unlockAchievement(title: "Night Owl", userProfile: &userProfile) }
+        }
+
+        // --- Variety ---
+        let distinctExercises = Set(allWorkouts.flatMap { $0.exercises.map { $0.exercise.name } })
+        if distinctExercises.count >= 10 { unlockAchievement(title: "Explorer", userProfile: &userProfile) }
+        if distinctExercises.count >= 25 { unlockAchievement(title: "Adventurer", userProfile: &userProfile) }
+        if distinctExercises.count >= 50 { unlockAchievement(title: "Pioneer", userProfile: &userProfile) }
+
+        // --- Special Days ---
+        let components = calendar.dateComponents([.day, .month], from: workout.date)
+        if components.day == 1 && components.month == 1 { unlockAchievement(title: "New Year, New Me", userProfile: &userProfile) }
+        if components.day == 25 && components.month == 12 { unlockAchievement(title: "Holiday Hustle", userProfile: &userProfile) }
     }
 
     private func unlockAchievement(title: String, userProfile: inout UserProfile) {

@@ -1,55 +1,99 @@
 import SwiftUI
 
 struct AchievementsView: View {
-    let userProfile: UserProfile
+    @Binding var userProfile: UserProfile
+
+    private var earnedAchievements: [Achievement] {
+        userProfile.achievements.filter { $0.isEarned }.sorted { $0.earnedDate ?? Date() > $1.earnedDate ?? Date() }
+    }
+
+    private var unearnedAchievements: [Achievement] {
+        userProfile.achievements.filter { !$0.isEarned }
+    }
 
     var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("Achievements")) {
-                    if userProfile.achievements.filter({ $0.isEarned }).isEmpty {
-                        Text("No achievements yet. Keep working out!")
-                    } else {
-                        ForEach(userProfile.achievements.filter { $0.isEarned }) { achievement in
-                            HStack {
-                                Image(systemName: achievement.iconName)
-                                    .font(.title)
-                                    .foregroundColor(.yellow)
-                                VStack(alignment: .leading) {
-                                    Text(achievement.title).font(.headline)
-                                    Text(achievement.description).font(.subheadline)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Section(header: Text("Personal Records")) {
-                    if userProfile.personalRecords.isEmpty {
-                        Text("No personal records yet. Let's lift!")
-                    } else {
-                        ForEach(groupedRecords.keys.sorted(), id: \.self) { exerciseName in
+        List {
+            Section(header: Text("Achievements Earned (\(earnedAchievements.count))")) {
+                if earnedAchievements.isEmpty {
+                    Text("No achievements yet. Keep working out!")
+                } else {
+                    ForEach(earnedAchievements) { achievement in
+                        HStack {
+                            Image(systemName: achievement.iconName)
+                                .font(.title)
+                                .foregroundColor(.yellow)
                             VStack(alignment: .leading) {
-                                Text(exerciseName).font(.headline)
-                                ForEach(groupedRecords[exerciseName]!) { record in
-                                    HStack {
-                                        Text(record.recordType.rawValue)
-                                        Spacer()
-                                        Text(formattedValue(for: record, unit: userProfile.weightUnit))
-                                            .fontWeight(.semibold)
-                                    }
+                                Text(achievement.title).font(.headline)
+                                Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
+                                if let date = achievement.earnedDate {
+                                    Text("Earned: \(date, formatter: itemFormatter)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
                                 }
                             }
                         }
                     }
                 }
             }
-            .navigationTitle("My Achievements")
+
+            Section(header: Text("Personal Records")) {
+                if userProfile.personalRecords.isEmpty {
+                    Text("No personal records yet. Let's lift!")
+                } else {
+                    ForEach(groupedRecords.keys.sorted(), id: \.self) { exerciseName in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(exerciseName).font(.headline)
+                                Spacer()
+                                Button(action: {
+                                    togglePin(for: exerciseName)
+                                }) {
+                                    Image(systemName: userProfile.watchedExercises.contains(exerciseName) ? "pin.fill" : "pin")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                            ForEach(groupedRecords[exerciseName]!) { record in
+                                HStack {
+                                    Text(record.recordType.rawValue)
+                                        .font(.subheadline)
+                                    Spacer()
+                                    Text(formattedValue(for: record, unit: userProfile.weightUnit))
+                                        .fontWeight(.semibold)
+                                }
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+
+            Section(header: Text("Achievements to Unlock (\(unearnedAchievements.count))")) {
+                ForEach(unearnedAchievements) { achievement in
+                    HStack {
+                        Image(systemName: achievement.iconName)
+                            .font(.title)
+                            .foregroundColor(.gray)
+                        VStack(alignment: .leading) {
+                            Text(achievement.title).font(.headline)
+                            Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
         }
+        .navigationTitle("My Achievements")
     }
 
     private var groupedRecords: [String: [PersonalRecord]] {
         Dictionary(grouping: userProfile.personalRecords, by: { $0.exerciseName })
+    }
+
+    private func togglePin(for exerciseName: String) {
+        if let index = userProfile.watchedExercises.firstIndex(of: exerciseName) {
+            userProfile.watchedExercises.remove(at: index)
+        } else {
+            userProfile.watchedExercises.append(exerciseName)
+        }
     }
 
     private func formattedValue(for record: PersonalRecord, unit: UserProfile.WeightUnit) -> String {
@@ -63,35 +107,32 @@ struct AchievementsView: View {
             return String(format: "%.1f lbs", convertedValueLbs)
         }
     }
+
+    private let itemFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
 }
 
 struct AchievementsView_Previews: PreviewProvider {
     static var previews: some View {
         // Create a sample user profile for previewing
-        // All PRs are stored in KG, regardless of the user's preference.
-        var sampleProfile = UserProfile()
-        sampleProfile.achievements = [
-            Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill", isEarned: true)
-        ]
-        sampleProfile.personalRecords = [
-            PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()), // 100.0 kg
-            PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date())      // 120.0 kg
-        ]
+        @State var sampleProfile = UserProfile(
+            personalRecords: [
+                PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()),
+                PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date())
+            ],
+            achievements: [
+                Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill", isEarned: true, earnedDate: Date()),
+                Achievement(title: "Workout Warrior", description: "Completed 10 workouts.", iconName: "flame.fill", isEarned: false)
+            ],
+            watchedExercises: ["Bench Press"]
+        )
 
-        // Create a KG view
-        var kgProfile = sampleProfile
-        kgProfile.weightUnit = .kilograms
-
-        // Create an LBS view
-        var lbsProfile = sampleProfile
-        lbsProfile.weightUnit = .pounds
-
-        return Group {
-            AchievementsView(userProfile: kgProfile)
-                .previewDisplayName("KG View")
-
-            AchievementsView(userProfile: lbsProfile)
-                .previewDisplayName("LBS View")
+        return NavigationView {
+            AchievementsView(userProfile: $sampleProfile)
         }
     }
 }
