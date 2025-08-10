@@ -65,7 +65,7 @@ class WorkoutManager: ObservableObject {
 
         // Process achievements and PRs
         let brokenPRs = achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile, unit: userProfileService.userProfile.weightUnit)
-        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs)
+        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs.count)
 
         // Determine newly earned achievements
         let allEarnedAchievements = userProfileService.userProfile.achievements.filter { $0.isEarned }
