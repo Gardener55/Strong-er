@@ -13,16 +13,22 @@ struct CalendarView: View {
 
     private let calendar = Calendar.current
     private var months: [Date] {
+        guard let firstWorkoutDate = workoutManager.workoutHistory.min(by: { $0.date < $1.date })?.date else {
+            // If no workout history, just show the current month
+            return [Date()]
+        }
+
         var dates: [Date] = []
         let today = Date()
-        let twoYearsAgo = calendar.date(byAdding: .year, value: -2, to: today)!
-        let oneYearFromNow = calendar.date(byAdding: .year, value: 1, to: today)!
+        let calendar = Calendar.current
+        let firstMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: firstWorkoutDate))!
+        var currentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: today))!
 
-        var date = twoYearsAgo
-        while date <= oneYearFromNow {
-            dates.append(date)
-            date = calendar.date(byAdding: .month, value: 1, to: date)!
+        while currentMonth >= firstMonth {
+            dates.append(currentMonth)
+            currentMonth = calendar.date(byAdding: .month, value: -1, to: currentMonth)!
         }
+
         return dates
     }
 
@@ -37,7 +43,9 @@ struct CalendarView: View {
                 }
             }
             .onAppear {
-                proxy.scrollTo(startOfMonth(for: Date()), anchor: .center)
+                if let firstMonth = months.first {
+                    proxy.scrollTo(firstMonth, anchor: .top)
+                }
             }
             .sheet(item: $selectedWorkout) { workout in
                 WorkoutDetailView(workout: workout)
