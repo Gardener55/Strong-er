@@ -148,12 +148,21 @@ class WorkoutManager: ObservableObject {
         return uniqueExercises.sorted { $0.name < $1.name }
     }
 
-    func getPreviousSet(for exercise: Exercise) -> WorkoutSet? {
-        for workout in workoutHistory.sorted(by: { $0.date > $1.date }) {
-            if let workoutExercise = workout.exercises.first(where: { $0.exercise.id == exercise.id }) {
-                return workoutExercise.sets.first
+    func getPreviousSet(for exercise: Exercise, setIndex: Int) -> WorkoutSet? {
+        // Sort workouts by date in descending order to find the most recent one first
+        let sortedWorkouts = workoutHistory.sorted { $0.date > $1.date }
+
+        for workout in sortedWorkouts {
+            // Find the specific exercise in the workout
+            if let exerciseInWorkout = workout.exercises.first(where: { $0.exercise.id == exercise.id }) {
+                // Check if the set index is within the bounds of the sets for that exercise
+                if setIndex < exerciseInWorkout.sets.count {
+                    return exerciseInWorkout.sets[setIndex]
+                }
             }
         }
+
+        // Return nil if no previous set is found
         return nil
     }
 }
