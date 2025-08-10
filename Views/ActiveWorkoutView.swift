@@ -13,6 +13,8 @@ struct ActiveWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var timer: Timer?
     @State private var restTimeRemaining: TimeInterval = 0
+    @State private var restTimerEnabled = true
+    @State private var defaultRestTime: TimeInterval = 60
 
     var body: some View {
         NavigationView {
@@ -21,17 +23,28 @@ struct ActiveWorkoutView: View {
                     .font(.largeTitle)
                     .padding()
 
-                if restTimeRemaining > 0 {
+                if restTimeRemaining > 0 && restTimerEnabled {
                     Text("Rest: \(Int(restTimeRemaining))s")
                         .font(.largeTitle)
                         .padding()
                 }
 
                 List {
+                    Section(header: Text("Settings")) {
+                        Toggle("Enable Rest Timer", isOn: $restTimerEnabled)
+                        HStack {
+                            Text("Default Rest Time")
+                            TextField("Seconds", value: $defaultRestTime, format: .number)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.numberPad)
+                        }
+                    }
+
                     ForEach($workout.exercises) { $exercise in
                         Section(header: Text(exercise.exercise.name)) {
                             ForEach($exercise.sets) { $set in
-                                SetCompletionRow(set: $set) {
+                                let previousSet = workoutManager.getPreviousSet(for: exercise.exercise)
+                                SetCompletionRow(set: $set, previousSet: previousSet) {
                                     if set.completed {
                                         startRestTimer(duration: set.restTime)
                                     } else {
@@ -39,6 +52,13 @@ struct ActiveWorkoutView: View {
                                         restTimeRemaining = 0
                                     }
                                 }
+                            }
+                            .onDelete { indexSet in
+                                exercise.sets.remove(atOffsets: indexSet)
+                            }
+                        } footer: {
+                            Button("Add Set") {
+                                exercise.sets.append(WorkoutSet(restTime: defaultRestTime))
                             }
                         }
                     }
@@ -67,6 +87,7 @@ struct ActiveWorkoutView: View {
     }
 
     private func startRestTimer(duration: TimeInterval) {
+        if !restTimerEnabled { return }
         restTimeRemaining = duration
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -81,30 +102,43 @@ struct ActiveWorkoutView: View {
 
 struct SetCompletionRow: View {
     @Binding var set: WorkoutSet
+    let previousSet: WorkoutSet?
     var onToggle: () -> Void
 
     var body: some View {
-        HStack {
-            Button(action: {
-                set.completed.toggle()
-                onToggle()
-            }) {
-                Image(systemName: set.completed ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(set.completed ? .green : .gray)
-            }
-            .buttonStyle(PlainButtonStyle())
-
-            if set.isWarmup {
-                Text("Warmup")
+        VStack(alignment: .leading) {
+            if let previous = previousSet {
+                Text("Previous: \(previous.reps) reps at \(String(format: "%.1f", previous.weight ?? 0))")
                     .font(.caption)
-                    .padding(.horizontal, 8)
-                    .background(Color.yellow.opacity(0.5))
-                    .cornerRadius(8)
+                    .foregroundColor(.secondary)
             }
+            HStack {
+                Button(action: {
+                    set.completed.toggle()
+                    onToggle()
+                }) {
+                    Image(systemName: set.completed ? "checkmark.circle.fill" : "circle")
+                        .foregroundColor(set.completed ? .green : .gray)
+                }
+                .buttonStyle(PlainButtonStyle())
 
-            Text("Reps: \(set.reps)")
-            if let weight = set.weight {
-                Text("Weight: \(weight, specifier: "%.1f")")
+                if set.isWarmup {
+                    Text("Warmup")
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .background(Color.yellow.opacity(0.5))
+                        .cornerRadius(8)
+                }
+
+                TextField("Reps", value: $set.reps, format: .number)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.numberPad)
+
+                if set.weight != nil {
+                    TextField("Weight", value: $set.weight, format: .number)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.decimalPad)
+                }
             }
         }
     }
