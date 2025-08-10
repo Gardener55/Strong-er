@@ -60,9 +60,16 @@ class WorkoutManager: ObservableObject {
         guard var workout = currentWorkout else { return ([], []) }
         workout.duration = Date().timeIntervalSince(workout.date)
 
+        // Get achievements before processing
+        let previouslyEarnedAchievements = userProfileService.userProfile.achievements.filter { $0.isEarned }.map { $0.id }
+
         // Process achievements and PRs
         let brokenPRs = achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile, unit: userProfileService.userProfile.weightUnit)
-        let newAchievements = achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs)
+        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs)
+
+        // Determine newly earned achievements
+        let allEarnedAchievements = userProfileService.userProfile.achievements.filter { $0.isEarned }
+        let newAchievements = allEarnedAchievements.filter { !previouslyEarnedAchievements.contains($0.id) }
 
         // Save updated user profile
         userProfileService.saveProfile()
