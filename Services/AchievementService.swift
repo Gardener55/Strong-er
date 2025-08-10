@@ -24,7 +24,7 @@ class AchievementService {
             processedWorkouts.append(workout)
             // Assumes the historical workout data is in the unit set in the user's profile
             let brokenPRsInWorkout = updatePersonalRecords(for: workout, userProfile: &userProfile, unit: userProfile.weightUnit)
-            totalBrokenPRs += brokenPRsInWorkout
+            totalBrokenPRs += brokenPRsInWorkout.count
             checkAchievements(for: workout, allWorkouts: processedWorkouts, userProfile: &userProfile, brokenPRs: totalBrokenPRs)
         }
     }
@@ -231,59 +231,47 @@ class AchievementService {
         return streak >= count
     }
 
-    func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile, unit: UserProfile.WeightUnit) -> Int {
-        var brokenPRs = 0
+    func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile, unit: UserProfile.WeightUnit) -> [PersonalRecord] {
+        var brokenPRs: [PersonalRecord] = []
         for exercise in workout.exercises {
             let exerciseName = exercise.exercise.name
 
-            // Calculate metrics from the workout (these are in the user's selected unit)
-            var maxWeight = exercise.sets.compactMap { $0.weight }.max() ?? 0
-            var totalVolume = exercise.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) }
-            var estimatedOneRepMax = exercise.sets.compactMap { aSet -> Double? in
+            // Calculate metrics from the workout
+            let maxWeight = exercise.sets.compactMap { $0.weight }.max() ?? 0
+            let totalVolume = exercise.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) }
+            let estimatedOneRepMax = exercise.sets.compactMap { aSet -> Double? in
                 guard let weight = aSet.weight, aSet.reps > 0 else { return nil }
                 return calculateOneRepMax(weight: weight, reps: aSet.reps)
             }.max() ?? 0
 
-            // The weights in the workout object are assumed to be in KG at this point.
-            // The 'unit' parameter reflects the user's setting at the time of workout completion,
-            // but the conversion to KG should have already happened.
-
-            // Update Max Weight PR (now in KG)
-            if updateRecord(exerciseName: exerciseName, recordType: .maxWeight, newValue: maxWeight, date: workout.date, userProfile: &userProfile) {
-                brokenPRs += 1
+            if let pr = updateRecord(exerciseName: exerciseName, recordType: .maxWeight, newValue: maxWeight, date: workout.date, userProfile: &userProfile) {
+                brokenPRs.append(pr)
             }
-
-            // Update Max Volume PR (now in KG)
-            if updateRecord(exerciseName: exerciseName, recordType: .maxVolume, newValue: totalVolume, date: workout.date, userProfile: &userProfile) {
-                brokenPRs += 1
+            if let pr = updateRecord(exerciseName: exerciseName, recordType: .maxVolume, newValue: totalVolume, date: workout.date, userProfile: &userProfile) {
+                brokenPRs.append(pr)
             }
-
-            // Update 1RM PR (now in KG)
-            if updateRecord(exerciseName: exerciseName, recordType: .oneRepMax, newValue: estimatedOneRepMax, date: workout.date, userProfile: &userProfile) {
-                brokenPRs += 1
+            if let pr = updateRecord(exerciseName: exerciseName, recordType: .oneRepMax, newValue: estimatedOneRepMax, date: workout.date, userProfile: &userProfile) {
+                brokenPRs.append(pr)
             }
         }
         return brokenPRs
     }
 
-    private func updateRecord(exerciseName: String, recordType: PersonalRecord.RecordType, newValue: Double, date: Date, userProfile: inout UserProfile) -> Bool {
-        // Do not record PRs for 0 values
-        guard newValue > 0 else { return false }
+    private func updateRecord(exerciseName: String, recordType: PersonalRecord.RecordType, newValue: Double, date: Date, userProfile: inout UserProfile) -> PersonalRecord? {
+        guard newValue > 0 else { return nil }
+
+        let newRecord = PersonalRecord(exerciseName: exerciseName, recordType: recordType, value: newValue, date: date)
 
         if let existingRecordIndex = userProfile.personalRecords.firstIndex(where: { $0.exerciseName == exerciseName && $0.recordType == recordType }) {
-            // If record exists and new value is greater, update it
             if newValue > userProfile.personalRecords[existingRecordIndex].value {
-                userProfile.personalRecords[existingRecordIndex].value = newValue
-                userProfile.personalRecords[existingRecordIndex].date = date
-                return true // A record was broken
+                userProfile.personalRecords[existingRecordIndex] = newRecord
+                return newRecord
             }
         } else {
-            // If no record exists, create a new one
-            let newRecord = PersonalRecord(exerciseName: exerciseName, recordType: recordType, value: newValue, date: date)
             userProfile.personalRecords.append(newRecord)
-            return true // A new record is also considered "breaking" for achievement purposes
+            return newRecord
         }
-        return false
+        return nil
     }
 
     private func findAchievement(withTitle title: String, in userProfile: UserProfile) -> Achievement? {
