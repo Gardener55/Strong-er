@@ -197,7 +197,7 @@ struct ActiveWorkoutView: View {
     }
 }
 
-struct SetRow: View {
+private struct SetRow: View {
     @Binding var set: WorkoutSet
     let setNumber: Int
     let previousSet: WorkoutSet?
