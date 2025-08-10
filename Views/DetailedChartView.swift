@@ -45,9 +45,9 @@ struct DetailedChartView: View {
     private var chartView: some View {
         switch chartType {
         case .highestWeight(let exercise):
-            HighestWeightChartView(exercise: exercise, visibleDomain: $visibleDomain)
+            DetailedHighestWeightChartView(exercise: exercise, visibleDomain: $visibleDomain)
         case .workoutsPerWeek:
-            WorkoutsPerWeekChartView(visibleDomain: $visibleDomain)
+            DetailedWorkoutsPerWeekChartView(visibleDomain: $visibleDomain)
         }
     }
 
@@ -72,7 +72,7 @@ struct DetailedChartView: View {
     }
 }
 
-struct HighestWeightChartView: View {
+struct DetailedHighestWeightChartView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var userProfileService: UserProfileService
     let exercise: Exercise
@@ -157,7 +157,7 @@ struct ChartZoomControlView: View {
     }
 }
 
-struct WorkoutsPerWeekChartView: View {
+struct DetailedWorkoutsPerWeekChartView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var visibleDomain: ClosedRange<Date>?
     private let chartManager = ChartManager()
