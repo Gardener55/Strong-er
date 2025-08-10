@@ -18,12 +18,14 @@ class AchievementService {
         let sortedWorkouts = allWorkouts.sorted { $0.date < $1.date }
 
         var processedWorkouts: [Workout] = []
+        var totalBrokenPRs = 0
 
         for workout in sortedWorkouts {
             processedWorkouts.append(workout)
             // Assumes the historical workout data is in the unit set in the user's profile
-            updatePersonalRecords(for: workout, userProfile: &userProfile, unit: userProfile.weightUnit)
-            checkAchievements(for: workout, allWorkouts: processedWorkouts, userProfile: &userProfile)
+            let brokenPRsInWorkout = updatePersonalRecords(for: workout, userProfile: &userProfile, unit: userProfile.weightUnit)
+            totalBrokenPRs += brokenPRsInWorkout
+            checkAchievements(for: workout, allWorkouts: processedWorkouts, userProfile: &userProfile, brokenPRs: totalBrokenPRs)
         }
     }
 
@@ -98,7 +100,7 @@ class AchievementService {
         ]
     }
 
-    func checkAchievements(for workout: Workout, allWorkouts: [Workout], userProfile: inout UserProfile) {
+    func checkAchievements(for workout: Workout, allWorkouts: [Workout], userProfile: inout UserProfile, brokenPRs: Int) {
         // Initialize achievements if they are not already
         if userProfile.achievements.isEmpty {
             userProfile.achievements = AchievementService.allAchievements()
@@ -134,6 +136,12 @@ class AchievementService {
         if singleWorkoutVolume >= 50000 { unlockAchievement(title: "Super Heavy Lifter", userProfile: &userProfile) }
 
         if !userProfile.personalRecords.isEmpty { unlockAchievement(title: "PR Setter", userProfile: &userProfile) }
+        if brokenPRs >= 10 { unlockAchievement(title: "Record Breaker", userProfile: &userProfile) }
+        if brokenPRs >= 50 { unlockAchievement(title: "Goal Crusher", userProfile: &userProfile) }
+
+        let lifetimeVolume = allWorkouts.reduce(0) { $0 + $1.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } } }
+        if lifetimeVolume >= 1000000 { unlockAchievement(title: "Millionaire Club", userProfile: &userProfile) }
+        if lifetimeVolume >= 5000000 { unlockAchievement(title: "Multi-Millionaire", userProfile: &userProfile) }
 
         // --- Duration & Time ---
         if let duration = workout.duration {
@@ -210,7 +218,8 @@ class AchievementService {
         return streak >= count
     }
 
-    func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile, unit: UserProfile.WeightUnit) {
+    func updatePersonalRecords(for workout: Workout, userProfile: inout UserProfile, unit: UserProfile.WeightUnit) -> Int {
+        var brokenPRs = 0
         for exercise in workout.exercises {
             let exerciseName = exercise.exercise.name
 
@@ -231,30 +240,40 @@ class AchievementService {
             }
 
             // Update Max Weight PR (now in KG)
-            updateRecord(exerciseName: exerciseName, recordType: .maxWeight, newValue: maxWeight, date: workout.date, userProfile: &userProfile)
+            if updateRecord(exerciseName: exerciseName, recordType: .maxWeight, newValue: maxWeight, date: workout.date, userProfile: &userProfile) {
+                brokenPRs += 1
+            }
 
             // Update Max Volume PR (now in KG)
-            updateRecord(exerciseName: exerciseName, recordType: .maxVolume, newValue: totalVolume, date: workout.date, userProfile: &userProfile)
+            if updateRecord(exerciseName: exerciseName, recordType: .maxVolume, newValue: totalVolume, date: workout.date, userProfile: &userProfile) {
+                brokenPRs += 1
+            }
 
             // Update 1RM PR (now in KG)
-            updateRecord(exerciseName: exerciseName, recordType: .oneRepMax, newValue: estimatedOneRepMax, date: workout.date, userProfile: &userProfile)
+            if updateRecord(exerciseName: exerciseName, recordType: .oneRepMax, newValue: estimatedOneRepMax, date: workout.date, userProfile: &userProfile) {
+                brokenPRs += 1
+            }
         }
+        return brokenPRs
     }
 
-    private func updateRecord(exerciseName: String, recordType: PersonalRecord.RecordType, newValue: Double, date: Date, userProfile: inout UserProfile) {
+    private func updateRecord(exerciseName: String, recordType: PersonalRecord.RecordType, newValue: Double, date: Date, userProfile: inout UserProfile) -> Bool {
         // Do not record PRs for 0 values
-        guard newValue > 0 else { return }
+        guard newValue > 0 else { return false }
 
         if let existingRecordIndex = userProfile.personalRecords.firstIndex(where: { $0.exerciseName == exerciseName && $0.recordType == recordType }) {
             // If record exists and new value is greater, update it
             if newValue > userProfile.personalRecords[existingRecordIndex].value {
                 userProfile.personalRecords[existingRecordIndex].value = newValue
                 userProfile.personalRecords[existingRecordIndex].date = date
+                return true // A record was broken
             }
         } else {
             // If no record exists, create a new one
             let newRecord = PersonalRecord(exerciseName: exerciseName, recordType: recordType, value: newValue, date: date)
             userProfile.personalRecords.append(newRecord)
+            return true // A new record is also considered "breaking" for achievement purposes
         }
+        return false
     }
 }

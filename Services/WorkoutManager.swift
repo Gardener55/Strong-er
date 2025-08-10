@@ -24,7 +24,7 @@ class WorkoutManager: ObservableObject {
 
     // Default initializer
     convenience init() {
-        self.init(achievementService: AchievementService(), userProfileService: UserProfileService())
+        self.init(achievementService: AchievementService(), userProfileService: UserProfileService.shared)
     }
 
     // Initializer for dependency injection
@@ -56,8 +56,8 @@ class WorkoutManager: ObservableObject {
         workout.duration = Date().timeIntervalSince(workout.date)
 
         // Process achievements and PRs
-        achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile, unit: userProfileService.userProfile.weightUnit)
-        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile)
+        let brokenPRs = achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile, unit: userProfileService.userProfile.weightUnit)
+        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs)
 
         // Save updated user profile
         userProfileService.saveProfile()
