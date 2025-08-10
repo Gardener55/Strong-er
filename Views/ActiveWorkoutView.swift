@@ -271,6 +271,7 @@ private struct ExerciseSectionView: View {
     @EnvironmentObject var userProfileService: UserProfileService
 
     var body: some View {
+ feature/active-workout-enhancements
         VStack(alignment: .leading, spacing: 0) {
             Text(exercise.name)
                 .font(.headline)
@@ -285,6 +286,8 @@ private struct ExerciseSectionView: View {
                     }
                 }
 
+        Section(header: Text(exercise.exercise.name).font(.headline)) {
+ main
             ForEach(0..<exercise.sets.count, id: \.self) { index in
                 ActiveWorkoutSetRow(
                     set: $exercise.sets[index],
@@ -308,11 +311,15 @@ private struct ExerciseSectionView: View {
                 .padding(.horizontal)
             }
             .onDelete { indexSet in
-                exercise.sets.remove(atOffsets: indexSet)
+                var tempExercise = exercise
+                tempExercise.sets.remove(atOffsets: indexSet)
+                exercise = tempExercise
             }
 
             Button(action: {
-                exercise.sets.append(WorkoutSet())
+                var tempExercise = exercise
+                tempExercise.sets.append(WorkoutSet())
+                exercise = tempExercise
             }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
