@@ -31,7 +31,7 @@ struct ActiveWorkoutView: View {
         }
     }
 
-    // Editable start time
+    // View State
     @State private var workoutStartDate: Date
     @State private var setForRestTimeEdit: Binding<WorkoutSet>?
     @State private var activeSheet: ActiveSheet?
@@ -51,9 +51,7 @@ struct ActiveWorkoutView: View {
         NavigationView {
             VStack {
                 headerView
-
                 exerciseListView
-
                 finishButtonView
             }
             .navigationTitle("Active Workout")
@@ -61,45 +59,12 @@ struct ActiveWorkoutView: View {
             .onAppear(perform: startWorkoutTimer)
             .onDisappear(perform: stopWorkoutTimer)
             .sheet(item: $activeSheet) { sheet in
-                switch sheet {
-                case .datePicker:
-                    VStack {
-                        DatePicker(
-                            "Workout Start Time",
-                            selection: $workoutStartDate,
-                            displayedComponents: [.date, .hourAndMinute]
-                        )
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .labelsHidden()
-
-                        Button("Done") {
-                            if workoutStartDate > Date() {
-                                workoutStartDate = Date()
-                            }
-                            activeSheet = nil
-                            recalculateDuration()
-                        }
-                        .padding()
-                    }
-                case .exercisePicker:
-                    ExercisePickerView { exercise in
-                        let newExercise = WorkoutExercise(exercise: exercise)
-                        workout.exercises.append(newExercise)
-                    }
-                case .restTimeEditor:
-                    if let setBinding = setForRestTimeEdit {
-                        RestTimeEditorView(set: setBinding)
-                            .onDisappear {
-                                if activeRestSetID == setBinding.wrappedValue.id {
-                                    restTimeRemaining = setBinding.wrappedValue.restTime
-                                }
-                                setForRestTimeEdit = nil
-                            }
-                    }
-                }
+                sheetView(for: sheet)
             }
         }
     }
+
+    // MARK: - Subviews
 
     private var headerView: some View {
         HStack {
@@ -130,53 +95,30 @@ struct ActiveWorkoutView: View {
     private var exerciseListView: some View {
         List {
             ForEach($workout.exercises) { $exercise in
-                Section(header: Text(exercise.exercise.name).font(.headline)) {
-                    ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, $set in
-                        ActiveWorkoutSetRow(
-                            set: $set,
-                            setNumber: index + 1,
-                            previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
-                            weightUnit: userProfileService.userProfile.weightUnit,
-                            onToggleCompletion: {
-                                if $set.completed.wrappedValue {
-                                    startRestTimer(for: $set.wrappedValue)
-                                } else {
-                                    stopRestTimer()
-                                }
-                            },
-                            isResting: activeRestSetID == set.id,
-                            restTimeRemaining: restTimeRemaining,
-                            onEditRestTime: {
-                                setForRestTimeEdit = $set
-                                activeSheet = .restTimeEditor
-                            }
-                        )
-                    }
-                    .onDelete { indexSet in
-                        exercise.sets.remove(atOffsets: indexSet)
-                    }
-
-                    Button(action: {
-                        exercise.sets.append(WorkoutSet())
-                    }) {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Add Set")
-                        }
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                }
+                ExerciseSectionView(
+                    exercise: $exercise,
+                    activeRestSetID: $activeRestSetID,
+                    restTimeRemaining: $restTimeRemaining,
+                    setForRestTimeEdit: $setForRestTimeEdit,
+                    activeSheet: $activeSheet,
+                    startRestTimer: startRestTimer,
+                    stopRestTimer: stopRestTimer
+                )
             }
             .onDelete(perform: removeExercise)
 
-            Section {
-                Button(action: {
-                    activeSheet = .exercisePicker
-                }) {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                        Text("Add Exercise")
-                    }
+            addExerciseButtonSection
+        }
+    }
+
+    private var addExerciseButtonSection: some View {
+        Section {
+            Button(action: {
+                activeSheet = .exercisePicker
+            }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add Exercise")
                 }
             }
         }
@@ -197,6 +139,53 @@ struct ActiveWorkoutView: View {
         .padding()
     }
 
+    @ViewBuilder
+    private func sheetView(for sheet: ActiveSheet) -> some View {
+        switch sheet {
+        case .datePicker:
+            datePickerSheet
+        case .exercisePicker:
+            ExercisePickerView { exercise in
+                let newExercise = WorkoutExercise(exercise: exercise)
+                workout.exercises.append(newExercise)
+                activeSheet = nil
+            }
+        case .restTimeEditor:
+            if let setBinding = setForRestTimeEdit {
+                RestTimeEditorView(set: setBinding)
+                    .onDisappear {
+                        if activeRestSetID == setBinding.wrappedValue.id {
+                            restTimeRemaining = setBinding.wrappedValue.restTime
+                        }
+                        setForRestTimeEdit = nil
+                    }
+            }
+        }
+    }
+
+    private var datePickerSheet: some View {
+        VStack {
+            DatePicker(
+                "Workout Start Time",
+                selection: $workoutStartDate,
+                displayedComponents: [.date, .hourAndMinute]
+            )
+            .datePickerStyle(GraphicalDatePickerStyle())
+            .labelsHidden()
+
+            Button("Done") {
+                if workoutStartDate > Date() {
+                    workoutStartDate = Date()
+                }
+                activeSheet = nil
+                recalculateDuration()
+            }
+            .padding()
+        }
+    }
+
+    // MARK: - Timer Functions
+
     private func timeString(from interval: TimeInterval) -> String {
         let hours = Int(interval) / 3600
         let minutes = Int(interval) / 60 % 60
@@ -206,7 +195,7 @@ struct ActiveWorkoutView: View {
 
     private func startWorkoutTimer() {
         if !isTimerRunning {
-            workout.date = workoutStartDate // Update workout date
+            workout.date = workoutStartDate
             workoutTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 workoutDuration = Date().timeIntervalSince(workoutStartDate)
             }
@@ -221,7 +210,6 @@ struct ActiveWorkoutView: View {
 
     private func recalculateDuration() {
         workoutDuration = Date().timeIntervalSince(workoutStartDate)
-        // If timer is running, restart it to ensure it's in sync
         if isTimerRunning {
             stopWorkoutTimer()
             startWorkoutTimer()
@@ -229,7 +217,7 @@ struct ActiveWorkoutView: View {
     }
 
     private func startRestTimer(for set: WorkoutSet) {
-        stopRestTimer() // Stop any existing timer
+        stopRestTimer()
         restTimeRemaining = set.restTime
         activeRestSetID = set.id
         restTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -248,6 +236,8 @@ struct ActiveWorkoutView: View {
         restTimeRemaining = 0
     }
 
+    // MARK: - Data Functions
+
     private func finishWorkout() {
         stopWorkoutTimer()
         workout.duration = workoutDuration
@@ -260,12 +250,66 @@ struct ActiveWorkoutView: View {
     }
 }
 
+// MARK: - Sub-Views
+
+private struct ExerciseSectionView: View {
+    @Binding var exercise: WorkoutExercise
+    @Binding var activeRestSetID: UUID?
+    @Binding var restTimeRemaining: TimeInterval
+    @Binding var setForRestTimeEdit: Binding<WorkoutSet>?
+    @Binding var activeSheet: ActiveWorkoutView.ActiveSheet?
+
+    var startRestTimer: (WorkoutSet) -> Void
+    var stopRestTimer: () -> Void
+
+    @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var userProfileService: UserProfileService
+
+    var body: some View {
+        Section(header: Text(exercise.name).font(.headline)) {
+            ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, $set in
+                ActiveWorkoutSetRow(
+                    set: $set,
+                    setNumber: index + 1,
+                    previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
+                    weightUnit: userProfileService.userProfile.weightUnit,
+                    onToggleCompletion: {
+                        if $set.wrappedValue.completed {
+                            startRestTimer($set.wrappedValue)
+                        } else {
+                            stopRestTimer()
+                        }
+                    },
+                    onEditRestTime: {
+                        setForRestTimeEdit = $set
+                        activeSheet = .restTimeEditor
+                    },
+                    isResting: activeRestSetID == set.id,
+                    restTimeRemaining: restTimeRemaining
+                )
+            }
+            .onDelete { indexSet in
+                exercise.sets.remove(atOffsets: indexSet)
+            }
+
+            Button(action: {
+                exercise.sets.append(WorkoutSet())
+            }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add Set")
+                }
+            }
+            .buttonStyle(BorderlessButtonStyle())
+        }
+    }
+}
+
 private struct ActiveWorkoutSetRow: View {
     @FocusState private var focusedField: Field?
 
     enum Field: Hashable {
-        case reps
-        case weight
+        case reps, weight
     }
 
     @Binding var set: WorkoutSet
@@ -280,14 +324,10 @@ private struct ActiveWorkoutSetRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                // Set Number
                 Text("Set \(setNumber)")
                     .font(.headline)
                     .fontWeight(.bold)
-
                 Spacer()
-
-                // Previous Set Info
                 if let previous = previousSet {
                     Text(previousSetText(for: previous))
                         .font(.caption)
@@ -296,7 +336,6 @@ private struct ActiveWorkoutSetRow: View {
             }
 
             HStack(spacing: 16) {
-                // Completion Checkmark
                 Button(action: {
                     set.completed.toggle()
                     onToggleCompletion()
@@ -307,10 +346,8 @@ private struct ActiveWorkoutSetRow: View {
                 }
                 .buttonStyle(PlainButtonStyle())
 
-                // Weight Input
                 VStack {
-                    Text("Weight")
-                        .font(.caption)
+                    Text("Weight").font(.caption)
                     TextField("0", value: $set.weight, format: .number)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .keyboardType(.decimalPad)
@@ -318,10 +355,8 @@ private struct ActiveWorkoutSetRow: View {
                         .focused($focusedField, equals: .weight)
                 }
 
-                // Reps Input
                 VStack {
-                    Text("Reps")
-                        .font(.caption)
+                    Text("Reps").font(.caption)
                     TextField("0", value: $set.reps, format: .number)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .keyboardType(.numberPad)
@@ -338,7 +373,6 @@ private struct ActiveWorkoutSetRow: View {
                 }
             }
 
-            // Rest Timer
             if isResting {
                 Button(action: onEditRestTime) {
                     HStack {
