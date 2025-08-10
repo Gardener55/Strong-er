@@ -40,25 +40,48 @@ struct ExerciseLibraryView: View {
                 SearchBar(text: $searchText)
                 
                 // Filters
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        FilterChip(
-                            title: "All Categories",
-                            isSelected: selectedCategory == nil
-                        ) {
-                            selectedCategory = nil
-                        }
-                        
-                        ForEach(Exercise.ExerciseCategory.allCases, id: \.self) { category in
+                VStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
                             FilterChip(
-                                title: category.rawValue,
-                                isSelected: selectedCategory == category
+                                title: "All Categories",
+                                isSelected: selectedCategory == nil
                             ) {
-                                selectedCategory = selectedCategory == category ? nil : category
+                                selectedCategory = nil
+                            }
+
+                            ForEach(Exercise.ExerciseCategory.allCases, id: \.self) { category in
+                                FilterChip(
+                                    title: category.rawValue,
+                                    isSelected: selectedCategory == category
+                                ) {
+                                    selectedCategory = selectedCategory == category ? nil : category
+                                }
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            FilterChip(
+                                title: "All Muscle Groups",
+                                isSelected: selectedMuscleGroup == nil
+                            ) {
+                                selectedMuscleGroup = nil
+                            }
+
+                            ForEach(Exercise.MuscleGroup.allCases, id: \.self) { muscleGroup in
+                                FilterChip(
+                                    title: muscleGroup.rawValue,
+                                    isSelected: selectedMuscleGroup == muscleGroup
+                                ) {
+                                    selectedMuscleGroup = selectedMuscleGroup == muscleGroup ? nil : muscleGroup
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
                 }
                 
                 // Exercise List

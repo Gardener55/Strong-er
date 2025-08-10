@@ -91,6 +91,30 @@ struct WorkoutDetailView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var userProfileService: UserProfileService
     
+    private var totalVolume: Double {
+        workout.exercises.reduce(0) { total, exercise in
+            total + exercise.sets.reduce(0) { setTotal, set in
+                setTotal + ((set.weight ?? 0) * Double(set.reps))
+            }
+        }
+    }
+
+    private var formattedTotalVolume: String {
+        let unit = userProfileService.userProfile.weightUnit
+        let volume: Double
+        let unitString: String
+
+        switch unit {
+        case .kilograms:
+            volume = totalVolume
+            unitString = "kg"
+        case .pounds:
+            volume = totalVolume * 2.20462
+            unitString = "lbs"
+        }
+        return String(format: "%.1f %@", volume, unitString)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -99,10 +123,14 @@ struct WorkoutDetailView: View {
                     Text(workout.name)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    
-                    Text(workout.date, style: .date)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+
+                    HStack {
+                        Text(workout.date, style: .date)
+                        Spacer()
+                        Text("Total Volume: \(formattedTotalVolume)")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                     
                     if let duration = workout.duration {
                         Text("Duration: \(formatDuration(duration))")

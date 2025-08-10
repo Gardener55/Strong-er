@@ -44,19 +44,12 @@ struct ContentView: View {
                 }
                 .tag(3)
             
-            ItemListView() // Your Core Data view
-                .tabItem {
-                    Image(systemName: "list.dash")
-                    Text("Items")
-                }
-                .tag(4)
-            
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")
                 }
-                .tag(5)
+                .tag(4)
         }
         .environmentObject(workoutManager)
         .environmentObject(exerciseDatabase)

@@ -138,7 +138,12 @@ private struct PRRow: View {
                 HStack {
                     Text(record.recordType.rawValue).font(.subheadline)
                     Spacer()
-                    Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
+                    VStack(alignment: .trailing) {
+                        Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
+                        Text(record.date, style: .date)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
         }.padding(.vertical, 4)
