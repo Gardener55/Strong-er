@@ -136,6 +136,12 @@ class WorkoutManager: ObservableObject {
             thisWeekWorkouts: thisWeekWorkouts
         )
     }
+
+    func getUniqueExercises() -> [Exercise] {
+        let allExercises = workoutHistory.flatMap { $0.exercises.map { $0.exercise } }
+        let uniqueExercises = Array(Set(allExercises))
+        return uniqueExercises.sorted { $0.name < $1.name }
+    }
 }
 
 struct WorkoutStats {

@@ -149,6 +149,14 @@ struct QuickActionsView: View {
                         color: .red
                     )
                 }
+
+                NavigationLink(destination: ChartsView()) {
+                    QuickActionButton(
+                        title: "Charts",
+                        icon: "chart.xyaxis.line",
+                        color: .blue
+                    )
+                }
             }
         }
         .sheet(isPresented: $showingCreateWorkout) {
