@@ -69,7 +69,7 @@ struct ActiveWorkoutView: View {
                     ForEach($workout.exercises) { $exercise in
                         Section(header: Text(exercise.exercise.name).font(.headline)) {
                             ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, $set in
-                                SetRow(
+                                ActiveWorkoutSetRow(
                                     set: $set,
                                     setNumber: index + 1,
                                     previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
@@ -197,7 +197,7 @@ struct ActiveWorkoutView: View {
     }
 }
 
-private struct SetRow: View {
+private struct ActiveWorkoutSetRow: View {
     @Binding var set: WorkoutSet
     let setNumber: Int
     let previousSet: WorkoutSet?
