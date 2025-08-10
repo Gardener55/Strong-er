@@ -2,6 +2,8 @@ import Foundation
 import Combine
 
 class UserProfileService: ObservableObject {
+    static let shared = UserProfileService()
+
     private static let userProfileKey = "userProfile"
 
     @Published var userProfile: UserProfile {
@@ -10,7 +12,7 @@ class UserProfileService: ObservableObject {
         }
     }
 
-    init() {
+    private init() {
         self.userProfile = UserProfileService.loadProfile()
     }
 
