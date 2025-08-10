@@ -266,34 +266,38 @@ private struct ExerciseSectionView: View {
     @EnvironmentObject var userProfileService: UserProfileService
 
     var body: some View {
-        Section(header: Text(exercise.name).font(.headline)) {
-            ForEach(0..<exercise.sets.count, id: \.self) { index in
+        Section(header: Text(exercise.wrappedValue.exercise.name).font(.headline)) {
+            ForEach(0..<exercise.wrappedValue.sets.count, id: \.self) { index in
                 ActiveWorkoutSetRow(
-                    set: $exercise.sets[index],
+                    set: exercise.sets[index],
                     setNumber: index + 1,
-                    previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
+                    previousSet: workoutManager.getPreviousSet(for: exercise.wrappedValue.exercise, setIndex: index),
                     weightUnit: userProfileService.userProfile.weightUnit,
                     onToggleCompletion: {
-                        if exercise.sets[index].completed {
-                            startRestTimer(exercise.sets[index])
+                        if exercise.wrappedValue.sets[index].completed {
+                            startRestTimer(exercise.wrappedValue.sets[index])
                         } else {
                             stopRestTimer()
                         }
                     },
                     onEditRestTime: {
-                        setForRestTimeEdit = $exercise.sets[index]
+                        setForRestTimeEdit = exercise.sets[index]
                         activeSheet = .restTimeEditor
                     },
-                    isResting: activeRestSetID == exercise.sets[index].id,
+                    isResting: activeRestSetID == exercise.wrappedValue.sets[index].id,
                     restTimeRemaining: restTimeRemaining
                 )
             }
             .onDelete { indexSet in
-                exercise.sets.remove(atOffsets: indexSet)
+                var tempExercise = exercise.wrappedValue
+                tempExercise.sets.remove(atOffsets: indexSet)
+                exercise.wrappedValue = tempExercise
             }
 
             Button(action: {
-                exercise.sets.append(WorkoutSet())
+                var tempExercise = exercise.wrappedValue
+                tempExercise.sets.append(WorkoutSet())
+                exercise.wrappedValue = tempExercise
             }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
