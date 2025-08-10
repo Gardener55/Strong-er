@@ -152,16 +152,15 @@ private struct PRRow: View {
     }
 
     private func formattedValue(for record: PersonalRecord, unit: UserProfile.WeightUnit) -> String {
-        // This is a temporary fix. The root cause is likely that PersonalRecord.value is not being
-        // consistently stored in KG. This function now assumes the stored value is in the user's
-        // currently selected unit, which should fix the immediate display issue.
-        let value = record.value
+        // Assumes record.value is always stored in KG
+        let storedValueKg = record.value
 
         switch unit {
         case .kilograms:
-            return String(format: "%.1f kg", value)
+            return String(format: "%.1f kg", storedValueKg)
         case .pounds:
-            return String(format: "%.1f lbs", value)
+            let convertedValueLbs = storedValueKg * 2.20462
+            return String(format: "%.1f lbs", convertedValueLbs)
         }
     }
 }
