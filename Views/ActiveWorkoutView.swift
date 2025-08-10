@@ -104,8 +104,16 @@ struct ActiveWorkoutView: View {
                     startRestTimer: startRestTimer,
                     stopRestTimer: stopRestTimer
                 )
+                .swipeActions {
+                    Button(role: .destructive) {
+                        if let index = workout.exercises.firstIndex(where: { $0.id == exercise.id }) {
+                            workout.exercises.remove(at: index)
+                        }
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
             }
-            .onDelete(perform: removeExercise)
 
             addExerciseButtonSection
         }
