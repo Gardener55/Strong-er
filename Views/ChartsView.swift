@@ -11,6 +11,7 @@ import Charts
 struct ChartsView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var selectedExercise: Exercise?
+    @State private var showingDetail: ChartType?
 
     var body: some View {
         NavigationView {
@@ -25,14 +26,25 @@ struct ChartsView: View {
                         VStack {
                             if let selectedExercise = selectedExercise {
                                 HighestWeightChartView(exercise: selectedExercise)
+                                    .onTapGesture {
+                                        showingDetail = .highestWeight(selectedExercise)
+                                    }
                             } else {
                                 Text("Select an exercise to view charts.")
                                     .foregroundColor(.secondary)
                             }
 
                             WorkoutsPerWeekChartView()
+                                .onTapGesture {
+                                    showingDetail = .workoutsPerWeek
+                                }
                         }
                     }
+                }
+            }
+            .sheet(item: $showingDetail) { chartType in
+                NavigationView {
+                    DetailedChartView(chartType: chartType)
                 }
             }
             .navigationTitle("Progress Charts")
@@ -45,80 +57,7 @@ struct ChartsView: View {
     }
 }
 
-struct WorkoutsPerWeekChartView: View {
-    @EnvironmentObject var workoutManager: WorkoutManager
-    private let chartManager = ChartManager()
 
-    var body: some View {
-        let data = chartManager.getWorkoutsPerWeekData(from: workoutManager.workoutHistory)
-
-        VStack {
-            Text("Workouts Per Week")
-                .font(.headline)
-                .padding()
-
-            if data.isEmpty {
-                Text("No data available.")
-                    .foregroundColor(.secondary)
-            } else {
-                Chart(data) {
-                    BarMark(
-                        x: .value("Week", $0.date, unit: .weekOfYear),
-                        y: .value("Count", $0.value)
-                    )
-                }
-                .chartXAxis {
-                    AxisMarks(values: .automatic) { value in
-                        AxisGridLine()
-                        AxisTick()
-                        AxisValueLabel(format: .dateTime.month().day())
-                    }
-                }
-                .padding()
-            }
-        }
-    }
-}
-
-struct HighestWeightChartView: View {
-    @EnvironmentObject var workoutManager: WorkoutManager
-    let exercise: Exercise
-    private let chartManager = ChartManager()
-
-    var body: some View {
-        let data = chartManager.getHighestWeightData(for: exercise, from: workoutManager.workoutHistory)
-
-        VStack {
-            Text("Highest Weight for \(exercise.name)")
-                .font(.headline)
-                .padding()
-
-            if data.isEmpty {
-                Text("No data available for this exercise.")
-                    .foregroundColor(.secondary)
-            } else {
-                Chart(data) {
-                    LineMark(
-                        x: .value("Date", $0.date),
-                        y: .value("Weight", $0.value)
-                    )
-                    PointMark(
-                        x: .value("Date", $0.date),
-                        y: .value("Weight", $0.value)
-                    )
-                }
-                .chartXAxis {
-                    AxisMarks(values: .automatic) { value in
-                        AxisGridLine()
-                        AxisTick()
-                        AxisValueLabel(format: .dateTime.month().day())
-                    }
-                }
-                .padding()
-            }
-        }
-    }
-}
 
 struct ExercisePicker: View {
     @EnvironmentObject var workoutManager: WorkoutManager
