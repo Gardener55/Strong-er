@@ -23,11 +23,18 @@ struct ActiveWorkoutView: View {
     @State private var restTimeRemaining: TimeInterval = 0
     @State private var activeRestSetID: UUID?
 
+    enum ActiveSheet: Identifiable {
+        case datePicker, exercisePicker, restTimeEditor
+
+        var id: Int {
+            hashValue
+        }
+    }
+
     // Editable start time
-    @State private var showingDatePicker = false
-    @State private var showingAddExercisePicker = false
     @State private var workoutStartDate: Date
     @State private var setForRestTimeEdit: Binding<WorkoutSet>?
+    @State private var activeSheet: ActiveSheet?
 
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -59,7 +66,7 @@ struct ActiveWorkoutView: View {
                             .font(.title)
                             .fontWeight(.semibold)
                             .onTapGesture {
-                                showingDatePicker = true
+                                activeSheet = .datePicker
                             }
                         Text("Duration")
                             .font(.caption)
@@ -88,6 +95,7 @@ struct ActiveWorkoutView: View {
                                     restTimeRemaining: restTimeRemaining,
                                     onEditRestTime: {
                                         setForRestTimeEdit = $set
+                                        activeSheet = .restTimeEditor
                                     }
                                 )
                             }
@@ -110,7 +118,7 @@ struct ActiveWorkoutView: View {
 
                     Section {
                         Button(action: {
-                            showingAddExercisePicker = true
+                            activeSheet = .exercisePicker
                         }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
@@ -137,42 +145,42 @@ struct ActiveWorkoutView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: startWorkoutTimer)
             .onDisappear(perform: stopWorkoutTimer)
-            .sheet(isPresented: $showingDatePicker) {
-                VStack {
-                    DatePicker(
-                        "Workout Start Time",
-                        selection: $workoutStartDate,
-                        displayedComponents: [.date, .hourAndMinute]
-                    )
-                    .datePickerStyle(GraphicalDatePickerStyle())
-                    .labelsHidden()
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                case .datePicker:
+                    VStack {
+                        DatePicker(
+                            "Workout Start Time",
+                            selection: $workoutStartDate,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                        .labelsHidden()
 
-                    Button("Done") {
-                        if workoutStartDate > Date() {
-                            workoutStartDate = Date()
+                        Button("Done") {
+                            if workoutStartDate > Date() {
+                                workoutStartDate = Date()
+                            }
+                            activeSheet = nil
+                            recalculateDuration()
                         }
-                        showingDatePicker = false
-                        recalculateDuration()
+                        .padding()
                     }
-                    .padding()
-                }
-            }
-            .sheet(isPresented: $showingAddExercisePicker) {
-                ExercisePickerView { exercise in
-                    let newExercise = WorkoutExercise(exercise: exercise)
-                    workout.exercises.append(newExercise)
-                }
-            }
-            .sheet(isPresented: .constant(setForRestTimeEdit != nil), onDismiss: {
-                if let setBinding = setForRestTimeEdit {
-                    if activeRestSetID == setBinding.wrappedValue.id {
-                        restTimeRemaining = setBinding.wrappedValue.restTime
+                case .exercisePicker:
+                    ExercisePickerView { exercise in
+                        let newExercise = WorkoutExercise(exercise: exercise)
+                        workout.exercises.append(newExercise)
                     }
-                }
-                setForRestTimeEdit = nil
-            }) {
-                if let setBinding = setForRestTimeEdit {
-                    RestTimeEditorView(set: setBinding)
+                case .restTimeEditor:
+                    if let setBinding = setForRestTimeEdit {
+                        RestTimeEditorView(set: setBinding)
+                            .onDisappear {
+                                if activeRestSetID == setBinding.wrappedValue.id {
+                                    restTimeRemaining = setBinding.wrappedValue.restTime
+                                }
+                                setForRestTimeEdit = nil
+                            }
+                    }
                 }
             }
         }
