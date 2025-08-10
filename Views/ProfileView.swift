@@ -46,7 +46,7 @@ struct ProfileView: View {
                     }
                     
                     // Achievements Link
-                    NavigationLink(destination: AchievementsView(userProfile: userProfileService.userProfile)) {
+                    NavigationLink(destination: AchievementsView(userProfile: $userProfileService.userProfile)) {
                         HStack {
                             Image(systemName: "star.fill")
                             Text("Achievements")
