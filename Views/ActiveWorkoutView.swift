@@ -267,45 +267,52 @@ private struct ExerciseSectionView: View {
 
     var body: some View {
         Section(header: Text(exercise.wrappedValue.exercise.name).font(.headline)) {
-            ForEach(0..<exercise.wrappedValue.sets.count, id: \.self) { index in
-                ActiveWorkoutSetRow(
-                    set: exercise.sets[index],
-                    setNumber: index + 1,
-                    previousSet: workoutManager.getPreviousSet(for: exercise.wrappedValue.exercise, setIndex: index),
-                    weightUnit: userProfileService.userProfile.weightUnit,
-                    onToggleCompletion: {
-                        if exercise.wrappedValue.sets[index].completed {
-                            startRestTimer(exercise.wrappedValue.sets[index])
-                        } else {
-                            stopRestTimer()
-                        }
-                    },
-                    onEditRestTime: {
-                        setForRestTimeEdit = exercise.sets[index]
-                        activeSheet = .restTimeEditor
-                    },
-                    isResting: activeRestSetID == exercise.wrappedValue.sets[index].id,
-                    restTimeRemaining: restTimeRemaining
-                )
-            }
-            .onDelete { indexSet in
-                var tempExercise = exercise.wrappedValue
-                tempExercise.sets.remove(atOffsets: indexSet)
-                exercise.wrappedValue = tempExercise
-            }
-
-            Button(action: {
-                var tempExercise = exercise.wrappedValue
-                tempExercise.sets.append(WorkoutSet())
-                exercise.wrappedValue = tempExercise
-            }) {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Add Set")
-                }
-            }
-            .buttonStyle(BorderlessButtonStyle())
+            setsList
+            addSetButton
         }
+    }
+
+    private var setsList: some View {
+        ForEach(0..<exercise.wrappedValue.sets.count, id: \.self) { index in
+            ActiveWorkoutSetRow(
+                set: exercise.sets[index],
+                setNumber: index + 1,
+                previousSet: workoutManager.getPreviousSet(for: exercise.wrappedValue.exercise, setIndex: index),
+                weightUnit: userProfileService.userProfile.weightUnit,
+                onToggleCompletion: {
+                    if exercise.wrappedValue.sets[index].completed {
+                        startRestTimer(exercise.wrappedValue.sets[index])
+                    } else {
+                        stopRestTimer()
+                    }
+                },
+                onEditRestTime: {
+                    setForRestTimeEdit = exercise.sets[index]
+                    activeSheet = .restTimeEditor
+                },
+                isResting: activeRestSetID == exercise.wrappedValue.sets[index].id,
+                restTimeRemaining: restTimeRemaining
+            )
+        }
+        .onDelete { indexSet in
+            var tempExercise = exercise.wrappedValue
+            tempExercise.sets.remove(atOffsets: indexSet)
+            exercise.wrappedValue = tempExercise
+        }
+    }
+
+    private var addSetButton: some View {
+        Button(action: {
+            var tempExercise = exercise.wrappedValue
+            tempExercise.sets.append(WorkoutSet())
+            exercise.wrappedValue = tempExercise
+        }) {
+            HStack {
+                Image(systemName: "plus.circle.fill")
+                Text("Add Set")
+            }
+        }
+        .buttonStyle(BorderlessButtonStyle())
     }
 }
 
