@@ -11,7 +11,7 @@ import SwiftUI
 struct Strong_erApp: App {
     let persistenceController = PersistenceController.shared
     @StateObject private var themeManager = ThemeManager()
-    @StateObject private var userProfileService = UserProfileService()
+    @StateObject private var userProfileService = UserProfileService.shared
 
     var body: some Scene {
         WindowGroup {
