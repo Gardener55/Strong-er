@@ -161,6 +161,8 @@ struct AchievementsView: View {
     }
 
     private func formattedValue(for record: PersonalRecord, unit: UserProfile.WeightUnit) -> String {
+        // This function assumes `record.value` is always stored in kilograms (kg).
+        // It converts the stored kg value to pounds for display if the user's preference is lbs.
         let storedValueKg = record.value
 
         switch unit {
