@@ -13,11 +13,13 @@ struct WorkoutExercise: Identifiable, Codable {
     var id = UUID()
     var exercise: Exercise
     var sets: [WorkoutSet]
+    var restTime: TimeInterval?
     var notes: String = ""
     
-    init(exercise: Exercise, sets: [WorkoutSet] = []) {
+    init(exercise: Exercise, sets: [WorkoutSet] = [], restTime: TimeInterval? = nil) {
         self.exercise = exercise
         self.sets = sets.isEmpty ? [WorkoutSet()] : sets
+        self.restTime = restTime
     }
     
     var isCompleted: Bool {

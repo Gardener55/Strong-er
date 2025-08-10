@@ -19,6 +19,7 @@ struct UserProfile: Codable {
     var preferredEquipment: [Exercise.Equipment] = []
     var workoutDaysPerWeek: Int = 3
     var sessionDuration: Int = 60 // minutes
+    var defaultRestTimer: TimeInterval = 60 // seconds
     var weightUnit: WeightUnit = .pounds
     var personalRecords: [PersonalRecord] = []
     var achievements: [Achievement] = []

@@ -56,13 +56,13 @@ class WorkoutManager: ObservableObject {
         startWorkout(quickStartWorkout)
     }
     
-    func completeWorkout() {
-        guard var workout = currentWorkout else { return }
+    func completeWorkout() -> (brokenPRs: [PersonalRecord], newAchievements: [Achievement]) {
+        guard var workout = currentWorkout else { return ([], []) }
         workout.duration = Date().timeIntervalSince(workout.date)
 
         // Process achievements and PRs
         let brokenPRs = achievementService.updatePersonalRecords(for: workout, userProfile: &userProfileService.userProfile, unit: userProfileService.userProfile.weightUnit)
-        achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs)
+        let newAchievements = achievementService.checkAchievements(for: workout, allWorkouts: workoutHistory + [workout], userProfile: &userProfileService.userProfile, brokenPRs: brokenPRs)
 
         // Save updated user profile
         userProfileService.saveProfile()
@@ -71,6 +71,8 @@ class WorkoutManager: ObservableObject {
         workoutHistory.append(workout)
         currentWorkout = nil
         saveData()
+
+        return (brokenPRs, newAchievements)
     }
     
     func saveTemplate(_ workout: Workout) {
