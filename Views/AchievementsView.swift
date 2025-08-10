@@ -2,6 +2,9 @@ import SwiftUI
 
 struct AchievementsView: View {
     @Binding var userProfile: UserProfile
+    @State private var showAllEarned = false
+    @State private var showAllUnearned = false
+    @State private var showAllPRs = false
 
     private var earnedAchievements: [Achievement] {
         userProfile.achievements.filter { $0.isEarned }.sorted { $0.earnedDate ?? Date() > $1.earnedDate ?? Date() }
@@ -27,7 +30,8 @@ struct AchievementsView: View {
                 if earnedAchievements.isEmpty {
                     Text("No achievements yet. Keep working out!")
                 } else {
-                    ForEach(earnedAchievements) { achievement in
+                    let displayedEarned = showAllEarned ? earnedAchievements : Array(earnedAchievements.prefix(5))
+                    ForEach(displayedEarned) { achievement in
                         HStack {
                             Image(systemName: achievement.iconName)
                                 .font(.title)
@@ -41,6 +45,16 @@ struct AchievementsView: View {
                                         .foregroundColor(.gray)
                                 }
                             }
+                        }
+                    }
+                    if earnedAchievements.count > 5 {
+                        Button(action: {
+                            withAnimation {
+                                showAllEarned.toggle()
+                            }
+                        }) {
+                            Text(showAllEarned ? "Show Less" : "Show More...")
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
@@ -69,13 +83,16 @@ struct AchievementsView: View {
                 }
             }
 
-            Section(header: Text(pinnedRecords.isEmpty ? "Personal Records" : "Other Personal Records")) {
+            Section(header: Text(pinnedRecords.isEmpty ? "Personal Records (\(unpinnedRecords.count))" : "Other Personal Records (\(unpinnedRecords.count))")) {
                 if unpinnedRecords.isEmpty && pinnedRecords.isEmpty {
                     Text("No personal records yet. Let's lift!")
                 } else if unpinnedRecords.isEmpty && !pinnedRecords.isEmpty {
                     Text("All records are pinned.")
                 } else {
-                    ForEach(unpinnedRecords.keys.sorted(), id: \.self) { exerciseName in
+                    let unpinnedKeys = unpinnedRecords.keys.sorted()
+                    let displayedKeys = showAllPRs ? unpinnedKeys : Array(unpinnedKeys.prefix(5))
+
+                    ForEach(displayedKeys, id: \.self) { exerciseName in
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Text(exerciseName).font(.headline)
@@ -93,11 +110,23 @@ struct AchievementsView: View {
                             }
                         }.padding(.vertical, 4)
                     }
+
+                    if unpinnedRecords.count > 5 {
+                        Button(action: {
+                            withAnimation {
+                                showAllPRs.toggle()
+                            }
+                        }) {
+                            Text(showAllPRs ? "Show Less" : "Show More...")
+                                .foregroundColor(.accentColor)
+                        }
+                    }
                 }
             }
 
             Section(header: Text("Achievements to Unlock (\(unearnedAchievements.count))")) {
-                ForEach(unearnedAchievements) { achievement in
+                let displayedUnearned = showAllUnearned ? unearnedAchievements : Array(unearnedAchievements.prefix(5))
+                ForEach(displayedUnearned) { achievement in
                     HStack {
                         Image(systemName: achievement.iconName)
                             .font(.title)
@@ -106,6 +135,16 @@ struct AchievementsView: View {
                             Text(achievement.title).font(.headline)
                             Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
                         }
+                    }
+                }
+                if unearnedAchievements.count > 5 {
+                    Button(action: {
+                        withAnimation {
+                            showAllUnearned.toggle()
+                        }
+                    }) {
+                        Text(showAllUnearned ? "Show Less" : "Show More...")
+                            .foregroundColor(.accentColor)
                     }
                 }
             }
