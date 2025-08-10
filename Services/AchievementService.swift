@@ -108,78 +108,78 @@ class AchievementService {
 
         // --- Consistency & Frequency ---
         let totalWorkouts = allWorkouts.count
-        if totalWorkouts >= 1 { unlockAchievement(title: "First Workout", userProfile: &userProfile) }
-        if totalWorkouts >= 5 { unlockAchievement(title: "Getting Started", userProfile: &userProfile) }
-        if totalWorkouts >= 10 { unlockAchievement(title: "Workout Warrior", userProfile: &userProfile) }
-        if totalWorkouts >= 25 { unlockAchievement(title: "Serious Contender", userProfile: &userProfile) }
-        if totalWorkouts >= 50 { unlockAchievement(title: "Dedicated", userProfile: &userProfile) }
-        if totalWorkouts >= 100 { unlockAchievement(title: "Centurion", userProfile: &userProfile) }
-        if totalWorkouts >= 250 { unlockAchievement(title: "Veteran", userProfile: &userProfile) }
-        if totalWorkouts >= 500 { unlockAchievement(title: "Elite", userProfile: &userProfile) }
+        if totalWorkouts >= 1 { unlockAchievement(title: "First Workout", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 5 { unlockAchievement(title: "Getting Started", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 10 { unlockAchievement(title: "Workout Warrior", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 25 { unlockAchievement(title: "Serious Contender", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 50 { unlockAchievement(title: "Dedicated", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 100 { unlockAchievement(title: "Centurion", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 250 { unlockAchievement(title: "Veteran", date: workout.date, userProfile: &userProfile) }
+        if totalWorkouts >= 500 { unlockAchievement(title: "Elite", date: workout.date, userProfile: &userProfile) }
 
-        if hasWorkoutStreak(count: 3, allWorkouts: allWorkouts) { unlockAchievement(title: "Warming Up", userProfile: &userProfile) }
-        if hasWorkoutStreak(count: 7, allWorkouts: allWorkouts) { unlockAchievement(title: "On a Roll", userProfile: &userProfile) }
-        if hasWorkoutStreak(count: 14, allWorkouts: allWorkouts) { unlockAchievement(title: "Unstoppable", userProfile: &userProfile) }
-        if hasWorkoutStreak(count: 30, allWorkouts: allWorkouts) { unlockAchievement(title: "Legendary Streak", userProfile: &userProfile) }
-        if hasWorkoutStreak(count: 100, allWorkouts: allWorkouts) { unlockAchievement(title: "Immortal", userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 3, allWorkouts: allWorkouts) { unlockAchievement(title: "Warming Up", date: workout.date, userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 7, allWorkouts: allWorkouts) { unlockAchievement(title: "On a Roll", date: workout.date, userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 14, allWorkouts: allWorkouts) { unlockAchievement(title: "Unstoppable", date: workout.date, userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 30, allWorkouts: allWorkouts) { unlockAchievement(title: "Legendary Streak", date: workout.date, userProfile: &userProfile) }
+        if hasWorkoutStreak(count: 100, allWorkouts: allWorkouts) { unlockAchievement(title: "Immortal", date: workout.date, userProfile: &userProfile) }
 
         let calendar = Calendar.current
         let workoutsThisMonth = allWorkouts.filter { calendar.isDate($0.date, equalTo: workout.date, toGranularity: .month) }.count
-        if workoutsThisMonth >= 10 { unlockAchievement(title: "Monthly Regular", userProfile: &userProfile) }
-        if workoutsThisMonth >= 15 { unlockAchievement(title: "Monthly Warrior", userProfile: &userProfile) }
-        if workoutsThisMonth >= 20 { unlockAchievement(title: "Monthly Champion", userProfile: &userProfile) }
+        if workoutsThisMonth >= 10 { unlockAchievement(title: "Monthly Regular", date: workout.date, userProfile: &userProfile) }
+        if workoutsThisMonth >= 15 { unlockAchievement(title: "Monthly Warrior", date: workout.date, userProfile: &userProfile) }
+        if workoutsThisMonth >= 20 { unlockAchievement(title: "Monthly Champion", date: workout.date, userProfile: &userProfile) }
 
         // --- Volume & PRs ---
         let singleWorkoutVolume = workout.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } }
-        if singleWorkoutVolume >= 10000 { unlockAchievement(title: "Light Lifter", userProfile: &userProfile) }
-        if singleWorkoutVolume >= 25000 { unlockAchievement(title: "Heavy Lifter", userProfile: &userProfile) }
-        if singleWorkoutVolume >= 50000 { unlockAchievement(title: "Super Heavy Lifter", userProfile: &userProfile) }
+        if singleWorkoutVolume >= 10000 { unlockAchievement(title: "Light Lifter", date: workout.date, userProfile: &userProfile) }
+        if singleWorkoutVolume >= 25000 { unlockAchievement(title: "Heavy Lifter", date: workout.date, userProfile: &userProfile) }
+        if singleWorkoutVolume >= 50000 { unlockAchievement(title: "Super Heavy Lifter", date: workout.date, userProfile: &userProfile) }
 
-        if !userProfile.personalRecords.isEmpty { unlockAchievement(title: "PR Setter", userProfile: &userProfile) }
-        if brokenPRs >= 10 { unlockAchievement(title: "Record Breaker", userProfile: &userProfile) }
-        if brokenPRs >= 50 { unlockAchievement(title: "Goal Crusher", userProfile: &userProfile) }
+        if !userProfile.personalRecords.isEmpty { unlockAchievement(title: "PR Setter", date: workout.date, userProfile: &userProfile) }
+        if brokenPRs >= 10 { unlockAchievement(title: "Record Breaker", date: workout.date, userProfile: &userProfile) }
+        if brokenPRs >= 50 { unlockAchievement(title: "Goal Crusher", date: workout.date, userProfile: &userProfile) }
 
         let lifetimeVolume = allWorkouts.reduce(0) { $0 + $1.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } } }
-        if lifetimeVolume >= 1000000 { unlockAchievement(title: "Millionaire Club", userProfile: &userProfile) }
-        if lifetimeVolume >= 5000000 { unlockAchievement(title: "Multi-Millionaire", userProfile: &userProfile) }
+        if lifetimeVolume >= 1000000 { unlockAchievement(title: "Millionaire Club", date: workout.date, userProfile: &userProfile) }
+        if lifetimeVolume >= 5000000 { unlockAchievement(title: "Multi-Millionaire", date: workout.date, userProfile: &userProfile) }
 
         // --- Duration & Time ---
         if let duration = workout.duration {
-            if duration < 1800 { unlockAchievement(title: "Quick Start", userProfile: &userProfile) }
-            if duration >= 2700 && duration <= 4500 { unlockAchievement(title: "Standard Session", userProfile: &userProfile) }
-            if duration > 5400 { unlockAchievement(title: "Marathon Session", userProfile: &userProfile) }
+            if duration < 1800 { unlockAchievement(title: "Quick Start", date: workout.date, userProfile: &userProfile) }
+            if duration >= 2700 && duration <= 4500 { unlockAchievement(title: "Standard Session", date: workout.date, userProfile: &userProfile) }
+            if duration > 5400 { unlockAchievement(title: "Marathon Session", date: workout.date, userProfile: &userProfile) }
         }
 
         let totalWorkoutTime = allWorkouts.compactMap { $0.duration }.reduce(0, +)
-        if totalWorkoutTime > 86400 { unlockAchievement(title: "Endurance Master", userProfile: &userProfile) } // 24 hours
-        if totalWorkoutTime > 360000 { unlockAchievement(title: "Time Lord", userProfile: &userProfile) }     // 100 hours
+        if totalWorkoutTime > 86400 { unlockAchievement(title: "Endurance Master", date: workout.date, userProfile: &userProfile) } // 24 hours
+        if totalWorkoutTime > 360000 { unlockAchievement(title: "Time Lord", date: workout.date, userProfile: &userProfile) }     // 100 hours
 
         let hour = calendar.component(.hour, from: workout.date)
         if hour < 7 {
             let earlyWorkouts = allWorkouts.filter { calendar.component(.hour, from: $0.date) < 7 }.count
-            if earlyWorkouts >= 10 { unlockAchievement(title: "Early Bird", userProfile: &userProfile) }
+            if earlyWorkouts >= 10 { unlockAchievement(title: "Early Bird", date: workout.date, userProfile: &userProfile) }
         }
         if hour >= 21 {
             let lateWorkouts = allWorkouts.filter { calendar.component(.hour, from: $0.date) >= 21 }.count
-            if lateWorkouts >= 10 { unlockAchievement(title: "Night Owl", userProfile: &userProfile) }
+            if lateWorkouts >= 10 { unlockAchievement(title: "Night Owl", date: workout.date, userProfile: &userProfile) }
         }
 
         // --- Variety ---
         let distinctExercises = Set(allWorkouts.flatMap { $0.exercises.map { $0.exercise.name } })
-        if distinctExercises.count >= 10 { unlockAchievement(title: "Explorer", userProfile: &userProfile) }
-        if distinctExercises.count >= 25 { unlockAchievement(title: "Adventurer", userProfile: &userProfile) }
-        if distinctExercises.count >= 50 { unlockAchievement(title: "Pioneer", userProfile: &userProfile) }
+        if distinctExercises.count >= 10 { unlockAchievement(title: "Explorer", date: workout.date, userProfile: &userProfile) }
+        if distinctExercises.count >= 25 { unlockAchievement(title: "Adventurer", date: workout.date, userProfile: &userProfile) }
+        if distinctExercises.count >= 50 { unlockAchievement(title: "Pioneer", date: workout.date, userProfile: &userProfile) }
 
         // --- Special Days ---
         let components = calendar.dateComponents([.day, .month], from: workout.date)
-        if components.day == 1 && components.month == 1 { unlockAchievement(title: "New Year, New Me", userProfile: &userProfile) }
-        if components.day == 25 && components.month == 12 { unlockAchievement(title: "Holiday Hustle", userProfile: &userProfile) }
+        if components.day == 1 && components.month == 1 { unlockAchievement(title: "New Year, New Me", date: workout.date, userProfile: &userProfile) }
+        if components.day == 25 && components.month == 12 { unlockAchievement(title: "Holiday Hustle", date: workout.date, userProfile: &userProfile) }
     }
 
-    private func unlockAchievement(title: String, userProfile: inout UserProfile) {
+    private func unlockAchievement(title: String, date: Date, userProfile: inout UserProfile) {
         if let index = userProfile.achievements.firstIndex(where: { $0.title == title && !$0.isEarned }) {
             userProfile.achievements[index].isEarned = true
-            userProfile.achievements[index].earnedDate = Date()
+            userProfile.achievements[index].earnedDate = date
         }
     }
 
