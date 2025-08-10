@@ -45,6 +45,12 @@ struct SettingsView: View {
                     .pickerStyle(SegmentedPickerStyle())
                 }
 
+                Section(header: Text("Workout Settings")) {
+                    Stepper(value: $userProfileService.userProfile.defaultRestTimer, in: 0...300, step: 5) {
+                        Text("Default Rest Timer: \(Int(userProfileService.userProfile.defaultRestTimer)) seconds")
+                    }
+                }
+
                 Section(header: Text("Data Management")) {
                     Button("Import Workouts from CSV") {
                         isImporting = true
