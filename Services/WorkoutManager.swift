@@ -147,6 +147,15 @@ class WorkoutManager: ObservableObject {
         let uniqueExercises = Array(Set(allExercises))
         return uniqueExercises.sorted { $0.name < $1.name }
     }
+
+    func getPreviousSet(for exercise: Exercise) -> WorkoutSet? {
+        for workout in workoutHistory.sorted(by: { $0.date > $1.date }) {
+            if let workoutExercise = workout.exercises.first(where: { $0.exercise.id == exercise.id }) {
+                return workoutExercise.sets.first
+            }
+        }
+        return nil
+    }
 }
 
 struct WorkoutStats {
