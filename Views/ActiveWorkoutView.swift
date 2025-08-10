@@ -50,96 +50,11 @@ struct ActiveWorkoutView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Workout header
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(workout.name)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                        Text(dateFormatter.string(from: workoutStartDate))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(timeString(from: workoutDuration))
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .onTapGesture {
-                                activeSheet = .datePicker
-                            }
-                        Text("Duration")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                .padding()
+                headerView
 
-                List {
-                    ForEach($workout.exercises) { $exercise in
-                        Section(header: Text(exercise.exercise.name).font(.headline)) {
-                            ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, $set in
-                                ActiveWorkoutSetRow(
-                                    set: $set,
-                                    setNumber: index + 1,
-                                    previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
-                                    weightUnit: userProfileService.userProfile.weightUnit,
-                                    onToggleCompletion: {
-                                        if $set.completed.wrappedValue {
-                                            startRestTimer(for: $set.wrappedValue)
-                                        } else {
-                                            stopRestTimer()
-                                        }
-                                    },
-                                    isResting: activeRestSetID == set.id,
-                                    restTimeRemaining: restTimeRemaining,
-                                    onEditRestTime: {
-                                        setForRestTimeEdit = $set
-                                        activeSheet = .restTimeEditor
-                                    }
-                                )
-                            }
-                            .onDelete { indexSet in
-                                exercise.sets.remove(atOffsets: indexSet)
-                            }
+                exerciseListView
 
-                            Button(action: {
-                                exercise.sets.append(WorkoutSet())
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("Add Set")
-                                }
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                        }
-                    }
-                    .onDelete(perform: removeExercise)
-
-                    Section {
-                        Button(action: {
-                            activeSheet = .exercisePicker
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Add Exercise")
-                            }
-                        }
-                    }
-                }
-
-                Button(action: {
-                    finishWorkout()
-                }) {
-                    Text("Finish Workout")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.green)
-                        .cornerRadius(10)
-                }
-                .padding()
+                finishButtonView
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
@@ -184,6 +99,102 @@ struct ActiveWorkoutView: View {
                 }
             }
         }
+    }
+
+    private var headerView: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(workout.name)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                Text(dateFormatter.string(from: workoutStartDate))
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text(timeString(from: workoutDuration))
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .onTapGesture {
+                        activeSheet = .datePicker
+                    }
+                Text("Duration")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding()
+    }
+
+    private var exerciseListView: some View {
+        List {
+            ForEach($workout.exercises) { $exercise in
+                Section(header: Text(exercise.exercise.name).font(.headline)) {
+                    ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, $set in
+                        ActiveWorkoutSetRow(
+                            set: $set,
+                            setNumber: index + 1,
+                            previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
+                            weightUnit: userProfileService.userProfile.weightUnit,
+                            onToggleCompletion: {
+                                if $set.completed.wrappedValue {
+                                    startRestTimer(for: $set.wrappedValue)
+                                } else {
+                                    stopRestTimer()
+                                }
+                            },
+                            isResting: activeRestSetID == set.id,
+                            restTimeRemaining: restTimeRemaining,
+                            onEditRestTime: {
+                                setForRestTimeEdit = $set
+                                activeSheet = .restTimeEditor
+                            }
+                        )
+                    }
+                    .onDelete { indexSet in
+                        exercise.sets.remove(atOffsets: indexSet)
+                    }
+
+                    Button(action: {
+                        exercise.sets.append(WorkoutSet())
+                    }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Add Set")
+                        }
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                }
+            }
+            .onDelete(perform: removeExercise)
+
+            Section {
+                Button(action: {
+                    activeSheet = .exercisePicker
+                }) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Add Exercise")
+                    }
+                }
+            }
+        }
+    }
+
+    private var finishButtonView: some View {
+        Button(action: {
+            finishWorkout()
+        }) {
+            Text("Finish Workout")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.green)
+                .cornerRadius(10)
+        }
+        .padding()
     }
 
     private func timeString(from interval: TimeInterval) -> String {
