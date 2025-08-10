@@ -64,8 +64,8 @@ struct CreateWorkoutView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        saveWorkout()
+                    Button("Start") {
+                        startWorkout()
                     }
                     .disabled(workoutName.isEmpty || selectedExercises.isEmpty)
                 }
@@ -83,9 +83,9 @@ struct CreateWorkoutView: View {
         selectedExercises.remove(atOffsets: offsets)
     }
     
-    private func saveWorkout() {
+    private func startWorkout() {
         let workout = Workout(name: workoutName, exercises: selectedExercises)
-        workoutManager.saveTemplate(workout)
+        workoutManager.startWorkout(workout)
         dismiss()
     }
 }
@@ -262,6 +262,12 @@ struct SetRow: View {
                 ), format: .number)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.numberPad)
+            }
+
+            VStack {
+                Text("Warmup")
+                    .font(.caption2)
+                Toggle("", isOn: $set.isWarmup)
             }
         }
         .onChange(of: set) { _ in

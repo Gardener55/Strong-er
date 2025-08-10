@@ -13,18 +13,24 @@ struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var showingAIWorkout = false
     @State private var showingSettings = false
-    
+    @State private var showingActiveWorkout = false
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // Current Workout Card
+                    MotivationalMessageView()
+
                     if let currentWorkout = workoutManager.currentWorkout {
-                        CurrentWorkoutCard(workout: currentWorkout)
+                        Button(action: { showingActiveWorkout = true }) {
+                            CurrentWorkoutCard(workout: currentWorkout)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     
                     // Quick Actions
-                    QuickActionsView(showingAIWorkout: $showingAIWorkout)
+                    QuickActionsView(showingAIWorkout: $showingAIWorkout, showingActiveWorkout: $showingActiveWorkout)
                     
                     // Workout Stats
                     WorkoutStatsView()
@@ -51,6 +57,15 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
+            }
+            .sheet(isPresented: $showingActiveWorkout) {
+                if let workout = workoutManager.currentWorkout {
+                    ActiveWorkoutView(workout: Binding(
+                        get: { workoutManager.currentWorkout ?? workout },
+                        set: { newWorkout in workoutManager.currentWorkout = newWorkout }
+                    ))
+                    .environmentObject(workoutManager)
+                }
             }
         }
     }
@@ -100,7 +115,9 @@ struct CurrentWorkoutCard: View {
 }
 
 struct QuickActionsView: View {
+    @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var showingAIWorkout: Bool
+    @Binding var showingActiveWorkout: Bool
     @State private var showingCreateWorkout = false
     
     var body: some View {
@@ -126,7 +143,10 @@ struct QuickActionsView: View {
                     )
                 }
                 
-                Button(action: { /* Quick start action */ }) {
+                Button(action: {
+                    workoutManager.startQuickWorkout()
+                    showingActiveWorkout = true
+                }) {
                     QuickActionButton(
                         title: "Quick Start",
                         icon: "play.circle",
@@ -313,5 +333,22 @@ struct RecentWorkoutRow: View {
         formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .abbreviated
         return formatter.string(from: duration) ?? ""
+    }
+}
+
+struct MotivationalMessageView: View {
+    private let messageService = MotivationalMessageService()
+    @State private var message: String = ""
+
+    var body: some View {
+        Text(message)
+            .font(.headline)
+            .multilineTextAlignment(.center)
+            .padding()
+            .background(Color.blue.opacity(0.1))
+            .cornerRadius(12)
+            .onAppear {
+                message = messageService.getDailyMessage()
+            }
     }
 }

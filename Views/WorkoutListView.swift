@@ -17,7 +17,7 @@ struct WorkoutListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(workoutManager.workoutHistory) { workout in
+                ForEach(workoutManager.workoutHistory.sorted { $0.date > $1.date }) { workout in
                     NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                         WorkoutListRow(workout: workout)
                     }
