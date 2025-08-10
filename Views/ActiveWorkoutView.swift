@@ -164,7 +164,7 @@ private struct ExerciseSectionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("\(exercise.name)")
+            Text("\(exercise.exercise.name)")
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
