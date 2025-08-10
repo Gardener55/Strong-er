@@ -59,6 +59,83 @@ struct ChartsView: View {
 
 
 
+struct WorkoutsPerWeekChartView: View {
+    @EnvironmentObject var workoutManager: WorkoutManager
+    private let chartManager = ChartManager()
+
+    var body: some View {
+        let data = chartManager.getWorkoutsPerWeekData(from: workoutManager.workoutHistory)
+
+        VStack {
+            Text("Workouts Per Week")
+                .font(.headline)
+                .padding()
+
+            if data.isEmpty {
+                Text("No data available.")
+                    .foregroundColor(.secondary)
+            } else {
+                Chart(data) {
+                    BarMark(
+                        x: .value("Week", $0.date, unit: .weekOfYear),
+                        y: .value("Count", $0.value)
+                    )
+                }
+                .chartXAxis {
+                    AxisMarks(values: .automatic) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel(format: .dateTime.month().day())
+                    }
+                }
+                .padding()
+            }
+        }
+    }
+}
+
+struct HighestWeightChartView: View {
+    @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var userProfileService: UserProfileService
+    let exercise: Exercise
+    private let chartManager = ChartManager()
+
+    var body: some View {
+        let unit = userProfileService.userProfile.weightUnit
+        let data = chartManager.getHighestWeightData(for: exercise, from: workoutManager.workoutHistory, unit: unit)
+
+        VStack {
+            Text("Highest Weight for \(exercise.name) (\(unit.rawValue))")
+                .font(.headline)
+                .padding()
+
+            if data.isEmpty {
+                Text("No data available for this exercise.")
+                    .foregroundColor(.secondary)
+            } else {
+                Chart(data) {
+                    LineMark(
+                        x: .value("Date", $0.date),
+                        y: .value("Weight", $0.value)
+                    )
+                    PointMark(
+                        x: .value("Date", $0.date),
+                        y: .value("Weight", $0.value)
+                    )
+                }
+                .chartXAxis {
+                    AxisMarks(values: .automatic) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel(format: .dateTime.month().day())
+                    }
+                }
+                .padding()
+            }
+        }
+    }
+}
+
 struct ExercisePicker: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var selectedExercise: Exercise?
