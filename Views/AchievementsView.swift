@@ -30,7 +30,7 @@ struct AchievementsView: View {
             Section(header: Text("Achievements Earned (\(earnedAchievements.count))")) {
                 let displayedData = showAllEarned ? earnedAchievements : Array(earnedAchievements.prefix(5))
                 ForEach(displayedData) { achievement in
-                    AchievementRow(achievement: achievement, isEarned: true)
+                    AchievementRow(achievement: achievement, isEarned: true, userProfile: $userProfile)
                 }
                 if earnedAchievements.count > 5 {
                     ShowMoreButton(isExpanded: $showAllEarned)
@@ -69,7 +69,7 @@ struct AchievementsView: View {
             Section(header: Text("Achievements to Unlock (\(unearnedAchievements.count))")) {
                 let displayedData = showAllUnearned ? unearnedAchievements : Array(unearnedAchievements.prefix(5))
                 ForEach(displayedData) { achievement in
-                    AchievementRow(achievement: achievement, isEarned: false)
+                    AchievementRow(achievement: achievement, isEarned: false, userProfile: $userProfile)
                 }
                 if unearnedAchievements.count > 5 {
                     ShowMoreButton(isExpanded: $showAllUnearned)
@@ -92,6 +92,7 @@ struct AchievementsView: View {
 private struct AchievementRow: View {
     let achievement: Achievement
     let isEarned: Bool
+    @Binding var userProfile: UserProfile
 
     private let itemFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -107,7 +108,7 @@ private struct AchievementRow: View {
                 .foregroundColor(isEarned ? .yellow : .gray)
             VStack(alignment: .leading) {
                 Text(achievement.title).font(.headline)
-                Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
+                Text(achievement.description(for: userProfile.weightUnit)).font(.subheadline).foregroundColor(.secondary)
                 if let date = achievement.earnedDate, isEarned {
                     Text("Earned: \(date, formatter: itemFormatter)")
                         .font(.caption)
@@ -194,10 +195,12 @@ struct AchievementsView_Previews: PreviewProvider {
                 PersonalRecord(exerciseName: "Barbell Row", recordType: .oneRepMax, value: 80.0, date: Date()),
                 PersonalRecord(exerciseName: "Pull Up", recordType: .maxWeight, value: 20.0, date: Date())
             ],
-            achievements: (1...10).map { i in
-                Achievement(title: "Earned Achievement \(i)", description: "Description \(i)", iconName: "star.fill", isEarned: true, earnedDate: Date())
-            } + (1...10).map { i in
-                Achievement(title: "Unearned Achievement \(i)", description: "Description \(i)", iconName: "lock.fill", isEarned: false)
+            achievements: [
+                 Achievement(title: "Millionaire Club", descriptionTemplate: "Lifted a total of {value} {unit} over your lifetime.", iconName: "dollarsign.circle.fill", isEarned: true, earnedDate: Date(), goalValue: 1000000, goalUnit: .pounds)
+            ] + (1...5).map { i in
+                Achievement(title: "Earned Achievement \(i)", descriptionTemplate: "Description \(i)", iconName: "star.fill", isEarned: true, earnedDate: Date())
+            } + (1...5).map { i in
+                Achievement(title: "Unearned Achievement \(i)", descriptionTemplate: "Description \(i)", iconName: "lock.fill", isEarned: false)
             },
             watchedExercises: ["Bench Press"]
         )

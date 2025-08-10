@@ -34,69 +34,69 @@ class AchievementService {
     private static func allAchievements() -> [Achievement] {
         return [
             // --- Consistency & Frequency ---
-            Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill"),
-            Achievement(title: "Getting Started", description: "Completed 5 workouts.", iconName: "figure.walk.arrival"),
-            Achievement(title: "Workout Warrior", description: "Completed 10 workouts.", iconName: "flame.fill"),
-            Achievement(title: "Serious Contender", description: "Completed 25 workouts.", iconName: "figure.strengthtraining.traditional"),
-            Achievement(title: "Dedicated", description: "Completed 50 workouts.", iconName: "person.fill.checkmark"),
-            Achievement(title: "Centurion", description: "Completed 100 workouts.", iconName: "100.square.fill"),
-            Achievement(title: "Veteran", description: "Completed 250 workouts.", iconName: "shield.fill"),
-            Achievement(title: "Elite", description: "Completed 500 workouts.", iconName: "crown.fill"),
+            Achievement(title: "First Workout", descriptionTemplate: "Completed your first workout.", iconName: "star.fill"),
+            Achievement(title: "Getting Started", descriptionTemplate: "Completed 5 workouts.", iconName: "figure.walk.arrival"),
+            Achievement(title: "Workout Warrior", descriptionTemplate: "Completed 10 workouts.", iconName: "flame.fill"),
+            Achievement(title: "Serious Contender", descriptionTemplate: "Completed 25 workouts.", iconName: "figure.strengthtraining.traditional"),
+            Achievement(title: "Dedicated", descriptionTemplate: "Completed 50 workouts.", iconName: "person.fill.checkmark"),
+            Achievement(title: "Centurion", descriptionTemplate: "Completed 100 workouts.", iconName: "100.square.fill"),
+            Achievement(title: "Veteran", descriptionTemplate: "Completed 250 workouts.", iconName: "shield.fill"),
+            Achievement(title: "Elite", descriptionTemplate: "Completed 500 workouts.", iconName: "crown.fill"),
 
-            Achievement(title: "Warming Up", description: "Worked out for 3 days in a row.", iconName: "3.circle"),
-            Achievement(title: "On a Roll", description: "Worked out for 7 days in a row.", iconName: "7.circle"),
-            Achievement(title: "Unstoppable", description: "Worked out for 14 days in a row.", iconName: "14.circle"),
-            Achievement(title: "Legendary Streak", description: "Worked out for 30 days in a row.", iconName: "30.circle"),
-            Achievement(title: "Immortal", description: "Worked out for 100 days in a row.", iconName: "infinity.circle.fill"),
+            Achievement(title: "Warming Up", descriptionTemplate: "Worked out for 3 days in a row.", iconName: "3.circle"),
+            Achievement(title: "On a Roll", descriptionTemplate: "Worked out for 7 days in a row.", iconName: "7.circle"),
+            Achievement(title: "Unstoppable", descriptionTemplate: "Worked out for 14 days in a row.", iconName: "14.circle"),
+            Achievement(title: "Legendary Streak", descriptionTemplate: "Worked out for 30 days in a row.", iconName: "30.circle"),
+            Achievement(title: "Immortal", descriptionTemplate: "Worked out for 100 days in a row.", iconName: "infinity.circle.fill"),
 
-            Achievement(title: "Monthly Regular", description: "Completed 10 workouts in a calendar month.", iconName: "calendar.badge.clock"),
-            Achievement(title: "Monthly Warrior", description: "Completed 15 workouts in a calendar month.", iconName: "calendar.badge.plus"),
-            Achievement(title: "Monthly Champion", description: "Completed 20 workouts in a calendar month.", iconName: "calendar.badge.exclamationmark"),
+            Achievement(title: "Monthly Regular", descriptionTemplate: "Completed 10 workouts in a calendar month.", iconName: "calendar.badge.clock"),
+            Achievement(title: "Monthly Warrior", descriptionTemplate: "Completed 15 workouts in a calendar month.", iconName: "calendar.badge.plus"),
+            Achievement(title: "Monthly Champion", descriptionTemplate: "Completed 20 workouts in a calendar month.", iconName: "calendar.badge.exclamationmark"),
 
-            Achievement(title: "Perfect Week", description: "Completed a workout every day for a full week.", iconName: "calendar.circle.fill"),
-            Achievement(title: "Weekend Warrior", description: "Completed a workout on a Saturday and Sunday in the same week.", iconName: "w.square.fill"),
-            Achievement(title: "Two-a-Day", description: "Completed two workouts in a single day.", iconName: "2.square.fill"),
-            Achievement(title: "Loyalist", description: "You've been using the app for one year.", iconName: "1.circle.fill"),
+            Achievement(title: "Perfect Week", descriptionTemplate: "Completed a workout every day for a full week.", iconName: "calendar.circle.fill"),
+            Achievement(title: "Weekend Warrior", descriptionTemplate: "Completed a workout on a Saturday and Sunday in the same week.", iconName: "w.square.fill"),
+            Achievement(title: "Two-a-Day", descriptionTemplate: "Completed two workouts in a single day.", iconName: "2.square.fill"),
+            Achievement(title: "Loyalist", descriptionTemplate: "You've been using the app for one year.", iconName: "1.circle.fill"),
 
             // --- Volume & PRs ---
-            Achievement(title: "Light Lifter", description: "Lifted a total of 10,000 kg/lbs in a single workout.", iconName: "scalemass"),
-            Achievement(title: "Heavy Lifter", description: "Lifted a total of 25,000 kg/lbs in a single workout.", iconName: "scalemass.fill"),
-            Achievement(title: "Super Heavy Lifter", description: "Lifted a total of 50,000 kg/lbs in a single workout.", iconName: "bolt.fill"),
+            Achievement(title: "Light Lifter", descriptionTemplate: "Lifted a total of {value} {unit} in a single workout.", iconName: "scalemass", goalValue: 10000, goalUnit: .pounds),
+            Achievement(title: "Heavy Lifter", descriptionTemplate: "Lifted a total of {value} {unit} in a single workout.", iconName: "scalemass.fill", goalValue: 25000, goalUnit: .pounds),
+            Achievement(title: "Super Heavy Lifter", descriptionTemplate: "Lifted a total of {value} {unit} in a single workout.", iconName: "bolt.fill", goalValue: 50000, goalUnit: .pounds),
 
-            Achievement(title: "PR Setter", description: "Set your first Personal Record.", iconName: "trophy"),
-            Achievement(title: "Record Breaker", description: "Broke 10 of your existing Personal Records.", iconName: "trophy.fill"),
-            Achievement(title: "Goal Crusher", description: "Broke 50 of your existing Personal Records.", iconName: "crown"),
+            Achievement(title: "PR Setter", descriptionTemplate: "Set your first Personal Record.", iconName: "trophy"),
+            Achievement(title: "Record Breaker", descriptionTemplate: "Broke 10 of your existing Personal Records.", iconName: "trophy.fill"),
+            Achievement(title: "Goal Crusher", descriptionTemplate: "Broke 50 of your existing Personal Records.", iconName: "crown"),
 
-            Achievement(title: "Millionaire Club", description: "Lifted a total of 1,000,000 kg/lbs over your lifetime.", iconName: "dollarsign.circle.fill"),
-            Achievement(title: "Multi-Millionaire", description: "Lifted a total of 5,000,000 kg/lbs over your lifetime.", iconName: "dollarsign.square.fill"),
+            Achievement(title: "Millionaire Club", descriptionTemplate: "Lifted a total of {value} {unit} over your lifetime.", iconName: "dollarsign.circle.fill", goalValue: 1000000, goalUnit: .pounds),
+            Achievement(title: "Multi-Millionaire", descriptionTemplate: "Lifted a total of {value} {unit} over your lifetime.", iconName: "dollarsign.square.fill", goalValue: 5000000, goalUnit: .pounds),
 
             // --- Duration & Time ---
-            Achievement(title: "Quick Start", description: "Completed a workout in under 30 minutes.", iconName: "hare.fill"),
-            Achievement(title: "Standard Session", description: "Completed a workout between 45 and 75 minutes.", iconName: "tortoise.fill"),
-            Achievement(title: "Marathon Session", description: "Completed a workout longer than 90 minutes.", iconName: "clock.fill"),
-            Achievement(title: "Endurance Master", description: "Your total workout time has exceeded 24 hours.", iconName: "24.circle"),
-            Achievement(title: "Time Lord", description: "Your total workout time has exceeded 100 hours.", iconName: "hourglass"),
+            Achievement(title: "Quick Start", descriptionTemplate: "Completed a workout in under 30 minutes.", iconName: "hare.fill"),
+            Achievement(title: "Standard Session", descriptionTemplate: "Completed a workout between 45 and 75 minutes.", iconName: "tortoise.fill"),
+            Achievement(title: "Marathon Session", descriptionTemplate: "Completed a workout longer than 90 minutes.", iconName: "clock.fill"),
+            Achievement(title: "Endurance Master", descriptionTemplate: "Your total workout time has exceeded 24 hours.", iconName: "24.circle"),
+            Achievement(title: "Time Lord", descriptionTemplate: "Your total workout time has exceeded 100 hours.", iconName: "hourglass"),
 
-            Achievement(title: "Early Bird", description: "Completed 10 workouts before 7 AM.", iconName: "sunrise.fill"),
-            Achievement(title: "Night Owl", description: "Completed 10 workouts after 9 PM.", iconName: "moon.stars.fill"),
+            Achievement(title: "Early Bird", descriptionTemplate: "Completed 10 workouts before 7 AM.", iconName: "sunrise.fill"),
+            Achievement(title: "Night Owl", descriptionTemplate: "Completed 10 workouts after 9 PM.", iconName: "moon.stars.fill"),
 
             // --- Variety ---
-            Achievement(title: "Explorer", description: "Performed 10 different exercises.", iconName: "magnifyingglass"),
-            Achievement(title: "Adventurer", description: "Performed 25 different exercises.", iconName: "map.fill"),
-            Achievement(title: "Pioneer", description: "Performed 50 different exercises.", iconName: "globe.americas.fill"),
+            Achievement(title: "Explorer", descriptionTemplate: "Performed 10 different exercises.", iconName: "magnifyingglass"),
+            Achievement(title: "Adventurer", descriptionTemplate: "Performed 25 different exercises.", iconName: "map.fill"),
+            Achievement(title: "Pioneer", descriptionTemplate: "Performed 50 different exercises.", iconName: "globe.americas.fill"),
 
-            Achievement(title: "Well-Rounded", description: "Trained every major muscle group in a single week.", iconName: "figure.mind.and.body"),
-            Achievement(title: "Specialist", description: "Completed 10 workouts for the same muscle group.", iconName: "scope"),
+            Achievement(title: "Well-Rounded", descriptionTemplate: "Trained every major muscle group in a single week.", iconName: "figure.mind.and.body"),
+            Achievement(title: "Specialist", descriptionTemplate: "Completed 10 workouts for the same muscle group.", iconName: "scope"),
 
-            Achievement(title: "Bodyweight Pro", description: "Completed 25 bodyweight workouts.", iconName: "figure.cooldown"),
-            Achievement(title: "Dumbbell Devotee", description: "Completed 25 workouts using dumbbells.", iconName: "dumbbell.fill"),
-            Achievement(title: "Barbell Boss", description: "Completed 25 workouts using a barbell.", iconName: "figure.strengthtraining.functional"),
-            Achievement(title: "Machine Master", description: "Completed 25 workouts using machines.", iconName: "gearshape.2.fill"),
+            Achievement(title: "Bodyweight Pro", descriptionTemplate: "Completed 25 bodyweight workouts.", iconName: "figure.cooldown"),
+            Achievement(title: "Dumbbell Devotee", descriptionTemplate: "Completed 25 workouts using dumbbells.", iconName: "dumbbell.fill"),
+            Achievement(title: "Barbell Boss", descriptionTemplate: "Completed 25 workouts using a barbell.", iconName: "figure.strengthtraining.functional"),
+            Achievement(title: "Machine Master", descriptionTemplate: "Completed 25 workouts using machines.", iconName: "gearshape.2.fill"),
 
             // --- Special Days ---
-            Achievement(title: "New Year, New Me", description: "Completed a workout on January 1st.", iconName: "party.popper.fill"),
-            Achievement(title: "Holiday Hustle", description: "Completed a workout on Christmas Day (Dec 25th).", iconName: "gift.fill"),
-            Achievement(title: "The Comeback", description: "Completed a workout after more than a month of inactivity.", iconName: "arrow.uturn.backward.circle.fill")
+            Achievement(title: "New Year, New Me", descriptionTemplate: "Completed a workout on January 1st.", iconName: "party.popper.fill"),
+            Achievement(title: "Holiday Hustle", descriptionTemplate: "Completed a workout on Christmas Day (Dec 25th).", iconName: "gift.fill"),
+            Achievement(title: "The Comeback", descriptionTemplate: "Completed a workout after more than a month of inactivity.", iconName: "arrow.uturn.backward.circle.fill")
         ]
     }
 
@@ -130,18 +130,31 @@ class AchievementService {
         if workoutsThisMonth >= 20 { unlockAchievement(title: "Monthly Champion", date: workout.date, userProfile: &userProfile) }
 
         // --- Volume & PRs ---
+        // All workout weights are stored in KG, so volume is in KG.
         let singleWorkoutVolume = workout.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } }
-        if singleWorkoutVolume >= 10000 { unlockAchievement(title: "Light Lifter", date: workout.date, userProfile: &userProfile) }
-        if singleWorkoutVolume >= 25000 { unlockAchievement(title: "Heavy Lifter", date: workout.date, userProfile: &userProfile) }
-        if singleWorkoutVolume >= 50000 { unlockAchievement(title: "Super Heavy Lifter", date: workout.date, userProfile: &userProfile) }
+        let lifetimeVolume = allWorkouts.reduce(0) { $0 + $1.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } } }
+        let lbsToKg = 1 / 2.20462
+
+        if let achievement = findAchievement(withTitle: "Light Lifter", in: userProfile), singleWorkoutVolume >= (achievement.goalValue! * lbsToKg) {
+            unlockAchievement(title: "Light Lifter", date: workout.date, userProfile: &userProfile)
+        }
+        if let achievement = findAchievement(withTitle: "Heavy Lifter", in: userProfile), singleWorkoutVolume >= (achievement.goalValue! * lbsToKg) {
+            unlockAchievement(title: "Heavy Lifter", date: workout.date, userProfile: &userProfile)
+        }
+        if let achievement = findAchievement(withTitle: "Super Heavy Lifter", in: userProfile), singleWorkoutVolume >= (achievement.goalValue! * lbsToKg) {
+            unlockAchievement(title: "Super Heavy Lifter", date: workout.date, userProfile: &userProfile)
+        }
 
         if !userProfile.personalRecords.isEmpty { unlockAchievement(title: "PR Setter", date: workout.date, userProfile: &userProfile) }
         if brokenPRs >= 10 { unlockAchievement(title: "Record Breaker", date: workout.date, userProfile: &userProfile) }
         if brokenPRs >= 50 { unlockAchievement(title: "Goal Crusher", date: workout.date, userProfile: &userProfile) }
 
-        let lifetimeVolume = allWorkouts.reduce(0) { $0 + $1.exercises.reduce(0) { $0 + $1.sets.reduce(0) { $0 + (($1.weight ?? 0) * Double($1.reps)) } } }
-        if lifetimeVolume >= 1000000 { unlockAchievement(title: "Millionaire Club", date: workout.date, userProfile: &userProfile) }
-        if lifetimeVolume >= 5000000 { unlockAchievement(title: "Multi-Millionaire", date: workout.date, userProfile: &userProfile) }
+        if let achievement = findAchievement(withTitle: "Millionaire Club", in: userProfile), lifetimeVolume >= (achievement.goalValue! * lbsToKg) {
+            unlockAchievement(title: "Millionaire Club", date: workout.date, userProfile: &userProfile)
+        }
+        if let achievement = findAchievement(withTitle: "Multi-Millionaire", in: userProfile), lifetimeVolume >= (achievement.goalValue! * lbsToKg) {
+            unlockAchievement(title: "Multi-Millionaire", date: workout.date, userProfile: &userProfile)
+        }
 
         // --- Duration & Time ---
         if let duration = workout.duration {
@@ -271,5 +284,9 @@ class AchievementService {
             return true // A new record is also considered "breaking" for achievement purposes
         }
         return false
+    }
+
+    private func findAchievement(withTitle title: String, in userProfile: UserProfile) -> Achievement? {
+        return userProfile.achievements.first(where: { $0.title == title })
     }
 }
