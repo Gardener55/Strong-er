@@ -11,48 +11,6 @@ struct ActiveWorkoutView: View {
     @Binding var workout: Workout
     @EnvironmentObject var workoutManager: WorkoutManager
     @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text(workout.name)
-                    .font(.largeTitle)
-                    .padding()
-
-                List {
-                    ForEach($workout.exercises) { $exercise in
-                        Section(header: Text(exercise.exercise.name)) {
-                            ForEach($exercise.sets) { $set in
-                                SetCompletionRow(set: $set)
-                            }
-                        }
-                    }
-                }
-
-                Button(action: {
-                    workoutManager.completeWorkout()
-                    dismiss()
-                }) {
-                    Text("Finish Workout")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.green)
-                        .cornerRadius(10)
-                }
-                .padding()
-            }
-            .navigationTitle("Active Workout")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}
-
-struct ActiveWorkoutView: View {
-    @Binding var workout: Workout
-    @EnvironmentObject var workoutManager: WorkoutManager
-    @Environment(\.dismiss) private var dismiss
     @State private var timer: Timer?
     @State private var restTimeRemaining: TimeInterval = 0
 
