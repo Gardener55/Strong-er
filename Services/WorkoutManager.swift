@@ -98,7 +98,7 @@ class WorkoutManager: ObservableObject {
         saveData()
 
         // After importing, recalculate all achievements and PRs
-        achievementService.recalculateAll(from: workoutHistory, for: &userProfileService.userProfile)
+        achievementService.recalculateAll(from: workoutHistory, for: &self.userProfileService.userProfile)
         userProfileService.saveProfile() // Explicitly save after recalculation
     }
 

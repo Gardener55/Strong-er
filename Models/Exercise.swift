@@ -10,7 +10,7 @@
 import Foundation
 
 struct Exercise: Identifiable, Codable, Hashable {
-    var id = UUID()
+    var id: String { name }
     let name: String
     let category: ExerciseCategory
     let muscleGroups: [MuscleGroup]
