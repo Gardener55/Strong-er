@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F03C13C92E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
+		F03C13CA2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
+		F03C13CB2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
+		F03C13CD2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */; };
+		F03C13CE2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */; };
+		F03C13CF2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */; };
 		F05104262E465D4A00BC0247 /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104252E465D4A00BC0247 /* WorkoutSet.swift */; };
 		F05104272E465D4A00BC0247 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104222E465D4A00BC0247 /* UserProfile.swift */; };
 		F05104282E465D4A00BC0247 /* WorkoutExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104242E465D4A00BC0247 /* WorkoutExercise.swift */; };
@@ -117,6 +123,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationalMessageService.swift; sourceTree = "<group>"; };
+		F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
 		F05103EF2E465CED00BC0247 /* Strong-er.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Strong-er.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05104012E465CEE00BC0247 /* Strong-erTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Strong-erTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F051040B2E465CEE00BC0247 /* Strong-erUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Strong-erUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -235,6 +243,7 @@
 		F051041F2E465D1300BC0247 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */,
 				F05104F42E484D4D00BC0247 /* ChartManager.swift */,
 				F05104E42E480DB600BC0247 /* AchievementService.swift */,
 				F05104B52E46F0B500BC0247 /* WorkoutImporter.swift */,
@@ -250,6 +259,7 @@
 		F05104202E465D1800BC0247 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */,
 				F05104F82E4851A200BC0247 /* DetailedChartView.swift */,
 				F05104F02E484D4100BC0247 /* ChartsView.swift */,
 				F05104E02E480DAF00BC0247 /* AchievementsView.swift */,
@@ -421,6 +431,7 @@
 				F05104302E465D4A00BC0247 /* WorkoutExercise.swift in Sources */,
 				F05104312E465D4A00BC0247 /* Workout.swift in Sources */,
 				F05104382E465D6E00BC0247 /* ExerciseDatabase.swift in Sources */,
+				F03C13C92E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */,
 				F05104662E46707300BC0247 /* ItemListView.swift in Sources */,
 				F05104E62E480DB600BC0247 /* AchievementService.swift in Sources */,
 				F05104392E465D6E00BC0247 /* AIWorkoutGenerator.swift in Sources */,
@@ -437,6 +448,7 @@
 				F05104B72E46F0B500BC0247 /* WorkoutImporter.swift in Sources */,
 				F05104582E465D7B00BC0247 /* TemplatesView.swift in Sources */,
 				F05104BC2E47A32F00BC0247 /* CalendarView.swift in Sources */,
+				F03C13CF2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */,
 				F05104592E465D7B00BC0247 /* ExerciseLibraryView.swift in Sources */,
 				F051045A2E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */,
 				F051045B2E465D7B00BC0247 /* HomeView.swift in Sources */,
@@ -458,6 +470,7 @@
 				F051043D2E465D6E00BC0247 /* WorkoutManager.swift in Sources */,
 				F05104EE2E480DC200BC0247 /* PersonalRecord.swift in Sources */,
 				F05104262E465D4A00BC0247 /* WorkoutSet.swift in Sources */,
+				F03C13CE2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */,
 				F05104272E465D4A00BC0247 /* UserProfile.swift in Sources */,
 				F05104F12E484D4100BC0247 /* ChartsView.swift in Sources */,
 				F05104EA2E480DBC00BC0247 /* Achievement.swift in Sources */,
@@ -466,6 +479,7 @@
 				F05104E52E480DB600BC0247 /* AchievementService.swift in Sources */,
 				F051044A2E465D7B00BC0247 /* WorkoutHistoryView.swift in Sources */,
 				F051047F2E4683D700BC0247 /* ThemeManager.swift in Sources */,
+				F03C13CB2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */,
 				F05104B62E46F0B500BC0247 /* WorkoutImporter.swift in Sources */,
 				F051044B2E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
 				F05104852E46938400BC0247 /* UserProfileService.swift in Sources */,
@@ -504,6 +518,7 @@
 				F051045F2E465D7B00BC0247 /* AIWorkoutView.swift in Sources */,
 				F05104602E465D7B00BC0247 /* CreateWorkoutView.swift in Sources */,
 				F05104612E465D7B00BC0247 /* TemplatesView.swift in Sources */,
+				F03C13CA2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */,
 				F05104622E465D7B00BC0247 /* ExerciseLibraryView.swift in Sources */,
 				F05104F32E484D4100BC0247 /* ChartsView.swift in Sources */,
 				F05104682E46707300BC0247 /* ItemListView.swift in Sources */,
@@ -516,6 +531,7 @@
 				F051047E2E4683D700BC0247 /* ThemeManager.swift in Sources */,
 				F05104FB2E4851A200BC0247 /* DetailedChartView.swift in Sources */,
 				F05104E12E480DAF00BC0247 /* AchievementsView.swift in Sources */,
+				F03C13CD2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */,
 				F05104812E4683F500BC0247 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
