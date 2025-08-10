@@ -41,7 +41,9 @@ struct ActiveWorkoutView: View {
                     }
 
                     ForEach($workout.exercises) { $exercise in
-                        Section(header: Text(exercise.exercise.name)) {
+                        Section(header: Text(exercise.exercise.name), footer: Button("Add Set") {
+                            exercise.sets.append(WorkoutSet(restTime: defaultRestTime))
+                        }) {
                             ForEach($exercise.sets) { $set in
                                 let previousSet = workoutManager.getPreviousSet(for: exercise.exercise)
                                 SetCompletionRow(set: $set, previousSet: previousSet) {
@@ -55,10 +57,6 @@ struct ActiveWorkoutView: View {
                             }
                             .onDelete { indexSet in
                                 exercise.sets.remove(atOffsets: indexSet)
-                            }
-                        } footer: {
-                            Button("Add Set") {
-                                exercise.sets.append(WorkoutSet(restTime: defaultRestTime))
                             }
                         }
                     }
