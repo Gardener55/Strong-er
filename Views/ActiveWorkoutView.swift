@@ -267,24 +267,24 @@ private struct ExerciseSectionView: View {
 
     var body: some View {
         Section(header: Text(exercise.name).font(.headline)) {
-            ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, $set in
+            ForEach(0..<exercise.sets.count, id: \.self) { index in
                 ActiveWorkoutSetRow(
-                    set: $set,
+                    set: $exercise.sets[index],
                     setNumber: index + 1,
                     previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
                     weightUnit: userProfileService.userProfile.weightUnit,
                     onToggleCompletion: {
-                        if $set.wrappedValue.completed {
-                            startRestTimer($set.wrappedValue)
+                        if exercise.sets[index].completed {
+                            startRestTimer(exercise.sets[index])
                         } else {
                             stopRestTimer()
                         }
                     },
                     onEditRestTime: {
-                        setForRestTimeEdit = $set
+                        setForRestTimeEdit = $exercise.sets[index]
                         activeSheet = .restTimeEditor
                     },
-                    isResting: activeRestSetID == set.id,
+                    isResting: activeRestSetID == exercise.sets[index].id,
                     restTimeRemaining: restTimeRemaining
                 )
             }
