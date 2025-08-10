@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var userProfileService: UserProfileService
     @StateObject private var workoutManager = WorkoutManager()
     @StateObject private var exerciseDatabase = ExerciseDatabase.shared
     @State private var selectedTab = 0
@@ -53,6 +54,7 @@ struct ContentView: View {
         }
         .environmentObject(workoutManager)
         .environmentObject(exerciseDatabase)
+        .environmentObject(userProfileService)
         .environment(\.managedObjectContext, viewContext)
     }
 }

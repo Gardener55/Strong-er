@@ -15,19 +15,21 @@ struct ChartDataPoint: Identifiable {
 
 class ChartManager {
 
-    func getHighestWeightData(for exercise: Exercise, from workouts: [Workout]) -> [ChartDataPoint] {
+    func getHighestWeightData(for exercise: Exercise, from workouts: [Workout], unit: UserProfile.WeightUnit) -> [ChartDataPoint] {
         let relevantWorkouts = workouts.filter { workout in
             workout.exercises.contains { $0.exercise.id == exercise.id }
         }
 
         let dataPoints = relevantWorkouts.map { workout -> ChartDataPoint in
-            let highestWeight = workout.exercises
+            let highestWeightInKg = workout.exercises
                 .filter { $0.exercise.id == exercise.id }
                 .flatMap { $0.sets }
                 .compactMap { $0.weight }
                 .max() ?? 0
 
-            return ChartDataPoint(date: workout.date, value: highestWeight)
+            let displayWeight = unit == .pounds ? highestWeightInKg * 2.20462 : highestWeightInKg
+
+            return ChartDataPoint(date: workout.date, value: displayWeight)
         }
 
         return dataPoints.sorted { $0.date < $1.date }
