@@ -231,13 +231,9 @@ class AchievementService {
                 return calculateOneRepMax(weight: weight, reps: aSet.reps)
             }.max() ?? 0
 
-            // If the user's unit is pounds, convert to KG for storage
-            if unit == .pounds {
-                let lbsToKg = 0.453592
-                maxWeight *= lbsToKg
-                totalVolume *= lbsToKg
-                estimatedOneRepMax *= lbsToKg
-            }
+            // The weights in the workout object are assumed to be in KG at this point.
+            // The 'unit' parameter reflects the user's setting at the time of workout completion,
+            // but the conversion to KG should have already happened.
 
             // Update Max Weight PR (now in KG)
             if updateRecord(exerciseName: exerciseName, recordType: .maxWeight, newValue: maxWeight, date: workout.date, userProfile: &userProfile) {
