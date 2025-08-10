@@ -10,6 +10,7 @@ import SwiftUI
 struct ActiveWorkoutView: View {
     @Binding var workout: Workout
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var userProfileService: UserProfileService
     @Environment(\.dismiss) private var dismiss
 
     // Timer states
@@ -24,6 +25,7 @@ struct ActiveWorkoutView: View {
 
     // Editable start time
     @State private var showingDatePicker = false
+    @State private var showingAddExercisePicker = false
     @State private var workoutStartDate: Date
 
     private var dateFormatter: DateFormatter {
@@ -73,6 +75,7 @@ struct ActiveWorkoutView: View {
                                     set: $set,
                                     setNumber: index + 1,
                                     previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
+                                    weightUnit: userProfileService.userProfile.weightUnit,
                                     onToggleCompletion: {
                                         if $set.completed.wrappedValue {
                                             startRestTimer(for: $set.wrappedValue)
@@ -99,6 +102,18 @@ struct ActiveWorkoutView: View {
                             .buttonStyle(BorderlessButtonStyle())
                         }
                     }
+                    .onDelete(perform: removeExercise)
+
+                    Section {
+                        Button(action: {
+                            showingAddExercisePicker = true
+                        }) {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Add Exercise")
+                            }
+                        }
+                    }
                 }
 
                 Button(action: {
@@ -113,6 +128,9 @@ struct ActiveWorkoutView: View {
                         .cornerRadius(10)
                 }
                 .padding()
+            }
+            .onTapGesture {
+                hideKeyboard()
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
@@ -129,10 +147,19 @@ struct ActiveWorkoutView: View {
                     .labelsHidden()
 
                     Button("Done") {
+                        if workoutStartDate > Date() {
+                            workoutStartDate = Date()
+                        }
                         showingDatePicker = false
                         recalculateDuration()
                     }
                     .padding()
+                }
+            }
+            .sheet(isPresented: $showingAddExercisePicker) {
+                ExercisePickerView { exercise in
+                    let newExercise = WorkoutExercise(exercise: exercise)
+                    workout.exercises.append(newExercise)
                 }
             }
         }
@@ -195,12 +222,21 @@ struct ActiveWorkoutView: View {
         workoutManager.completeWorkout()
         dismiss()
     }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+
+    private func removeExercise(at offsets: IndexSet) {
+        workout.exercises.remove(atOffsets: offsets)
+    }
 }
 
 private struct ActiveWorkoutSetRow: View {
     @Binding var set: WorkoutSet
     let setNumber: Int
     let previousSet: WorkoutSet?
+    let weightUnit: UserProfile.WeightUnit
     var onToggleCompletion: () -> Void
     let isResting: Bool
     let restTimeRemaining: TimeInterval
@@ -217,7 +253,7 @@ private struct ActiveWorkoutSetRow: View {
 
                 // Previous Set Info
                 if let previous = previousSet {
-                    Text("Prev: \(previous.reps) x \(String(format: "%.1f", previous.weight ?? 0)) lbs")
+                    Text(previousSetText(for: previous))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -270,6 +306,20 @@ private struct ActiveWorkoutSetRow: View {
             }
         }
         .padding(.vertical, 8)
+    }
+
+    private func previousSetText(for set: WorkoutSet) -> String {
+        let weight = set.weight ?? 0
+        var displayText = "Prev: \(set.reps) x "
+
+        if weightUnit == .pounds {
+            let weightInLbs = weight * 2.20462
+            displayText += "\(String(format: "%.1f", weightInLbs)) lbs"
+        } else {
+            displayText += "\(String(format: "%.1f", weight)) kg"
+        }
+
+        return displayText
     }
 
     private func timeString(from interval: TimeInterval) -> String {
