@@ -39,8 +39,9 @@ struct WorkoutListView: View {
     }
     
     private func deleteWorkouts(at offsets: IndexSet) {
+        let sortedWorkouts = workoutManager.workoutHistory.sorted { $0.date > $1.date }
         for index in offsets {
-            let workout = workoutManager.workoutHistory[index]
+            let workout = sortedWorkouts[index]
             workoutManager.deleteWorkout(workout)
         }
     }

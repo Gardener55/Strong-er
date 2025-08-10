@@ -27,4 +27,20 @@ struct WorkoutSet: Identifiable, Codable, Equatable {
         self.restTime = restTime
         self.isWarmup = isWarmup
     }
+
+    enum CodingKeys: String, CodingKey {
+        case id, reps, weight, duration, distance, restTime, completed, isWarmup
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        reps = try container.decode(Int.self, forKey: .reps)
+        weight = try container.decodeIfPresent(Double.self, forKey: .weight)
+        duration = try container.decodeIfPresent(TimeInterval.self, forKey: .duration)
+        distance = try container.decodeIfPresent(Double.self, forKey: .distance)
+        restTime = try container.decode(TimeInterval.self, forKey: .restTime)
+        completed = try container.decode(Bool.self, forKey: .completed)
+        isWarmup = (try? container.decode(Bool.self, forKey: .isWarmup)) ?? false
+    }
 }
