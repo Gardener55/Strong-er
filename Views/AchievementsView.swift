@@ -26,130 +26,121 @@ struct AchievementsView: View {
 
     var body: some View {
         List {
+            // Earned Achievements Section
             Section(header: Text("Achievements Earned (\(earnedAchievements.count))")) {
-                if earnedAchievements.isEmpty {
-                    Text("No achievements yet. Keep working out!")
-                } else {
-                    let displayedEarned = showAllEarned ? earnedAchievements : Array(earnedAchievements.prefix(5))
-                    ForEach(displayedEarned) { achievement in
-                        HStack {
-                            Image(systemName: achievement.iconName)
-                                .font(.title)
-                                .foregroundColor(.yellow)
-                            VStack(alignment: .leading) {
-                                Text(achievement.title).font(.headline)
-                                Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
-                                if let date = achievement.earnedDate {
-                                    Text("Earned: \(date, formatter: itemFormatter)")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                        }
-                    }
-                    if earnedAchievements.count > 5 {
-                        Button(action: {
-                            withAnimation {
-                                showAllEarned.toggle()
-                            }
-                        }) {
-                            Text(showAllEarned ? "Show Less" : "Show More...")
-                                .foregroundColor(.accentColor)
-                        }
-                    }
+                let displayedData = showAllEarned ? earnedAchievements : Array(earnedAchievements.prefix(5))
+                ForEach(displayedData) { achievement in
+                    AchievementRow(achievement: achievement, isEarned: true)
+                }
+                if earnedAchievements.count > 5 {
+                    ShowMoreButton(isExpanded: $showAllEarned)
                 }
             }
 
+            // Pinned PRs Section
             if !pinnedRecords.isEmpty {
                 Section(header: Text("Pinned Personal Records")) {
                     ForEach(pinnedRecords.keys.sorted(), id: \.self) { exerciseName in
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(exerciseName).font(.headline)
-                                Spacer()
-                                Button(action: { togglePin(for: exerciseName) }) {
-                                    Image(systemName: "pin.fill").foregroundColor(.accentColor)
-                                }
-                            }
-                            ForEach(pinnedRecords[exerciseName]!) { record in
-                                HStack {
-                                    Text(record.recordType.rawValue).font(.subheadline)
-                                    Spacer()
-                                    Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
-                                }
-                            }
-                        }.padding(.vertical, 4)
+                        PRRow(userProfile: $userProfile, exerciseName: exerciseName, records: pinnedRecords[exerciseName]!)
                     }
                 }
             }
 
-            Section(header: Text(pinnedRecords.isEmpty ? "Personal Records (\(unpinnedRecords.count))" : "Other Personal Records (\(unpinnedRecords.count))")) {
-                if unpinnedRecords.isEmpty && pinnedRecords.isEmpty {
+            // Other PRs Section
+            Section(header: Text(pinnedRecords.isEmpty ? "Personal Records" : "Other Personal Records")) {
+                let keys = unpinnedRecords.keys.sorted()
+                let displayedKeys = showAllPRs ? keys : Array(keys.prefix(5))
+
+                if keys.isEmpty && pinnedRecords.isEmpty {
                     Text("No personal records yet. Let's lift!")
-                } else if unpinnedRecords.isEmpty && !pinnedRecords.isEmpty {
+                } else if keys.isEmpty {
                     Text("All records are pinned.")
                 } else {
-                    let unpinnedKeys = unpinnedRecords.keys.sorted()
-                    let displayedKeys = showAllPRs ? unpinnedKeys : Array(unpinnedKeys.prefix(5))
-
                     ForEach(displayedKeys, id: \.self) { exerciseName in
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(exerciseName).font(.headline)
-                                Spacer()
-                                Button(action: { togglePin(for: exerciseName) }) {
-                                    Image(systemName: "pin").foregroundColor(.accentColor)
-                                }
-                            }
-                            ForEach(unpinnedRecords[exerciseName]!) { record in
-                                HStack {
-                                    Text(record.recordType.rawValue).font(.subheadline)
-                                    Spacer()
-                                    Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
-                                }
-                            }
-                        }.padding(.vertical, 4)
+                        PRRow(userProfile: $userProfile, exerciseName: exerciseName, records: unpinnedRecords[exerciseName]!)
                     }
-
-                    if unpinnedRecords.count > 5 {
-                        Button(action: {
-                            withAnimation {
-                                showAllPRs.toggle()
-                            }
-                        }) {
-                            Text(showAllPRs ? "Show Less" : "Show More...")
-                                .foregroundColor(.accentColor)
-                        }
+                    if keys.count > 5 {
+                        ShowMoreButton(isExpanded: $showAllPRs)
                     }
                 }
             }
 
+            // Unearned Achievements Section
             Section(header: Text("Achievements to Unlock (\(unearnedAchievements.count))")) {
-                let displayedUnearned = showAllUnearned ? unearnedAchievements : Array(unearnedAchievements.prefix(5))
-                ForEach(displayedUnearned) { achievement in
-                    HStack {
-                        Image(systemName: achievement.iconName)
-                            .font(.title)
-                            .foregroundColor(.gray)
-                        VStack(alignment: .leading) {
-                            Text(achievement.title).font(.headline)
-                            Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
-                        }
-                    }
+                let displayedData = showAllUnearned ? unearnedAchievements : Array(unearnedAchievements.prefix(5))
+                ForEach(displayedData) { achievement in
+                    AchievementRow(achievement: achievement, isEarned: false)
                 }
                 if unearnedAchievements.count > 5 {
-                    Button(action: {
-                        withAnimation {
-                            showAllUnearned.toggle()
-                        }
-                    }) {
-                        Text(showAllUnearned ? "Show Less" : "Show More...")
-                            .foregroundColor(.accentColor)
-                    }
+                    ShowMoreButton(isExpanded: $showAllUnearned)
                 }
             }
         }
         .navigationTitle("My Achievements")
+    }
+
+    private let itemFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
+}
+
+// MARK: - Subviews
+
+private struct AchievementRow: View {
+    let achievement: Achievement
+    let isEarned: Bool
+
+    private let itemFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
+
+    var body: some View {
+        HStack {
+            Image(systemName: achievement.iconName)
+                .font(.title)
+                .foregroundColor(isEarned ? .yellow : .gray)
+            VStack(alignment: .leading) {
+                Text(achievement.title).font(.headline)
+                Text(achievement.description).font(.subheadline).foregroundColor(.secondary)
+                if let date = achievement.earnedDate, isEarned {
+                    Text("Earned: \(date, formatter: itemFormatter)")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+    }
+}
+
+private struct PRRow: View {
+    @Binding var userProfile: UserProfile
+    let exerciseName: String
+    let records: [PersonalRecord]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(exerciseName).font(.headline)
+                Spacer()
+                Button(action: { togglePin(for: exerciseName) }) {
+                    Image(systemName: userProfile.watchedExercises.contains(exerciseName) ? "pin.fill" : "pin")
+                        .foregroundColor(.accentColor)
+                }
+            }
+            ForEach(records) { record in
+                HStack {
+                    Text(record.recordType.rawValue).font(.subheadline)
+                    Spacer()
+                    Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
+                }
+            }
+        }.padding(.vertical, 4)
     }
 
     private func togglePin(for exerciseName: String) {
@@ -161,8 +152,7 @@ struct AchievementsView: View {
     }
 
     private func formattedValue(for record: PersonalRecord, unit: UserProfile.WeightUnit) -> String {
-        // This function assumes `record.value` is always stored in kilograms (kg).
-        // It converts the stored kg value to pounds for display if the user's preference is lbs.
+        // Assumes record.value is always stored in KG
         let storedValueKg = record.value
 
         switch unit {
@@ -173,27 +163,42 @@ struct AchievementsView: View {
             return String(format: "%.1f lbs", convertedValueLbs)
         }
     }
-
-    private let itemFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
 }
+
+private struct ShowMoreButton: View {
+    @Binding var isExpanded: Bool
+
+    var body: some View {
+        Button(action: {
+            withAnimation {
+                isExpanded.toggle()
+            }
+        }) {
+            Text(isExpanded ? "Show Less" : "Show More...")
+                .foregroundColor(.accentColor)
+        }
+    }
+}
+
+// MARK: - Preview
 
 struct AchievementsView_Previews: PreviewProvider {
     static var previews: some View {
         // Create a sample user profile for previewing
         @State var sampleProfile = UserProfile(
             personalRecords: [
-                PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()),
-                PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date())
+                PersonalRecord(exerciseName: "Bench Press", recordType: .oneRepMax, value: 100.0, date: Date()), // 100 kg
+                PersonalRecord(exerciseName: "Squat", recordType: .maxWeight, value: 120.0, date: Date()),      // 120 kg
+                PersonalRecord(exerciseName: "Deadlift", recordType: .oneRepMax, value: 150.0, date: Date()),
+                PersonalRecord(exerciseName: "Overhead Press", recordType: .oneRepMax, value: 60.0, date: Date()),
+                PersonalRecord(exerciseName: "Barbell Row", recordType: .oneRepMax, value: 80.0, date: Date()),
+                PersonalRecord(exerciseName: "Pull Up", recordType: .maxWeight, value: 20.0, date: Date())
             ],
-            achievements: [
-                Achievement(title: "First Workout", description: "Completed your first workout.", iconName: "star.fill", isEarned: true, earnedDate: Date()),
-                Achievement(title: "Workout Warrior", description: "Completed 10 workouts.", iconName: "flame.fill", isEarned: false)
-            ],
+            achievements: (1...10).map { i in
+                Achievement(title: "Earned Achievement \(i)", description: "Description \(i)", iconName: "star.fill", isEarned: true, earnedDate: Date())
+            } + (1...10).map { i in
+                Achievement(title: "Unearned Achievement \(i)", description: "Description \(i)", iconName: "lock.fill", isEarned: false)
+            },
             watchedExercises: ["Bench Press"]
         )
 
