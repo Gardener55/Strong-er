@@ -50,6 +50,11 @@ class WorkoutManager: ObservableObject {
         }
         currentWorkout = newWorkout
     }
+
+    func startQuickWorkout() {
+        let quickStartWorkout = Workout(name: "Quick Start Workout")
+        startWorkout(quickStartWorkout)
+    }
     
     func completeWorkout() {
         guard var workout = currentWorkout else { return }

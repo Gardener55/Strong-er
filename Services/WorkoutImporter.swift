@@ -81,7 +81,11 @@ class WorkoutImporter {
             
             if workoutsByDate[date] == nil {
                 let workoutName = rowData["Workout Name"] ?? "Imported Workout"
-                workoutsByDate[date] = Workout(name: workoutName, date: date)
+                var newWorkout = Workout(name: workoutName, date: date)
+                if let durationString = rowData["Duration"], let duration = TimeInterval(durationString) {
+                    newWorkout.duration = duration
+                }
+                workoutsByDate[date] = newWorkout
             }
             
             if let exerciseIndex = workoutsByDate[date]!.exercises.firstIndex(where: { $0.exercise.name == exercise.name }) {

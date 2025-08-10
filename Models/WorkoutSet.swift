@@ -17,12 +17,14 @@ struct WorkoutSet: Identifiable, Codable, Equatable {
     var distance: Double?
     var restTime: TimeInterval
     var completed: Bool = false
+    var isWarmup: Bool = false
     
-    init(reps: Int = 0, weight: Double? = nil, duration: TimeInterval? = nil, distance: Double? = nil, restTime: TimeInterval = 60) {
+    init(reps: Int = 0, weight: Double? = nil, duration: TimeInterval? = nil, distance: Double? = nil, restTime: TimeInterval = 60, isWarmup: Bool = false) {
         self.reps = reps
         self.weight = weight
         self.duration = duration
         self.distance = distance
         self.restTime = restTime
+        self.isWarmup = isWarmup
     }
 }
