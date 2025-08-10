@@ -67,7 +67,7 @@ struct DetailedPersonalRecordsTimelineView: View {
                     VStack(alignment: .leading) {
                         Text(record.exerciseName)
                             .font(.headline)
-                        Text("Value: \(record.value, specifier: "%.2f") \(record.unit.rawValue)")
+                        Text("\(record.recordType.rawValue): \(record.value, specifier: "%.2f") \(userProfileService.userProfile.weightUnit.rawValue)")
                         Text("Date: \(record.date, formatter: DateFormatter.shortDate)")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -475,6 +475,9 @@ struct DetailedChartView: View {
             return chartManager.getWeeklyExerciseVarietyData(from: workoutManager.workoutHistory)
         case .muscleGroupDistribution:
             // This case is handled by pieChartData
+            return []
+        case .personalRecordsTimeline:
+            // This case is handled by a List view, not a chart
             return []
         }
     }
