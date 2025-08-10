@@ -102,17 +102,13 @@ struct ActiveWorkoutView: View {
                     setForRestTimeEdit: $setForRestTimeEdit,
                     activeSheet: $activeSheet,
                     startRestTimer: startRestTimer,
-                    stopRestTimer: stopRestTimer
-                )
-                .swipeActions {
-                    Button(role: .destructive) {
+                    stopRestTimer: stopRestTimer,
+                    onDelete: {
                         if let index = workout.exercises.firstIndex(where: { $0.id == exercise.id }) {
                             workout.exercises.remove(at: index)
                         }
-                    } label: {
-                        Label("Delete", systemImage: "trash")
                     }
-                }
+                )
             }
 
             addExerciseButtonSection
@@ -269,12 +265,26 @@ private struct ExerciseSectionView: View {
 
     var startRestTimer: (WorkoutSet) -> Void
     var stopRestTimer: () -> Void
+    var onDelete: () -> Void
 
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var userProfileService: UserProfileService
 
     var body: some View {
-        Section(header: Text(exercise.name).font(.headline)) {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(exercise.name)
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.systemGroupedBackground))
+                .swipeActions {
+                    Button(role: .destructive) {
+                        onDelete()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+
             ForEach(0..<exercise.sets.count, id: \.self) { index in
                 ActiveWorkoutSetRow(
                     set: $exercise.sets[index],
@@ -295,6 +305,7 @@ private struct ExerciseSectionView: View {
                     isResting: activeRestSetID == exercise.sets[index].id,
                     restTimeRemaining: restTimeRemaining
                 )
+                .padding(.horizontal)
             }
             .onDelete { indexSet in
                 exercise.sets.remove(atOffsets: indexSet)
@@ -307,9 +318,11 @@ private struct ExerciseSectionView: View {
                     Image(systemName: "plus.circle.fill")
                     Text("Add Set")
                 }
+                .padding()
             }
             .buttonStyle(BorderlessButtonStyle())
         }
+        .listRowInsets(EdgeInsets())
     }
 }
 
