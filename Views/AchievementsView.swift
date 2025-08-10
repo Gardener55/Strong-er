@@ -11,6 +11,16 @@ struct AchievementsView: View {
         userProfile.achievements.filter { !$0.isEarned }
     }
 
+    private var pinnedRecords: [String: [PersonalRecord]] {
+        Dictionary(grouping: userProfile.personalRecords, by: { $0.exerciseName })
+            .filter { userProfile.watchedExercises.contains($0.key) }
+    }
+
+    private var unpinnedRecords: [String: [PersonalRecord]] {
+        Dictionary(grouping: userProfile.personalRecords, by: { $0.exerciseName })
+            .filter { !userProfile.watchedExercises.contains($0.key) }
+    }
+
     var body: some View {
         List {
             Section(header: Text("Achievements Earned (\(earnedAchievements.count))")) {
@@ -36,33 +46,52 @@ struct AchievementsView: View {
                 }
             }
 
-            Section(header: Text("Personal Records")) {
-                if userProfile.personalRecords.isEmpty {
-                    Text("No personal records yet. Let's lift!")
-                } else {
-                    ForEach(groupedRecords.keys.sorted(), id: \.self) { exerciseName in
+            if !pinnedRecords.isEmpty {
+                Section(header: Text("Pinned Personal Records")) {
+                    ForEach(pinnedRecords.keys.sorted(), id: \.self) { exerciseName in
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Text(exerciseName).font(.headline)
                                 Spacer()
-                                Button(action: {
-                                    togglePin(for: exerciseName)
-                                }) {
-                                    Image(systemName: userProfile.watchedExercises.contains(exerciseName) ? "pin.fill" : "pin")
-                                        .foregroundColor(.accentColor)
+                                Button(action: { togglePin(for: exerciseName) }) {
+                                    Image(systemName: "pin.fill").foregroundColor(.accentColor)
                                 }
                             }
-                            ForEach(groupedRecords[exerciseName]!) { record in
+                            ForEach(pinnedRecords[exerciseName]!) { record in
                                 HStack {
-                                    Text(record.recordType.rawValue)
-                                        .font(.subheadline)
+                                    Text(record.recordType.rawValue).font(.subheadline)
                                     Spacer()
-                                    Text(formattedValue(for: record, unit: userProfile.weightUnit))
-                                        .fontWeight(.semibold)
+                                    Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
                                 }
                             }
-                        }
-                        .padding(.vertical, 4)
+                        }.padding(.vertical, 4)
+                    }
+                }
+            }
+
+            Section(header: Text(pinnedRecords.isEmpty ? "Personal Records" : "Other Personal Records")) {
+                if unpinnedRecords.isEmpty && pinnedRecords.isEmpty {
+                    Text("No personal records yet. Let's lift!")
+                } else if unpinnedRecords.isEmpty && !pinnedRecords.isEmpty {
+                    Text("All records are pinned.")
+                } else {
+                    ForEach(unpinnedRecords.keys.sorted(), id: \.self) { exerciseName in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(exerciseName).font(.headline)
+                                Spacer()
+                                Button(action: { togglePin(for: exerciseName) }) {
+                                    Image(systemName: "pin").foregroundColor(.accentColor)
+                                }
+                            }
+                            ForEach(unpinnedRecords[exerciseName]!) { record in
+                                HStack {
+                                    Text(record.recordType.rawValue).font(.subheadline)
+                                    Spacer()
+                                    Text(formattedValue(for: record, unit: userProfile.weightUnit)).fontWeight(.semibold)
+                                }
+                            }
+                        }.padding(.vertical, 4)
                     }
                 }
             }
@@ -82,10 +111,6 @@ struct AchievementsView: View {
             }
         }
         .navigationTitle("My Achievements")
-    }
-
-    private var groupedRecords: [String: [PersonalRecord]] {
-        Dictionary(grouping: userProfile.personalRecords, by: { $0.exerciseName })
     }
 
     private func togglePin(for exerciseName: String) {
