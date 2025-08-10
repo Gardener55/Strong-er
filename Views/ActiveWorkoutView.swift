@@ -27,6 +27,7 @@ struct ActiveWorkoutView: View {
     @State private var showingDatePicker = false
     @State private var showingAddExercisePicker = false
     @State private var workoutStartDate: Date
+    @State private var setForRestTimeEdit: Binding<WorkoutSet>?
 
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -84,7 +85,10 @@ struct ActiveWorkoutView: View {
                                         }
                                     },
                                     isResting: activeRestSetID == set.id,
-                                    restTimeRemaining: restTimeRemaining
+                                    restTimeRemaining: restTimeRemaining,
+                                    onEditRestTime: {
+                                        setForRestTimeEdit = $set
+                                    }
                                 )
                             }
                             .onDelete { indexSet in
@@ -129,9 +133,6 @@ struct ActiveWorkoutView: View {
                 }
                 .padding()
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: startWorkoutTimer)
@@ -160,6 +161,18 @@ struct ActiveWorkoutView: View {
                 ExercisePickerView { exercise in
                     let newExercise = WorkoutExercise(exercise: exercise)
                     workout.exercises.append(newExercise)
+                }
+            }
+            .sheet(isPresented: .constant(setForRestTimeEdit != nil), onDismiss: {
+                if let setBinding = setForRestTimeEdit {
+                    if activeRestSetID == setBinding.wrappedValue.id {
+                        restTimeRemaining = setBinding.wrappedValue.restTime
+                    }
+                }
+                setForRestTimeEdit = nil
+            }) {
+                if let setBinding = setForRestTimeEdit {
+                    RestTimeEditorView(set: setBinding)
                 }
             }
         }
@@ -223,21 +236,25 @@ struct ActiveWorkoutView: View {
         dismiss()
     }
 
-    private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-
     private func removeExercise(at offsets: IndexSet) {
         workout.exercises.remove(atOffsets: offsets)
     }
 }
 
 private struct ActiveWorkoutSetRow: View {
+    @FocusState private var focusedField: Field?
+
+    enum Field: Hashable {
+        case reps
+        case weight
+    }
+
     @Binding var set: WorkoutSet
     let setNumber: Int
     let previousSet: WorkoutSet?
     let weightUnit: UserProfile.WeightUnit
     var onToggleCompletion: () -> Void
+    var onEditRestTime: () -> Void
     let isResting: Bool
     let restTimeRemaining: TimeInterval
 
@@ -279,6 +296,7 @@ private struct ActiveWorkoutSetRow: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .keyboardType(.decimalPad)
                         .frame(width: 80)
+                        .focused($focusedField, equals: .weight)
                 }
 
                 // Reps Input
@@ -289,18 +307,29 @@ private struct ActiveWorkoutSetRow: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .keyboardType(.numberPad)
                         .frame(width: 80)
+                        .focused($focusedField, equals: .reps)
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        focusedField = nil
+                    }
                 }
             }
 
             // Rest Timer
             if isResting {
-                HStack {
-                    Spacer()
-                    Image(systemName: "timer")
-                    Text(timeString(from: restTimeRemaining))
-                        .font(.subheadline)
-                        .foregroundColor(.blue)
-                    Spacer()
+                Button(action: onEditRestTime) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "timer")
+                        Text(timeString(from: restTimeRemaining))
+                            .font(.subheadline)
+                            .foregroundColor(.blue)
+                        Spacer()
+                    }
                 }
                 .padding(.top, 8)
             }
@@ -326,5 +355,40 @@ private struct ActiveWorkoutSetRow: View {
         let minutes = Int(interval) / 60 % 60
         let seconds = Int(interval) % 60
         return String(format: "%02i:%02i", minutes, seconds)
+    }
+}
+
+private struct RestTimeEditorView: View {
+    @Binding var set: WorkoutSet
+    @Environment(\.dismiss) private var dismiss
+    @State private var newRestTime: String
+
+    init(set: Binding<WorkoutSet>) {
+        _set = set
+        _newRestTime = State(initialValue: String(Int(set.wrappedValue.restTime)))
+    }
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Update rest time for this set.")
+                    .font(.headline)
+
+                TextField("Seconds", text: $newRestTime)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.numberPad)
+                    .frame(width: 100)
+
+                Button("Save") {
+                    if let time = TimeInterval(newRestTime) {
+                        set.restTime = time
+                    }
+                    dismiss()
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .navigationTitle("Edit Rest Time")
+            .navigationBarItems(trailing: Button("Cancel") { dismiss() })
+        }
     }
 }
