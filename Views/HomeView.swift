@@ -14,6 +14,8 @@ struct HomeView: View {
     @State private var showingAIWorkout = false
     @State private var showingSettings = false
     @State private var showingActiveWorkout = false
+    @State private var showingWorkoutStats = false
+    @State private var showingThisWeekHistory = false
 
     var body: some View {
         NavigationView {
@@ -33,7 +35,7 @@ struct HomeView: View {
                     QuickActionsView(showingAIWorkout: $showingAIWorkout, showingActiveWorkout: $showingActiveWorkout)
                     
                     // Workout Stats
-                    WorkoutStatsView()
+                    WorkoutStatsView(showingWorkoutStats: $showingWorkoutStats, showingThisWeekHistory: $showingThisWeekHistory)
                     
                     // Recent Workouts
                     RecentWorkoutsView()
@@ -66,6 +68,12 @@ struct HomeView: View {
                     ))
                     .environmentObject(workoutManager)
                 }
+            }
+            .sheet(isPresented: $showingWorkoutStats) {
+                WorkoutStatisticsView()
+            }
+            .sheet(isPresented: $showingThisWeekHistory) {
+                ThisWeekHistoryView()
             }
         }
     }
@@ -210,6 +218,8 @@ struct QuickActionButton: View {
 
 struct WorkoutStatsView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @Binding var showingWorkoutStats: Bool
+    @Binding var showingThisWeekHistory: Bool
     
     var body: some View {
         let stats = workoutManager.getWorkoutStats()
@@ -220,19 +230,25 @@ struct WorkoutStatsView: View {
                 .padding(.bottom, 8)
             
             HStack(spacing: 20) {
-                StatCard(
-                    title: "Total Workouts",
-                    value: "\(stats.totalWorkouts)",
-                    icon: "chart.bar.fill",
-                    color: Color("ActionBlue")
-                )
+                Button(action: { showingWorkoutStats = true }) {
+                    StatCard(
+                        title: "Total Workouts",
+                        value: "\(stats.totalWorkouts)",
+                        icon: "chart.bar.fill",
+                        color: Color("ActionBlue")
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
                 
-                StatCard(
-                    title: "This Week",
-                    value: "\(stats.thisWeekWorkouts)",
-                    icon: "calendar",
-                    color: Color("ActionGreen")
-                )
+                Button(action: { showingThisWeekHistory = true }) {
+                    StatCard(
+                        title: "This Week",
+                        value: "\(stats.thisWeekWorkouts)",
+                        icon: "calendar",
+                        color: Color("ActionGreen")
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }
