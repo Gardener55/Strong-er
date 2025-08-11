@@ -95,6 +95,7 @@ private struct ActiveWorkoutSetRow: View {
     let weightUnit: UserProfile.WeightUnit
     var onToggleCompletion: () -> Void
     var onEditRestTime: () -> Void
+    var onDelete: () -> Void
     let isResting: Bool
     let restTimeRemaining: TimeInterval
 
@@ -185,6 +186,13 @@ private struct ActiveWorkoutSetRow: View {
             }
         }
         .padding(.vertical, 8)
+        .swipeActions {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
     }
 
     private func updateWeightInput(fromModel: Bool = false) {
@@ -335,13 +343,13 @@ private struct ExerciseSectionView: View {
                         setForRestTimeEdit = $exercise.sets[index]
                         activeSheet = .restTimeEditor
                     },
+                    onDelete: {
+                        deleteSet(at: IndexSet(integer: index))
+                    },
                     isResting: activeRestSetID == exercise.sets[index].id,
                     restTimeRemaining: restTimeRemaining
                 )
                 .padding(.horizontal)
-            }
-            .onDelete { indexSet in
-                exercise.sets.remove(atOffsets: indexSet)
             }
 
             Button(action: {
@@ -357,6 +365,10 @@ private struct ExerciseSectionView: View {
             .buttonStyle(BorderlessButtonStyle())
         }
         .listRowInsets(EdgeInsets())
+    }
+
+    private func deleteSet(at offsets: IndexSet) {
+        exercise.sets.remove(atOffsets: offsets)
     }
 }
 
