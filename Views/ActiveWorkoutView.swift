@@ -402,7 +402,9 @@ struct ActiveWorkoutView: View {
     @State private var setForRestTimeEdit: Binding<WorkoutSet>?
     @State private var exerciseForRestTimeEdit: Binding<WorkoutExercise>?
     @State private var activeSheet: ActiveSheet?
-    @State private var showingFinishWorkoutPrompt = false
+    @State private var showingAlert = false
+    @State private var alertInfo: AlertInfo?
+
 
     // For summary view navigation
     @State private var showSummary = false
@@ -411,6 +413,17 @@ struct ActiveWorkoutView: View {
 
     // For replacing an exercise
     @State private var exerciseToReplace: Binding<WorkoutExercise>?
+
+    private struct AlertInfo {
+        let title: String
+        let message: String
+        let primaryButton: Alert.Button
+        let secondaryButton: Alert.Button?
+    }
+
+    private var hasUnfinishedSets: Bool {
+        workout.exercises.flatMap { $0.sets }.contains { !$0.completed }
+    }
 
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -428,7 +441,7 @@ struct ActiveWorkoutView: View {
             VStack {
                 headerView
                 exerciseListView
-                finishButtonView
+                bottomButtonsView
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
@@ -454,23 +467,15 @@ struct ActiveWorkoutView: View {
             .onTapGesture {
                 hideKeyboard()
             }
-            .actionSheet(isPresented: $showingFinishWorkoutPrompt) {
-                ActionSheet(
-                    title: Text("Finish Workout"),
-                    message: Text("How would you like to proceed?"),
-                    buttons: [
-                        .default(Text("Complete as is")) {
-                            finishWorkout(shouldRemoveUnfinished: false)
-                        },
-                        .default(Text("Remove Unfinished Sets & Complete")) {
-                            finishWorkout(shouldRemoveUnfinished: true)
-                        },
-                        .destructive(Text("Discard Workout")) {
-                            dismiss()
-                        },
-                        .cancel()
-                    ]
-                )
+            .alert(isPresented: $showingAlert) {
+                let primaryButton = alertInfo?.primaryButton ?? .default(Text("OK"))
+                let secondaryButton = alertInfo?.secondaryButton
+
+                if let secondaryButton = secondaryButton {
+                    return Alert(title: Text(alertInfo?.title ?? ""), message: Text(alertInfo?.message ?? ""), primaryButton: primaryButton, secondaryButton: secondaryButton)
+                } else {
+                    return Alert(title: Text(alertInfo?.title ?? ""), message: Text(alertInfo?.message ?? ""), dismissButton: primaryButton)
+                }
             }
         }
     }
@@ -549,17 +554,60 @@ struct ActiveWorkoutView: View {
         }
     }
 
-    private var finishButtonView: some View {
-        Button(action: {
-            showingFinishWorkoutPrompt = true
-        }) {
-            Text("Finish Workout")
-                .font(.headline)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.green)
-                .cornerRadius(10)
+    private var bottomButtonsView: some View {
+        HStack(spacing: 16) {
+            Button(action: {
+                self.alertInfo = AlertInfo(
+                    title: "Cancel Workout",
+                    message: "Are you sure you want to cancel this workout? This action cannot be undone.",
+                    primaryButton: .destructive(Text("Confirm")) {
+                        cancelWorkout()
+                    },
+                    secondaryButton: .cancel()
+                )
+                self.showingAlert = true
+            }) {
+                Text("Cancel Workout")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.red)
+                    .cornerRadius(10)
+            }
+
+            Button(action: {
+                if hasUnfinishedSets {
+                    self.alertInfo = AlertInfo(
+                        title: "Unfinished Sets",
+                        message: "You have unfinished sets. How would you like to proceed?",
+                        primaryButton: .default(Text("Complete Unfinished Sets")) {
+                            finishWorkout(completionType: .autocomplete)
+                        },
+                        secondaryButton: .destructive(Text("Discard Unfinished Sets")) {
+                            finishWorkout(completionType: .discard)
+                        }
+                    )
+                } else {
+                    self.alertInfo = AlertInfo(
+                        title: "Finish Workout",
+                        message: "Are you sure you want to finish this workout?",
+                        primaryButton: .default(Text("Finish")) {
+                            finishWorkout(completionType: .standard)
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+                self.showingAlert = true
+            }) {
+                Text("Finish Workout")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green)
+                    .cornerRadius(10)
+            }
         }
         .padding()
     }
@@ -688,10 +736,26 @@ struct ActiveWorkoutView: View {
         restTimeRemaining = 0
     }
 
+    private enum WorkoutCompletionType {
+        case standard, autocomplete, discard
+    }
     // MARK: - Data Functions
 
-    private func finishWorkout(shouldRemoveUnfinished: Bool) {
-        if shouldRemoveUnfinished {
+    private func finishWorkout(completionType: WorkoutCompletionType) {
+        switch completionType {
+        case .standard:
+            // No changes needed, just finish the workout as is.
+            break
+        case .autocomplete:
+            // Mark all unfinished sets as completed.
+            for i in 0..<workout.exercises.count {
+                for j in 0..<workout.exercises[i].sets.count {
+                    if !workout.exercises[i].sets[j].completed {
+                        workout.exercises[i].sets[j].completed = true
+                    }
+                }
+            }
+        case .discard:
             // Remove exercises with no completed sets.
             workout.exercises.removeAll { exercise in
                 exercise.sets.allSatisfy { !$0.completed }
@@ -710,6 +774,13 @@ struct ActiveWorkoutView: View {
         self.summaryData = summary
         self.workoutToSummarize = workout
         self.showSummary = true
+    }
+
+    private func cancelWorkout() {
+        if let currentWorkout = workoutManager.currentWorkout {
+            workoutManager.deleteWorkout(currentWorkout)
+        }
+        dismiss()
     }
 
     private func removeExercise(at offsets: IndexSet) {
