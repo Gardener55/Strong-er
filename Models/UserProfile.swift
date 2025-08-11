@@ -10,6 +10,7 @@
 import Foundation
 
 struct UserProfile: Codable {
+    var isProfileSetupComplete: Bool = false
     var name: String = ""
     var age: Int = 25
     var weight: Double = 70.0
