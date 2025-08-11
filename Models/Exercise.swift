@@ -18,7 +18,16 @@ struct Exercise: Identifiable, Codable, Hashable {
     let description: String
     let instructions: [String]
     let difficulty: Difficulty
+    let exerciseType: ExerciseType // New property
+    let targetMuscleGroup: MuscleGroup // New property
     
+    enum ExerciseType: String, CaseIterable, Codable, Equatable {
+        case primary = "Primary"
+        case accessory = "Accessory"
+        case warmup = "Warm-up"
+        case cooldown = "Cool-down"
+    }
+
     enum ExerciseCategory: String, CaseIterable, Codable, Equatable {
         case strength = "Strength"
         case cardio = "Cardio"

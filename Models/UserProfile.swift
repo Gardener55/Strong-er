@@ -25,6 +25,10 @@ struct UserProfile: Codable {
     var achievements: [Achievement] = []
     var watchedExercises: [String] = []
 
+    // New properties for AI Workout Generator
+    var estimatedOneRepMax: [String: Double] = [:]
+    var lastTrainedMuscleGroups: [Exercise.MuscleGroup: Date] = [:]
+
     enum WeightUnit: String, CaseIterable, Codable, Equatable {
         case kilograms = "kg"
         case pounds = "lbs"
