@@ -14,6 +14,7 @@ struct ContentView: View {
     @StateObject private var workoutManager = WorkoutManager()
     @StateObject private var exerciseDatabase = ExerciseDatabase.shared
     @State private var selectedTab = 0
+    @State private var showGettingStarted = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -56,6 +57,16 @@ struct ContentView: View {
         .environmentObject(exerciseDatabase)
         .environmentObject(userProfileService)
         .environment(\.managedObjectContext, viewContext)
+        .onAppear {
+            showGettingStarted = !userProfileService.userProfile.isProfileSetupComplete
+        }
+        .onChange(of: userProfileService.userProfile.isProfileSetupComplete) {
+            showGettingStarted = !userProfileService.userProfile.isProfileSetupComplete
+        }
+        .fullScreenCover(isPresented: $showGettingStarted) {
+            GettingStartedView()
+                .environmentObject(userProfileService)
+        }
     }
 }
 
