@@ -143,12 +143,43 @@ class WorkoutManager: ObservableObject {
             Calendar.current.isDate(workout.date, equalTo: Date(), toGranularity: .weekOfYear)
         }.count
         
+        // Advanced Stats
+        let averageWorkoutsPerWeek = calculateAverageWorkoutsPerWeek()
+        let mostCompletedExercise = calculateMostCompletedExercise()
+        let mostExercisesInOneWorkout = workoutHistory.map { $0.exercises.count }.max() ?? 0
+        let mostRepsInOneSet = workoutHistory.flatMap { $0.exercises }.flatMap { $0.sets }.map { $0.reps }.max() ?? 0
+
         return WorkoutStats(
             totalWorkouts: totalWorkouts,
             totalDuration: totalDuration,
             averageDuration: averageDuration,
-            thisWeekWorkouts: thisWeekWorkouts
+            thisWeekWorkouts: thisWeekWorkouts,
+            averageWorkoutsPerWeek: averageWorkoutsPerWeek,
+            mostCompletedExercise: mostCompletedExercise,
+            mostExercisesInOneWorkout: mostExercisesInOneWorkout,
+            mostRepsInOneSet: mostRepsInOneSet
         )
+    }
+
+    private func calculateAverageWorkoutsPerWeek() -> Double {
+        guard !workoutHistory.isEmpty else { return 0 }
+
+        let sortedHistory = workoutHistory.sorted { $0.date < $1.date }
+        guard let firstWorkoutDate = sortedHistory.first?.date else { return 0 }
+
+        let weeks = Calendar.current.dateComponents([.weekOfYear], from: firstWorkoutDate, to: Date()).weekOfYear ?? 0
+
+        return weeks > 0 ? Double(workoutHistory.count) / Double(weeks) : Double(workoutHistory.count)
+    }
+
+    private func calculateMostCompletedExercise() -> (name: String, count: Int)? {
+        let exerciseCounts = workoutHistory
+            .flatMap { $0.exercises }
+            .reduce(into: [String: Int]()) { counts, workoutExercise in
+                counts[workoutExercise.exercise.name, default: 0] += 1
+            }
+
+        return exerciseCounts.max { $0.value < $1.value }
     }
 
     func getUniqueExercises() -> [Exercise] {
@@ -177,4 +208,10 @@ struct WorkoutStats {
     let totalDuration: TimeInterval
     let averageDuration: TimeInterval
     let thisWeekWorkouts: Int
+
+    // Advanced Stats
+    let averageWorkoutsPerWeek: Double
+    let mostCompletedExercise: (name: String, count: Int)?
+    let mostExercisesInOneWorkout: Int
+    let mostRepsInOneSet: Int
 }
