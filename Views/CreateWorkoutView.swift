@@ -50,6 +50,7 @@ struct CreateWorkoutView: View {
                         }
                         .foregroundColor(.blue)
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
                 
                 Spacer()
@@ -61,6 +62,7 @@ struct CreateWorkoutView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -68,6 +70,7 @@ struct CreateWorkoutView: View {
                         startWorkout()
                     }
                     .disabled(workoutName.isEmpty || selectedExercises.isEmpty)
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .sheet(isPresented: $showingExercisePicker) {
@@ -108,6 +111,7 @@ struct WorkoutExerciseRow: View {
                     showingDetail = true
                 }
                 .font(.caption)
+                .buttonStyle(HapticButtonStyle())
             }
             
             Text("\(workoutExercise.sets.count) sets")
@@ -146,7 +150,7 @@ struct ExercisePickerView: View {
                     }) {
                         ExerciseRow(exercise: exercise)
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .navigationTitle("Select Exercise")
@@ -156,6 +160,7 @@ struct ExercisePickerView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
         }
@@ -189,6 +194,7 @@ struct ExerciseSetupView: View {
                     Button("Add Set") {
                         workoutExercise.sets.append(WorkoutSet())
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .navigationTitle(workoutExercise.exercise.name)
@@ -198,6 +204,7 @@ struct ExerciseSetupView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -205,6 +212,7 @@ struct ExerciseSetupView: View {
                         onSave(workoutExercise)
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
         }

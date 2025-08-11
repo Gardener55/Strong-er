@@ -83,6 +83,7 @@ struct PostWorkoutSummaryView: View {
             .frame(maxWidth: .infinity)
             .background(Color.blue)
             .cornerRadius(10)
+            .buttonStyle(HapticButtonStyle())
         }
         .padding()
         .navigationBarHidden(true)

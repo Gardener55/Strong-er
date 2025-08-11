@@ -29,6 +29,7 @@ struct TemplatesView: View {
                     Button(action: { showingCreateTemplate = true }) {
                         Image(systemName: "plus")
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .sheet(isPresented: $showingCreateTemplate) {
@@ -74,7 +75,7 @@ struct TemplateRow: View {
             Spacer()
             
             Button("Start", action: onStart)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(HapticButtonStyle())
                 .controlSize(.small)
         }
         .padding(.vertical, 4)

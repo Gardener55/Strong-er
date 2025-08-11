@@ -38,7 +38,7 @@ struct WorkoutStatisticsView: View {
             .navigationTitle("Statistics")
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
-            })
+            }.buttonStyle(HapticButtonStyle()))
         }
     }
 

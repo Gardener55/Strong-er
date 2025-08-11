@@ -575,6 +575,7 @@ struct ChartZoomControlView: View {
                     visibleDomain = getFullDomain()
                 }
             }
+            .buttonStyle(HapticButtonStyle())
 
             Button("Zoom In") {
                 if let domain = visibleDomain {
@@ -585,10 +586,12 @@ struct ChartZoomControlView: View {
                     }
                 }
             }
+            .buttonStyle(HapticButtonStyle())
 
             Button("Reset") {
                 visibleDomain = getFullDomain()
             }
+            .buttonStyle(HapticButtonStyle())
         }
         .padding()
     }

@@ -34,7 +34,7 @@ struct ThisWeekHistoryView: View {
             .navigationTitle("This Week's History")
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
-            })
+            }.buttonStyle(HapticButtonStyle()))
         }
     }
 }

@@ -133,6 +133,7 @@ private struct PRRow: View {
                     Image(systemName: userProfile.watchedExercises.contains(exerciseName) ? "pin.fill" : "pin")
                         .foregroundColor(.accentColor)
                 }
+                .buttonStyle(HapticButtonStyle())
             }
             ForEach(records) { record in
                 HStack {
@@ -183,6 +184,7 @@ private struct ShowMoreButton: View {
             Text(isExpanded ? "Show Less" : "Show More...")
                 .foregroundColor(.accentColor)
         }
+        .buttonStyle(HapticButtonStyle())
     }
 }
 

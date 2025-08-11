@@ -37,6 +37,7 @@ struct ItemListView: View {
                     Button(action: addItem) {
                         Label("Add Item", systemImage: "plus")
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             Text("Select an item")
