@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F0AADDFFDEADBEEF12345678 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0AADDFFDEADBEEF12345677 /* HealthKit.framework */; };
 		F03C13C92E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
 		F03C13CA2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
 		F03C13CB2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
@@ -159,10 +160,13 @@
 		F05104F02E484D4100BC0247 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
 		F05104F42E484D4D00BC0247 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		F05104F82E4851A200BC0247 /* DetailedChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedChartView.swift; sourceTree = "<group>"; };
-		F05104FC2E4851A200BC0248 /* workout_template.csv */ = {isa = PBXFileReference; lastKnownFileType = text.csv; path = "workout_template.csv"; sourceTree = "<group>"; };
+		F0AADDFFDEADBEEF12345677 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		F0AADDFF1122334455667788 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		F0AADDFF1122334455667799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
+		F0AADDFF8877665544332211 /* workout_template.csv in Resources */ = {isa = PBXBuildFile; fileRef = F0AADDFF1122334455667788 /* workout_template.csv */; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXFrameworksBuildPhase section */
 		F05103F12E465CED00BC0247 /* Strong-er */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Strong-er";
@@ -185,6 +189,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0AADDFFDEADBEEF12345678 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +369,11 @@
 				TargetAttributes = {
 					F05103EE2E465CED00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 					F05104002E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;

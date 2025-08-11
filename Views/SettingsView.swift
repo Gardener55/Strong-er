@@ -15,9 +15,12 @@ struct SettingsView: View {
     @State private var isExporting = false
     @State private var exportError: Error?
     @State private var exportedFileURL: URL?
+    @State private var healthKitConnected = false
+    @State private var showHealthKitAlert = false
 
     private let workoutImporter = WorkoutImporter()
     private let workoutExporter = WorkoutExporter()
+    private let healthKitManager = HealthKitManager()
 
     private func importWorkouts(from url: URL, as sourceUnit: UserProfile.WeightUnit) {
         do {
@@ -91,8 +94,30 @@ struct SettingsView: View {
                     }
                     .buttonStyle(HapticButtonStyle())
                 }
+
+                Section(header: Text("Apple Health")) {
+                    Button(healthKitConnected ? "Connected to Apple Health" : "Connect to Apple Health") {
+                        if !healthKitConnected {
+                            healthKitManager.requestAuthorization { success, error in
+                                if success {
+                                    healthKitConnected = true
+                                }
+                                showHealthKitAlert = true
+                            }
+                        }
+                    }
+                    .buttonStyle(HapticButtonStyle())
+                    .disabled(healthKitConnected)
+                }
             }
             .navigationTitle("Settings")
+            .alert(isPresented: $showHealthKitAlert) {
+                Alert(
+                    title: Text(healthKitConnected ? "Success" : "Error"),
+                    message: Text(healthKitConnected ? "Successfully connected to Apple Health." : "Failed to connect to Apple Health. Please make sure you have granted the necessary permissions in the Health app."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             .fileImporter(
                 isPresented: $isImporting,
                 allowedContentTypes: [UTType.commaSeparatedText],
