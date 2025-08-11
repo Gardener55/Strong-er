@@ -12,14 +12,38 @@ struct SettingsView: View {
     @State private var showError = false
     @State private var showingUnitSelector = false
     @State private var selectedFile: URL?
+    @State private var isExporting = false
+    @State private var exportError: Error?
+    @State private var exportedFileURL: URL?
 
     private let workoutImporter = WorkoutImporter()
+    private let workoutExporter = WorkoutExporter()
 
     private func importWorkouts(from url: URL, as sourceUnit: UserProfile.WeightUnit) {
         do {
             try workoutImporter.importWorkouts(from: url, exerciseDatabase: exerciseDatabase, workoutManager: workoutManager, sourceUnit: sourceUnit)
         } catch {
             importError = error
+            showError = true
+        }
+    }
+
+    private func downloadTemplate() {
+        if let url = Bundle.main.url(forResource: "workout_template", withExtension: "csv") {
+            exportedFileURL = url
+            isExporting = true
+        } else {
+            exportError = NSError(domain: "WorkoutApp", code: 404, userInfo: [NSLocalizedDescriptionKey: "Template file not found."])
+            showError = true
+        }
+    }
+
+    private func exportWorkouts() {
+        do {
+            exportedFileURL = try workoutExporter.exportWorkouts(workoutManager: workoutManager)
+            isExporting = true
+        } catch {
+            exportError = error
             showError = true
         }
     }
@@ -55,6 +79,14 @@ struct SettingsView: View {
                     Button("Import Workouts from CSV") {
                         isImporting = true
                     }
+
+                    Button("Export Workout Data") {
+                        exportWorkouts()
+                    }
+
+                    Button("Download Template File") {
+                        downloadTemplate()
+                    }
                 }
             }
             .navigationTitle("Settings")
@@ -89,13 +121,30 @@ struct SettingsView: View {
                     }
                 }
             }
+            .sheet(isPresented: $isExporting) {
+                if let url = exportedFileURL {
+                    ShareSheet(activityItems: [url])
+                }
+            }
             .alert(isPresented: $showError) {
                 Alert(
-                    title: Text("Import Error"),
-                    message: Text(importError?.localizedDescription ?? "An unknown error occurred."),
+                    title: Text("Error"),
+                    message: Text(exportError?.localizedDescription ?? importError?.localizedDescription ?? "An unknown error occurred."),
                     dismissButton: .default(Text("OK"))
                 )
             }
         }
     }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    var applicationActivities: [UIActivity]? = nil
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ShareSheet>) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ShareSheet>) {}
 }
