@@ -21,16 +21,18 @@ class WorkoutManager: ObservableObject {
     
     private var achievementService: AchievementService
     private var userProfileService: UserProfileService
+    private let healthKitManager: HealthKitManager
 
     // Default initializer
     convenience init() {
-        self.init(achievementService: AchievementService(), userProfileService: UserProfileService.shared)
+        self.init(achievementService: AchievementService(), userProfileService: UserProfileService.shared, healthKitManager: HealthKitManager())
     }
 
     // Initializer for dependency injection
-    init(achievementService: AchievementService, userProfileService: UserProfileService) {
+    init(achievementService: AchievementService, userProfileService: UserProfileService, healthKitManager: HealthKitManager) {
         self.achievementService = achievementService
         self.userProfileService = userProfileService
+        self.healthKitManager = healthKitManager
         loadData()
 
         // Recalculate all achievements and PRs from history on launch
@@ -78,6 +80,13 @@ class WorkoutManager: ObservableObject {
         workoutHistory.append(workout)
         currentWorkout = nil
         saveData()
+
+        healthKitManager.saveWorkout(workout: workout) { success, error in
+            if !success {
+                // Handle the error appropriately, e.g., by logging it
+                print("Failed to save workout to HealthKit: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
 
         return (brokenPRs, newAchievements)
     }
