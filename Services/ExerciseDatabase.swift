@@ -382,7 +382,75 @@ class ExerciseDatabase: ObservableObject {
             Exercise(name: "Upright Row (Cable)", category: .strength, muscleGroups: [.shoulders, .biceps], equipment: .cable, description: "", instructions: [], difficulty: .intermediate, exerciseType: .accessory, targetMuscleGroup: .shoulders),
             Exercise(name: "Upright Row (Dumbbell)", category: .strength, muscleGroups: [.shoulders, .biceps], equipment: .dumbbells, description: "", instructions: [], difficulty: .intermediate, exerciseType: .accessory, targetMuscleGroup: .shoulders),
             Exercise(name: "Upright Row (Barbell)", category: .strength, muscleGroups: [.shoulders, .biceps], equipment: .barbell, description: "", instructions: [], difficulty: .intermediate, exerciseType: .accessory, targetMuscleGroup: .shoulders),
-            Exercise(name: "Wrist Roller", category: .strength, muscleGroups: [.forearms], equipment: .bodyweight, description: "", instructions: [], difficulty: .intermediate, exerciseType: .accessory, targetMuscleGroup: .forearms)
+            Exercise(name: "Wrist Roller", category: .strength, muscleGroups: [.forearms], equipment: .bodyweight, description: "", instructions: [], difficulty: .intermediate, exerciseType: .accessory, targetMuscleGroup: .forearms),
+            // New Exercises
+            Exercise(
+                name: "Bird-dog",
+                category: .balance,
+                muscleGroups: [.core, .glutes, .back],
+                equipment: .noEquipment,
+                description: "An exercise to train the body how to stabilize the lumbar spine (low back) during upper and lower extremity movement.",
+                instructions: [
+                    "Kneel on an exercise mat or floor, positioning your knees and feet hip-width apart, with your feet dorsi-flexed (toes pointing towards your body).",
+                    "Slowly lean forward to place your hands on the mat, positioning them directly under your shoulders at shoulder-width with your fingers facing forward. Reposition your hands and knees as necessary so that your knees are directly under your hips and hands are directly under your shoulders.",
+                    "Stiffen your core and abdominal muscles to position your spine in a neutral position, avoid any excessive sagging or arching.",
+                    "Upward Phase: This exercise involves simultaneous movement of your leg and contralateral (opposite) arm. This exercise is best performed facing a mirror. Hip Extension: Slowly extend your left hip (raise and straighten the knee) attempting to extend it until it is at, or near parallel, to the floor without any rotation in the hip. Your goal is to keep both hips parallel to the floor. The use of a light bar placed across the hips, parallel to the waistline of your pants, provides visual feedback to hip rotation and what corrections are needed.",
+                    "Shoulder flexion: Slowly flex your right arm (raise and straighten the arm) attempting to raise it until it is at, or near parallel, to the floor without any tilting at the shoulders. Your goal is to keep the both shoulders parallel to the floor. The use of a light bar placed across the shoulders provides visual feedback to shoulder rotation and what corrections are needed. Your head should remain aligned with the spine throughout the movement.",
+                    "The degree of hip extension and shoulder flexion is determined by the ability to control against movement in the low back. As the leg is raised, individuals may witness an increase in lumbar lordosis (low back sagging). Only raise the limbs to heights where the low back position can be maintained through the combined actions of the core and abdominal muscles.",
+                    "Downward Phase: Gently lower yourself back to your starting position and repeat with the opposite limbs."
+                ],
+                difficulty: .intermediate,
+                exerciseType: .accessory,
+                targetMuscleGroup: .core
+            ),
+            Exercise(
+                name: "Cat-Cow",
+                category: .flexibility,
+                muscleGroups: [.back, .chest],
+                equipment: .noEquipment,
+                description: "A gentle exercise to warm up the spine.",
+                instructions: [
+                    "Kneel on an exercise mat or floor, positioning your knees and feet hip-width apart, with your feet dorsi-flexed (toes pointing towards your body).",
+                    "Slowly lean forward to place your hands on the mat, positioning them directly under your shoulders at shoulder-width with your hands facing forward. Reposition your hands and knees as necessary so that your knees are directly under your hips and hands are directly under your shoulders.",
+                    "Gently stiffen your core and abdominal muscles to position your spine in a neutral position, avoiding any sagging or arching.",
+                    "Upward (Cat) Phase: Gently exhale and contract your abdominal muscles, pushing your spine upwards towards the ceiling and hold this position for 10 - 15 seconds. Allow your head to fall towards your chest, maintaining alignment with the spine.",
+                    "Downward (Cow) Phase: Slowly relax and yield to the effects of gravity. Let your stomach fall towards the floor (increasing the arch in your low back) and allow your shoulder blades to fall together (move towards the spine). Hold this position for 10 - 15 seconds before returning to your starting position"
+                ],
+                difficulty: .beginner,
+                exerciseType: .warmup,
+                targetMuscleGroup: .back
+            ),
+            Exercise(
+                name: "Dumbbell Bench Press",
+                category: .strength,
+                muscleGroups: [.chest, .shoulders, .triceps],
+                equipment: .dumbbells,
+                description: "A classic exercise for building the chest muscles.",
+                instructions: [
+                    "Lie on a flat bench with your feet firmly on the floor. Hold a dumbbell in each hand with an overhand grip (palms facing forward).",
+                    "Position the dumbbells at the sides of your chest, with your upper arms and elbows at a 90-degree angle to your body.",
+                    "Press the dumbbells up until your arms are fully extended, but not locked. Keep the dumbbells parallel to each other.",
+                    "Slowly lower the dumbbells back to the starting position."
+                ],
+                difficulty: .intermediate,
+                exerciseType: .primary,
+                targetMuscleGroup: .chest
+            ),
+            Exercise(
+                name: "Dumbbell Curl",
+                category: .strength,
+                muscleGroups: [.biceps],
+                equipment: .dumbbells,
+                description: "A classic exercise for building the biceps.",
+                instructions: [
+                    "Stand or sit with a dumbbell in each hand, palms facing forward. Keep your elbows close to your torso.",
+                    "Curl the weights up to shoulder level, keeping your upper arms stationary. Squeeze your biceps at the top of the movement.",
+                    "Slowly lower the dumbbells back to the starting position."
+                ],
+                difficulty: .beginner,
+                exerciseType: .accessory,
+                targetMuscleGroup: .biceps
+            )
         ]
     }
     

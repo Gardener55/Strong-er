@@ -57,6 +57,11 @@ struct Exercise: Identifiable, Codable, Hashable {
         case machine = "Machine"
         case kettlebell = "Kettlebell"
         case cable = "Cable"
+        case bench = "Bench"
+        case bosuTrainer = "BOSU Trainer"
+        case stabilityBall = "Stability Ball"
+        case medicineBall = "Medicine Ball"
+        case noEquipment = "No Equipment"
     }
     
     enum Difficulty: String, CaseIterable, Codable, Equatable {
