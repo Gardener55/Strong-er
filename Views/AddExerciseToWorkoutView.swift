@@ -37,14 +37,14 @@ struct AddExerciseToWorkoutView: View {
                         Button("Add to Current Workout") {
                             addToCurrentWorkout()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(HapticButtonStyle())
                         .frame(maxWidth: .infinity)
                     }
                     
                     Button("Create New Workout") {
                         showingNewWorkout = true
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(HapticButtonStyle())
                     .frame(maxWidth: .infinity)
                     
                     if !workoutManager.templates.isEmpty {
@@ -56,7 +56,7 @@ struct AddExerciseToWorkoutView: View {
                             Button(template.name) {
                                 addToTemplate(template)
                             }
-                            .buttonStyle(.bordered)
+                            .buttonStyle(HapticButtonStyle())
                             .frame(maxWidth: .infinity)
                         }
                     }
@@ -71,6 +71,7 @@ struct AddExerciseToWorkoutView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
         }

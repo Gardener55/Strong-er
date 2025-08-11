@@ -35,10 +35,10 @@ private struct RestTimeEditorView: View {
                     }
                     dismiss()
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(HapticButtonStyle())
             }
             .navigationTitle("Edit Rest Time")
-            .navigationBarItems(trailing: Button("Cancel") { dismiss() })
+            .navigationBarItems(trailing: Button("Cancel") { dismiss() }.buttonStyle(HapticButtonStyle()))
         }
     }
 }
@@ -74,10 +74,10 @@ private struct ExerciseRestTimeEditorView: View {
                     }
                     dismiss()
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(HapticButtonStyle())
             }
             .navigationTitle("Edit Exercise Rest Time")
-            .navigationBarItems(trailing: Button("Cancel") { dismiss() })
+            .navigationBarItems(trailing: Button("Cancel") { dismiss() }.buttonStyle(HapticButtonStyle()))
         }
     }
 }
@@ -140,7 +140,7 @@ private struct ActiveWorkoutSetRow: View {
                         .foregroundColor(set.completed ? .green : .gray)
                         .font(.title2)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(HapticButtonStyle())
 
                 VStack {
                     Text("Weight (\(weightUnit.rawValue))").font(.caption)
@@ -181,6 +181,7 @@ private struct ActiveWorkoutSetRow: View {
                                 .foregroundColor(.blue)
                         }
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
                 .padding(.top, 8)
             }
@@ -362,7 +363,7 @@ private struct ExerciseSectionView: View {
                 }
                 .padding()
             }
-            .buttonStyle(BorderlessButtonStyle())
+            .buttonStyle(HapticButtonStyle())
         }
         .listRowInsets(EdgeInsets())
     }
@@ -537,6 +538,7 @@ struct ActiveWorkoutView: View {
                 Button("Done") {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
+                .buttonStyle(HapticButtonStyle())
             }
         }
     }
@@ -551,6 +553,7 @@ struct ActiveWorkoutView: View {
                     Text("Add Exercise")
                 }
             }
+            .buttonStyle(HapticButtonStyle())
         }
     }
 
@@ -575,6 +578,7 @@ struct ActiveWorkoutView: View {
                     .background(Color.red)
                     .cornerRadius(10)
             }
+            .buttonStyle(HapticButtonStyle())
 
             Button(action: {
                 if hasUnfinishedSets {
@@ -608,6 +612,7 @@ struct ActiveWorkoutView: View {
                     .background(Color.green)
                     .cornerRadius(10)
             }
+            .buttonStyle(HapticButtonStyle())
         }
         .padding()
     }
@@ -672,6 +677,7 @@ struct ActiveWorkoutView: View {
                 activeSheet = nil
                 recalculateDuration()
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }

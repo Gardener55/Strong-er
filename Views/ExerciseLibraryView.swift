@@ -127,6 +127,7 @@ struct FilterChip: View {
                 .foregroundColor(isSelected ? .white : .primary)
                 .cornerRadius(16)
         }
+        .buttonStyle(HapticButtonStyle())
     }
 }
 
@@ -239,6 +240,7 @@ struct ExerciseDetailView: View {
                 Button("Add to Workout") {
                     showingAddToWorkout = true
                 }
+                .buttonStyle(HapticButtonStyle())
             }
         }
         .sheet(isPresented: $showingAddToWorkout) {

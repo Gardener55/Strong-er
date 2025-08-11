@@ -30,6 +30,7 @@ struct WorkoutListView: View {
                     Button(action: { showingCreateWorkout = true }) {
                         Image(systemName: "plus")
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .sheet(isPresented: $showingCreateWorkout) {
@@ -170,6 +171,7 @@ struct WorkoutDetailView: View {
                 Button("Repeat") {
                     workoutManager.startWorkout(workout)
                 }
+                .buttonStyle(HapticButtonStyle())
             }
         }
     }

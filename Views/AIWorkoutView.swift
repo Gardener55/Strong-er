@@ -52,6 +52,7 @@ struct AIWorkoutView: View {
                         .cornerRadius(12)
                     }
                     .disabled(isGenerating)
+                    .buttonStyle(HapticButtonStyle())
                     
                     // Generated Workout
                     if let workout = generatedWorkout {
@@ -69,6 +70,7 @@ struct AIWorkoutView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
         }
@@ -178,6 +180,7 @@ struct GoalToggle: View {
                 .foregroundColor(isSelected ? .white : .primary)
                 .cornerRadius(8)
         }
+        .buttonStyle(HapticButtonStyle())
     }
 }
 
@@ -196,6 +199,7 @@ struct EquipmentToggle: View {
                 .foregroundColor(isSelected ? .white : .primary)
                 .cornerRadius(8)
         }
+        .buttonStyle(HapticButtonStyle())
     }
 }
 
@@ -210,7 +214,7 @@ struct GeneratedWorkoutView: View {
                     .font(.headline)
                 Spacer()
                 Button("Start Workout", action: onStart)
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(HapticButtonStyle())
             }
             
             ForEach(workout.exercises) { exercise in

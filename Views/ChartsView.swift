@@ -25,63 +25,87 @@ struct ChartsView: View {
                     ScrollView {
                         VStack {
                             if let selectedExercise = selectedExercise {
-                                HighestWeightChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .highestWeight(selectedExercise)
-                                    }
-                                TotalVolumeChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .totalVolume(selectedExercise)
-                                    }
-                                EstimatedOneRepMaxChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .estimatedOneRepMax(selectedExercise)
-                                    }
-                                TotalRepsChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .totalReps(selectedExercise)
-                                    }
-                                TotalSetsChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .totalSets(selectedExercise)
-                                    }
-                                TimeUnderTensionChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .timeUnderTension(selectedExercise)
-                                    }
-                                AverageIntensityChartView(exercise: selectedExercise)
-                                    .onTapGesture {
-                                        showingDetail = .averageIntensity(selectedExercise)
-                                    }
+                                Button(action: {
+                                    showingDetail = .highestWeight(selectedExercise)
+                                }) {
+                                    HighestWeightChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
+                                Button(action: {
+                                    showingDetail = .totalVolume(selectedExercise)
+                                }) {
+                                    TotalVolumeChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
+                                Button(action: {
+                                    showingDetail = .estimatedOneRepMax(selectedExercise)
+                                }) {
+                                    EstimatedOneRepMaxChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
+                                Button(action: {
+                                    showingDetail = .totalReps(selectedExercise)
+                                }) {
+                                    TotalRepsChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
+                                Button(action: {
+                                    showingDetail = .totalSets(selectedExercise)
+                                }) {
+                                    TotalSetsChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
+                                Button(action: {
+                                    showingDetail = .timeUnderTension(selectedExercise)
+                                }) {
+                                    TimeUnderTensionChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
+                                Button(action: {
+                                    showingDetail = .averageIntensity(selectedExercise)
+                                }) {
+                                    AverageIntensityChartView(exercise: selectedExercise)
+                                }
+                                .buttonStyle(HapticButtonStyle())
                             } else {
                                 Text("Select an exercise to view charts.")
                                     .foregroundColor(.secondary)
                             }
 
-                            WorkoutsPerWeekChartView()
-                                .onTapGesture {
-                                    showingDetail = .workoutsPerWeek
-                                }
+                            Button(action: {
+                                showingDetail = .workoutsPerWeek
+                            }) {
+                                WorkoutsPerWeekChartView()
+                            }
+                            .buttonStyle(HapticButtonStyle())
 
-                            WorkoutDurationChartView()
-                                .onTapGesture {
-                                    showingDetail = .workoutDuration
-                                }
+                            Button(action: {
+                                showingDetail = .workoutDuration
+                            }) {
+                                WorkoutDurationChartView()
+                            }
+                            .buttonStyle(HapticButtonStyle())
 
-                            WeeklyExerciseVarietyChartView()
-                                .onTapGesture {
-                                    showingDetail = .weeklyExerciseVariety
-                                }
+                            Button(action: {
+                                showingDetail = .weeklyExerciseVariety
+                            }) {
+                                WeeklyExerciseVarietyChartView()
+                            }
+                            .buttonStyle(HapticButtonStyle())
 
-                            MuscleGroupDistributionChartView()
-                                .onTapGesture {
-                                    showingDetail = .muscleGroupDistribution
-                                }
+                            Button(action: {
+                                showingDetail = .muscleGroupDistribution
+                            }) {
+                                MuscleGroupDistributionChartView()
+                            }
+                            .buttonStyle(HapticButtonStyle())
 
-                            PersonalRecordsTimelineView()
-                                .onTapGesture {
-                                    showingDetail = .personalRecordsTimeline
-                                }
+                            Button(action: {
+                                showingDetail = .personalRecordsTimeline
+                            }) {
+                                PersonalRecordsTimelineView()
+                            }
+                            .buttonStyle(HapticButtonStyle())
                         }
                     }
                 }

@@ -28,7 +28,7 @@ struct HomeView: View {
                         Button(action: { showingActiveWorkout = true }) {
                             CurrentWorkoutCard(workout: currentWorkout)
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .buttonStyle(HapticButtonStyle())
                     }
                     
                     // Quick Actions
@@ -52,6 +52,7 @@ struct HomeView: View {
                     }) {
                         Image(systemName: "gear")
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .sheet(isPresented: $showingAIWorkout) {
@@ -142,6 +143,7 @@ struct QuickActionsView: View {
                         color: Color("ActionPurple")
                     )
                 }
+                .buttonStyle(HapticButtonStyle())
                 
                 Button(action: { showingCreateWorkout = true }) {
                     QuickActionButton(
@@ -150,6 +152,7 @@ struct QuickActionsView: View {
                         color: Color("ActionBlue")
                     )
                 }
+                .buttonStyle(HapticButtonStyle())
                 
                 Button(action: {
                     workoutManager.startQuickWorkout()
@@ -161,6 +164,7 @@ struct QuickActionsView: View {
                         color: Color("ActionGreen")
                     )
                 }
+                .buttonStyle(HapticButtonStyle())
                 
                 NavigationLink(destination: TemplatesView()) {
                     QuickActionButton(
@@ -169,6 +173,7 @@ struct QuickActionsView: View {
                         color: Color("ActionOrange")
                     )
                 }
+                .buttonStyle(HapticButtonStyle())
 
                 NavigationLink(destination: WorkoutHistoryView()) {
                     QuickActionButton(
@@ -177,6 +182,7 @@ struct QuickActionsView: View {
                         color: .red
                     )
                 }
+                .buttonStyle(HapticButtonStyle())
 
                 NavigationLink(destination: ChartsView()) {
                     QuickActionButton(
@@ -185,6 +191,7 @@ struct QuickActionsView: View {
                         color: .blue
                     )
                 }
+                .buttonStyle(HapticButtonStyle())
             }
         }
         .sheet(isPresented: $showingCreateWorkout) {
@@ -238,7 +245,7 @@ struct WorkoutStatsView: View {
                         color: Color("ActionBlue")
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(HapticButtonStyle())
                 
                 Button(action: { showingThisWeekHistory = true }) {
                     StatCard(
@@ -248,7 +255,7 @@ struct WorkoutStatsView: View {
                         color: Color("ActionGreen")
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(HapticButtonStyle())
             }
         }
     }
@@ -304,7 +311,7 @@ struct RecentWorkoutsView: View {
                     NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                         RecentWorkoutRow(workout: workout)
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
         }

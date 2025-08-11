@@ -79,14 +79,17 @@ struct SettingsView: View {
                     Button("Import Workouts from CSV") {
                         isImporting = true
                     }
+                    .buttonStyle(HapticButtonStyle())
 
                     Button("Export Workout Data") {
                         exportWorkouts()
                     }
+                    .buttonStyle(HapticButtonStyle())
 
                     Button("Download Template File") {
                         downloadTemplate()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .navigationTitle("Settings")

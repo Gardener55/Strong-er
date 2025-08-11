@@ -105,6 +105,7 @@ struct MonthCalendarView: View {
                             )
                             .opacity(date < Date.distantPast ? 0 : 1)
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .padding()

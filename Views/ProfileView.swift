@@ -57,7 +57,7 @@ struct ProfileView: View {
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .buttonStyle(HapticButtonStyle())
 
                     // Goals Section
                     VStack(alignment: .leading, spacing: 12) {
@@ -86,6 +86,7 @@ struct ProfileView: View {
                     Button("Edit") {
                         showingSettings = true
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
             .sheet(isPresented: $showingSettings) {
@@ -167,22 +168,23 @@ struct ProfileEditView: View {
                 
                 Section("Goals") {
                     ForEach(UserProfile.FitnessGoal.allCases, id: \.self) { goal in
-                        HStack {
-                            Text(goal.rawValue)
-                            Spacer()
-                            if profile.goals.contains(goal) {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.blue)
-                            }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
+                        Button(action: {
                             if profile.goals.contains(goal) {
                                 profile.goals.removeAll { $0 == goal }
                             } else {
                                 profile.goals.append(goal)
                             }
+                        }) {
+                            HStack {
+                                Text(goal.rawValue)
+                                Spacer()
+                                if profile.goals.contains(goal) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
+                            }
                         }
+                        .buttonStyle(HapticButtonStyle())
                     }
                 }
                 
@@ -205,6 +207,7 @@ struct ProfileEditView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .buttonStyle(HapticButtonStyle())
                 }
             }
         }
