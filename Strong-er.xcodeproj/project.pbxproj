@@ -103,6 +103,7 @@
 		F05104F92E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
 		F05104FA2E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
 		F05104FB2E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
+		F0AADDFF8877665544332211 /* workout_template.csv in Resources */ = {isa = PBXBuildFile; fileRef = F0AADDFF1122334455667788 /* workout_template.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +159,7 @@
 		F05104F02E484D4100BC0247 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
 		F05104F42E484D4D00BC0247 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		F05104F82E4851A200BC0247 /* DetailedChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedChartView.swift; sourceTree = "<group>"; };
+		F05104FC2E4851A200BC0248 /* workout_template.csv */ = {isa = PBXFileReference; lastKnownFileType = text.csv; path = "workout_template.csv"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -399,6 +401,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0AADDFF8877665544332211 /* workout_template.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
