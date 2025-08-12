@@ -188,7 +188,7 @@ class WorkoutManager: ObservableObject {
                 counts[workoutExercise.exercise.name, default: 0] += 1
             }
 
-        return exerciseCounts.max { $0.value < $1.value }
+        return exerciseCounts.max { $0.value < $1.value }.map { (name: $0.key, count: $0.value) }
     }
 
     func getUniqueExercises() -> [Exercise] {
