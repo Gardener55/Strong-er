@@ -7,13 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F0AADDFFDEADBEEF12345678 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0AADDFFDEADBEEF12345677 /* HealthKit.framework */; };
 		F03C13C92E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
 		F03C13CA2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
 		F03C13CB2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */; };
 		F03C13CD2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */; };
 		F03C13CE2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */; };
 		F03C13CF2E48E15400C0AC3F /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */; };
+		F03C149E2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149A2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift */; };
+		F03C149F2E4ABEAE00C0AC3F /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149C2E4ABEAE00C0AC3F /* WorkoutDetailView.swift */; };
+		F03C14A02E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149B2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift */; };
+		F03C14A12E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */; };
+		F03C14A22E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14992E4ABEAE00C0AC3F /* GettingStartedView.swift */; };
+		F03C14A32E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149A2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift */; };
+		F03C14A42E4ABEAE00C0AC3F /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149C2E4ABEAE00C0AC3F /* WorkoutDetailView.swift */; };
+		F03C14A52E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149B2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift */; };
+		F03C14A62E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */; };
+		F03C14A72E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14992E4ABEAE00C0AC3F /* GettingStartedView.swift */; };
+		F03C14A82E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149A2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift */; };
+		F03C14A92E4ABEAE00C0AC3F /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149C2E4ABEAE00C0AC3F /* WorkoutDetailView.swift */; };
+		F03C14AA2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149B2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift */; };
+		F03C14AB2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */; };
+		F03C14AC2E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14992E4ABEAE00C0AC3F /* GettingStartedView.swift */; };
+		F03C14B32E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */; };
+		F03C14B42E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */; };
+		F03C14B52E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */; };
+		F03C14B62E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
+		F03C14B72E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */; };
+		F03C14B82E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */; };
+		F03C14B92E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */; };
+		F03C14BA2E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */; };
+		F03C14BB2E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */; };
+		F03C14BC2E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
+		F03C14BD2E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */; };
+		F03C14BE2E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */; };
+		F03C14BF2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */; };
+		F03C14C02E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */; };
+		F03C14C12E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */; };
+		F03C14C22E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
+		F03C14C32E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */; };
+		F03C14C42E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */; };
 		F05104262E465D4A00BC0247 /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104252E465D4A00BC0247 /* WorkoutSet.swift */; };
 		F05104272E465D4A00BC0247 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104222E465D4A00BC0247 /* UserProfile.swift */; };
 		F05104282E465D4A00BC0247 /* WorkoutExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104242E465D4A00BC0247 /* WorkoutExercise.swift */; };
@@ -104,7 +136,8 @@
 		F05104F92E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
 		F05104FA2E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
 		F05104FB2E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
-		F0AADDFF8877665544332211 /* workout_template.csv in Resources */ = {isa = PBXBuildFile; fileRef = F0AADDFF1122334455667788 /* workout_template.csv */; };
+		F0AADDFF8877665544332211 /* HealthKitManager.swift in Resources */ = {isa = PBXBuildFile; fileRef = F0AADDFF1122334455667788 /* HealthKitManager.swift */; };
+		F0AADDFFDEADBEEF12345678 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0AADDFFDEADBEEF12345677 /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +160,17 @@
 /* Begin PBXFileReference section */
 		F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationalMessageService.swift; sourceTree = "<group>"; };
 		F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		F03C14992E4ABEAE00C0AC3F /* GettingStartedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingStartedView.swift; sourceTree = "<group>"; };
+		F03C149A2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostWorkoutSummaryView.swift; sourceTree = "<group>"; };
+		F03C149B2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThisWeekHistoryView.swift; sourceTree = "<group>"; };
+		F03C149C2E4ABEAE00C0AC3F /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
+		F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStatisticsView.swift; sourceTree = "<group>"; };
+		F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticButtonStyle.swift; sourceTree = "<group>"; };
+		F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackModifier.swift; sourceTree = "<group>"; };
+		F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCompletionService.swift; sourceTree = "<group>"; };
+		F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutExporter.swift; sourceTree = "<group>"; };
+		F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutScience.swift; sourceTree = "<group>"; };
 		F05103EF2E465CED00BC0247 /* Strong-er.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Strong-er.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05104012E465CEE00BC0247 /* Strong-erTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Strong-erTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F051040B2E465CEE00BC0247 /* Strong-erUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Strong-erUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,13 +204,11 @@
 		F05104F02E484D4100BC0247 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
 		F05104F42E484D4D00BC0247 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		F05104F82E4851A200BC0247 /* DetailedChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedChartView.swift; sourceTree = "<group>"; };
-		F0AADDFFDEADBEEF12345677 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		F0AADDFF1122334455667788 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
-		F0AADDFF1122334455667799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
-		F0AADDFF8877665544332211 /* workout_template.csv in Resources */ = {isa = PBXBuildFile; fileRef = F0AADDFF1122334455667788 /* workout_template.csv */; };
+		F0AADDFFDEADBEEF12345677 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
-/* Begin PBXFrameworksBuildPhase section */
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		F05103F12E465CED00BC0247 /* Strong-er */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Strong-er";
@@ -210,6 +252,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F03C14812E4ABE9900C0AC3F /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				F0AADDFFDEADBEEF12345677 /* HealthKit.framework */,
+				F0AADDFF1122334455667788 /* HealthKitManager.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		F05103E62E465CED00BC0247 = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +271,7 @@
 				F05104042E465CEE00BC0247 /* Strong-erTests */,
 				F051040E2E465CEE00BC0247 /* Strong-erUITests */,
 				F05103F02E465CED00BC0247 /* Products */,
+				F03C14812E4ABE9900C0AC3F /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -250,6 +302,12 @@
 		F051041F2E465D1300BC0247 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */,
+				F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */,
+				F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */,
+				F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */,
+				F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */,
+				F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */,
 				F03C13C82E48E12800C0AC3F /* MotivationalMessageService.swift */,
 				F05104F42E484D4D00BC0247 /* ChartManager.swift */,
 				F05104E42E480DB600BC0247 /* AchievementService.swift */,
@@ -266,6 +324,11 @@
 		F05104202E465D1800BC0247 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F03C14992E4ABEAE00C0AC3F /* GettingStartedView.swift */,
+				F03C149A2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift */,
+				F03C149B2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift */,
+				F03C149C2E4ABEAE00C0AC3F /* WorkoutDetailView.swift */,
+				F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */,
 				F03C13CC2E48E15400C0AC3F /* ActiveWorkoutView.swift */,
 				F05104F82E4851A200BC0247 /* DetailedChartView.swift */,
 				F05104F02E484D4100BC0247 /* ChartsView.swift */,
@@ -411,7 +474,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0AADDFF8877665544332211 /* workout_template.csv in Resources */,
+				F0AADDFF8877665544332211 /* HealthKitManager.swift in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +500,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				F051047D2E4683D700BC0247 /* ThemeManager.swift in Sources */,
+				F03C14BF2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */,
+				F03C14C02E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */,
+				F03C14C12E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */,
+				F03C14C22E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */,
+				F03C14C32E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */,
+				F03C14C42E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */,
 				F05104872E46938400BC0247 /* UserProfileService.swift in Sources */,
 				F05104E32E480DAF00BC0247 /* AchievementsView.swift in Sources */,
 				F051042E2E465D4A00BC0247 /* WorkoutSet.swift in Sources */,
@@ -454,6 +523,11 @@
 				F05104EF2E480DC200BC0247 /* PersonalRecord.swift in Sources */,
 				F05104FA2E4851A200BC0247 /* DetailedChartView.swift in Sources */,
 				F05104E92E480DBC00BC0247 /* Achievement.swift in Sources */,
+				F03C14A82E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift in Sources */,
+				F03C14A92E4ABEAE00C0AC3F /* WorkoutDetailView.swift in Sources */,
+				F03C14AA2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */,
+				F03C14AB2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */,
+				F03C14AC2E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */,
 				F05104542E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
 				F05104552E465D7B00BC0247 /* ProfileView.swift in Sources */,
 				F05104562E465D7B00BC0247 /* AIWorkoutView.swift in Sources */,
@@ -494,6 +568,12 @@
 				F051047F2E4683D700BC0247 /* ThemeManager.swift in Sources */,
 				F03C13CB2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */,
 				F05104B62E46F0B500BC0247 /* WorkoutImporter.swift in Sources */,
+				F03C14B92E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */,
+				F03C14BA2E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */,
+				F03C14BB2E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */,
+				F03C14BC2E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */,
+				F03C14BD2E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */,
+				F03C14BE2E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */,
 				F051044B2E465D7B00BC0247 /* WorkoutListView.swift in Sources */,
 				F05104852E46938400BC0247 /* UserProfileService.swift in Sources */,
 				F051044C2E465D7B00BC0247 /* ProfileView.swift in Sources */,
@@ -502,6 +582,11 @@
 				F05104E22E480DAF00BC0247 /* AchievementsView.swift in Sources */,
 				F051044F2E465D7B00BC0247 /* TemplatesView.swift in Sources */,
 				F05104502E465D7B00BC0247 /* ExerciseLibraryView.swift in Sources */,
+				F03C14A32E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift in Sources */,
+				F03C14A42E4ABEAE00C0AC3F /* WorkoutDetailView.swift in Sources */,
+				F03C14A52E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */,
+				F03C14A62E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */,
+				F03C14A72E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */,
 				F05104512E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */,
 				F05104522E465D7B00BC0247 /* HomeView.swift in Sources */,
 				F05104282E465D4A00BC0247 /* WorkoutExercise.swift in Sources */,
@@ -535,7 +620,18 @@
 				F05104622E465D7B00BC0247 /* ExerciseLibraryView.swift in Sources */,
 				F05104F32E484D4100BC0247 /* ChartsView.swift in Sources */,
 				F05104682E46707300BC0247 /* ItemListView.swift in Sources */,
+				F03C149E2E4ABEAE00C0AC3F /* PostWorkoutSummaryView.swift in Sources */,
+				F03C149F2E4ABEAE00C0AC3F /* WorkoutDetailView.swift in Sources */,
+				F03C14A02E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */,
+				F03C14A12E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */,
+				F03C14A22E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */,
 				F05104632E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */,
+				F03C14B32E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */,
+				F03C14B42E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */,
+				F03C14B52E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */,
+				F03C14B62E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */,
+				F03C14B72E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */,
+				F03C14B82E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */,
 				F05104642E465D7B00BC0247 /* HomeView.swift in Sources */,
 				F05104862E46938400BC0247 /* UserProfileService.swift in Sources */,
 				F05104342E465D5C00BC0247 /* Exercise.swift in Sources */,
