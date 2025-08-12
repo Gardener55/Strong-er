@@ -17,7 +17,7 @@ class WorkoutExporter {
             let dateString = dateFormatter.string(from: workout.date)
             for exercise in workout.exercises {
                 for (index, set) in exercise.sets.enumerated() {
-                    let line = "\(dateString),\(exercise.exercise.name),\(index + 1),\(set.reps),\(set.weight),\(set.weightUnit.rawValue),\(set.restTime)\n"
+                    let line = "\(dateString),\(exercise.exercise.name),\(index + 1),\(set.reps),\(set.weight ?? 0),\(workoutManager.userProfileService.userProfile.weightUnit.rawValue),\(set.restTime)\n"
                     csvString.append(line)
                 }
             }

@@ -54,7 +54,7 @@ class HealthKitManager: ObservableObject {
                 return
             }
 
-            builder.endCollection(withEnd: workout.date.addingTimeInterval(workout.duration)) { (success, error) in
+            builder.endCollection(withEnd: workout.date.addingTimeInterval(workout.duration ?? 0.0)) { (success, error) in
                 guard success else {
                     completion(false, error)
                     return
@@ -78,9 +78,9 @@ class HealthKitManager: ObservableObject {
         for exercise in workout.exercises {
             let exerciseType = HKWorkoutActivityType.traditionalStrengthTraining
             let startDate = workout.date // Assuming all exercises start at the same time
-            let endDate = startDate.addingTimeInterval(workout.duration) // Assuming duration is for the whole workout
+            let endDate = startDate.addingTimeInterval(workout.duration ?? 0.0) // Assuming duration is for the whole workout
 
-            let workoutEvent = HKWorkoutEvent(type: .segment, dateInterval: DateInterval(start: startDate, end: endDate), metadata: [HKMetadataKeyWorkoutActivityType: exerciseType.rawValue])
+            let workoutEvent = HKWorkoutEvent(type: .segment, dateInterval: DateInterval(start: startDate, end: endDate), metadata: [:])
 
             let totalEnergyBurned = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: 200) // Placeholder value
 
