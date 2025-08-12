@@ -20,7 +20,7 @@ class WorkoutManager: ObservableObject {
     private let templatesKey = "WorkoutTemplates"
     
     private var achievementService: AchievementService
-    private var userProfileService: UserProfileService
+    var userProfileService: UserProfileService
     private let healthKitManager: HealthKitManager
 
     // Default initializer
