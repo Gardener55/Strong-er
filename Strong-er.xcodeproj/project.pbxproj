@@ -136,7 +136,6 @@
 		F05104F92E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
 		F05104FA2E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
 		F05104FB2E4851A200BC0247 /* DetailedChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104F82E4851A200BC0247 /* DetailedChartView.swift */; };
-		F0AADDFF8877665544332211 /* HealthKitManager.swift in Resources */ = {isa = PBXBuildFile; fileRef = F0AADDFF1122334455667788 /* HealthKitManager.swift */; };
 		F0AADDFFDEADBEEF12345678 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0AADDFFDEADBEEF12345677 /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
