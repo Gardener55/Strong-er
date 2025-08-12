@@ -8,7 +8,7 @@ struct HapticFeedbackOnTap: ViewModifier {
     var style: SensoryFeedback
     @State private var isTapped: Bool = false
 
-    init(style: SensoryFeedback = .impact) {
+    init(style: SensoryFeedback = .impact(weight: .heavy, intensity: 1.0)) {
         self.style = style
     }
 
@@ -26,7 +26,7 @@ extension View {
     ///
     /// Note: This modifier should not be used on `Button` views, as it will
     /// override the button's action. For buttons, use `HapticButtonStyle` instead.
-    func withHapticFeedback(style: SensoryFeedback = .impact) -> some View {
+    func withHapticFeedback(style: SensoryFeedback = .impact(weight: .heavy, intensity: 1.0)) -> some View {
         self.modifier(HapticFeedbackOnTap(style: style))
     }
 }
