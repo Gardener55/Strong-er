@@ -17,20 +17,23 @@ class WorkoutManager: ObservableObject {
     
     private let userDefaults = UserDefaults.standard
     private let workoutsKey = "SavedWorkouts"
+    private let workoutHistoryKey = "WorkoutHistory"
     private let templatesKey = "WorkoutTemplates"
     
     private var achievementService: AchievementService
-    private var userProfileService: UserProfileService
+    var userProfileService: UserProfileService
+    private let healthKitManager: HealthKitManager
 
     // Default initializer
     convenience init() {
-        self.init(achievementService: AchievementService(), userProfileService: UserProfileService.shared)
+        self.init(achievementService: AchievementService(), userProfileService: UserProfileService.shared, healthKitManager: HealthKitManager())
     }
 
     // Initializer for dependency injection
-    init(achievementService: AchievementService, userProfileService: UserProfileService) {
+    init(achievementService: AchievementService, userProfileService: UserProfileService, healthKitManager: HealthKitManager) {
         self.achievementService = achievementService
         self.userProfileService = userProfileService
+        self.healthKitManager = healthKitManager
         loadData()
 
         // Recalculate all achievements and PRs from history on launch
@@ -79,6 +82,13 @@ class WorkoutManager: ObservableObject {
         currentWorkout = nil
         saveData()
 
+        healthKitManager.saveWorkout(workout: workout) { success, error in
+            if !success {
+                // Handle the error appropriately, e.g., by logging it
+                print("Failed to save workout to HealthKit: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+
         return (brokenPRs, newAchievements)
     }
     
@@ -118,13 +128,23 @@ class WorkoutManager: ObservableObject {
         if let templatesData = try? JSONEncoder().encode(templates) {
             userDefaults.set(templatesData, forKey: templatesKey)
         }
+        if let historyData = try? JSONEncoder().encode(workoutHistory) {
+            userDefaults.set(historyData, forKey: workoutHistoryKey)
+        }
     }
     
     private func loadData() {
         if let workoutsData = userDefaults.data(forKey: workoutsKey),
            let decodedWorkouts = try? JSONDecoder().decode([Workout].self, from: workoutsData) {
             workouts = decodedWorkouts
-            workoutHistory = decodedWorkouts
+        }
+
+        if let historyData = userDefaults.data(forKey: workoutHistoryKey),
+           let decodedHistory = try? JSONDecoder().decode([Workout].self, from: historyData) {
+            workoutHistory = decodedHistory
+        } else {
+            // For backward compatibility, if no history is found, initialize it with the saved workouts.
+            workoutHistory = workouts
         }
         
         if let templatesData = userDefaults.data(forKey: templatesKey),
@@ -179,7 +199,7 @@ class WorkoutManager: ObservableObject {
                 counts[workoutExercise.exercise.name, default: 0] += 1
             }
 
-        return exerciseCounts.max { $0.value < $1.value }
+        return exerciseCounts.max { $0.value < $1.value }.map { (name: $0.key, count: $0.value) }
     }
 
     func getUniqueExercises() -> [Exercise] {

@@ -16,6 +16,7 @@ struct AIWorkoutView: View {
     
     @State private var userProfile = UserProfile()
     @State private var generatedWorkout: Workout?
+    @State private var targetGroup: Exercise.MuscleGroup = .chest
     @State private var isGenerating = false
     
     var body: some View {
@@ -34,7 +35,7 @@ struct AIWorkoutView: View {
                     }
                     
                     // Profile Configuration
-                    ProfileConfigurationView(profile: $userProfile)
+                    ProfileConfigurationView(profile: $userProfile, targetGroup: $targetGroup)
                     
                     // Generate Button
                     Button(action: generateWorkout) {
@@ -81,7 +82,7 @@ struct AIWorkoutView: View {
         
         // Simulate AI processing time
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            generatedWorkout = aiGenerator.generateWorkout(for: userProfile)
+            generatedWorkout = aiGenerator.generateWorkout(for: userProfile, for: targetGroup)
             isGenerating = false
         }
     }
@@ -89,12 +90,27 @@ struct AIWorkoutView: View {
 
 struct ProfileConfigurationView: View {
     @Binding var profile: UserProfile
+    @Binding var targetGroup: Exercise.MuscleGroup
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Your Profile")
                 .font(.headline)
             
+            // Target Muscle Group
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Target Muscle Group")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                Picker("Target Muscle Group", selection: $targetGroup) {
+                    ForEach(Exercise.MuscleGroup.allCases, id: \.self) { group in
+                        Text(group.rawValue).tag(group)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+            }
+
             // Fitness Level
             VStack(alignment: .leading, spacing: 8) {
                 Text("Fitness Level")
