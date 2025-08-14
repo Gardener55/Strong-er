@@ -805,6 +805,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
 			};
 			name = Debug;
 		};
@@ -833,6 +835,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
 			};
 			name = Release;
 		};
