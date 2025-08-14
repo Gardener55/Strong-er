@@ -442,10 +442,20 @@
 					F05104002E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = F05103EE2E465CED00BC0247;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 					F051040A2E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = F05103EE2E465CED00BC0247;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};

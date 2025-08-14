@@ -99,10 +99,12 @@ struct SettingsView: View {
                     Button(healthKitConnected ? "Connected to Apple Health" : "Connect to Apple Health") {
                         if !healthKitConnected {
                             healthKitManager.requestAuthorization { success, error in
-                                if success {
-                                    healthKitConnected = true
+                                DispatchQueue.main.async {
+                                    if success {
+                                        healthKitConnected = true
+                                    }
+                                    showHealthKitAlert = true
                                 }
-                                showHealthKitAlert = true
                             }
                         }
                     }
