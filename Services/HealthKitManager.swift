@@ -45,22 +45,38 @@ class HealthKitManager: ObservableObject {
                                        configuration: workoutConfiguration,
                                        device: .local())
 
-        builder.beginCollection(withStart: workout.date) { (success, error) in
+        let startDate = workout.date
+        let endDate = startDate.addingTimeInterval(workout.duration ?? 0.0)
+
+        builder.beginCollection(withStart: startDate) { (success, error) in
             guard success else {
                 completion(false, error)
                 return
             }
         }
 
-        let samples = self.samples(for: workout)
+        let workoutEvents = self.workoutEvents(for: workout)
 
-        builder.add(samples) { (success, error) in
+        if !workoutEvents.isEmpty {
+            builder.add(workoutEvents) { (success, error) in
+                guard success else {
+                    completion(false, error)
+                    return
+                }
+            }
+        }
+
+        // Add a total energy burned sample
+        let totalEnergyBurned = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: 300) // Placeholder for total calories
+        let calorieSample = HKQuantitySample(type: HKQuantityType.activeEnergyBurned(), quantity: totalEnergyBurned, start: startDate, end: endDate)
+
+        builder.add([calorieSample]) { (success, error) in
             guard success else {
                 completion(false, error)
                 return
             }
 
-            builder.endCollection(withEnd: workout.date.addingTimeInterval(workout.duration ?? 0.0)) { (success, error) in
+            builder.endCollection(withEnd: endDate) { (success, error) in
                 guard success else {
                     completion(false, error)
                     return
@@ -77,30 +93,29 @@ class HealthKitManager: ObservableObject {
         }
     }
 
-    private func samples(for workout: Workout) -> [HKSample] {
-        var samples: [HKSample] = []
+    private func workoutEvents(for workout: Workout) -> [HKWorkoutEvent] {
+        var events: [HKWorkoutEvent] = []
+        var currentTime = workout.date
 
-        // Create a sample for each exercise
+        guard !workout.exercises.isEmpty else { return events }
+
+        // Assuming each exercise takes an equal fraction of the total duration.
+        // A more accurate implementation would require per-exercise durations.
+        let exerciseDuration = (workout.duration ?? 0.0) / Double(workout.exercises.count)
+
+        guard exerciseDuration > 0 else { return events }
+
         for exercise in workout.exercises {
-            let exerciseType = HKWorkoutActivityType.traditionalStrengthTraining
-            let startDate = workout.date // Assuming all exercises start at the same time
-            let endDate = startDate.addingTimeInterval(workout.duration ?? 0.0) // Assuming duration is for the whole workout
+            let exerciseEndDate = currentTime.addingTimeInterval(exerciseDuration)
 
-            let workoutEvent = HKWorkoutEvent(type: .segment, dateInterval: DateInterval(start: startDate, end: endDate), metadata: [:])
+            let event = HKWorkoutEvent(type: .segment,
+                                       dateInterval: DateInterval(start: currentTime, end: exerciseEndDate),
+                                       metadata: [HKMetadataKeyWorkoutBrandName: "Strong-er", "Exercise": exercise.exercise.name])
+            events.append(event)
 
-            let totalEnergyBurned = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: 200) // Placeholder value
-
-            let exerciseSample = HKWorkout(activityType: .traditionalStrengthTraining,
-                                           start: startDate,
-                                           end: endDate,
-                                           workoutEvents: [workoutEvent],
-                                           totalEnergyBurned: totalEnergyBurned,
-                                           totalDistance: nil,
-                                           device: .local(),
-                                           metadata: [HKMetadataKeyWorkoutBrandName: "Strong-er"])
-            samples.append(exerciseSample)
+            currentTime = exerciseEndDate
         }
 
-        return samples
+        return events
     }
 }
