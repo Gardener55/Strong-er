@@ -111,6 +111,9 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .onAppear {
+                healthKitConnected = healthKitManager.checkAuthorizationStatus()
+            }
             .alert(isPresented: $showHealthKitAlert) {
                 Alert(
                     title: Text(healthKitConnected ? "Success" : "Error"),

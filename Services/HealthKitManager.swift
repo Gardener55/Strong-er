@@ -30,6 +30,12 @@ class HealthKitManager: ObservableObject {
         }
     }
 
+    func checkAuthorizationStatus() -> Bool {
+        let workoutType = HKObjectType.workoutType()
+        let status = healthStore.authorizationStatus(for: workoutType)
+        return status == .sharingAuthorized
+    }
+
     func saveWorkout(workout: Workout, completion: @escaping (Bool, Error?) -> Void) {
         let workoutConfiguration = HKWorkoutConfiguration()
         workoutConfiguration.activityType = .traditionalStrengthTraining
