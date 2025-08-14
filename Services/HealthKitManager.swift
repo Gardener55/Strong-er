@@ -58,7 +58,7 @@ class HealthKitManager: ObservableObject {
         let workoutEvents = self.workoutEvents(for: workout)
 
         if !workoutEvents.isEmpty {
-            builder.add(workoutEvents) { (success, error) in
+            builder.addWorkoutEvents(workoutEvents) { (success, error) in
                 guard success else {
                     completion(false, error)
                     return
@@ -68,7 +68,7 @@ class HealthKitManager: ObservableObject {
 
         // Add a total energy burned sample
         let totalEnergyBurned = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: 300) // Placeholder for total calories
-        let calorieSample = HKQuantitySample(type: HKQuantityType.activeEnergyBurned(), quantity: totalEnergyBurned, start: startDate, end: endDate)
+        let calorieSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!, quantity: totalEnergyBurned, start: startDate, end: endDate)
 
         builder.add([calorieSample]) { (success, error) in
             guard success else {
