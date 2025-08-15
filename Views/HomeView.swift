@@ -306,7 +306,7 @@ struct RecentWorkoutsView: View {
             }
             .padding(.bottom, 8)
             
-            LazyVStack(spacing: 12) {
+            VStack(spacing: 12) {
                 ForEach(workoutManager.workoutHistory.sorted { $0.date > $1.date }.prefix(3)) { workout in
                     NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                         RecentWorkoutRow(workout: workout)
