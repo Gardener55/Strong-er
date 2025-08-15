@@ -11,6 +11,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @Binding var selectedTab: Int
     @State private var showingAIWorkout = false
     @State private var showingSettings = false
@@ -121,6 +122,7 @@ struct CurrentWorkoutCard: View {
 
 struct QuickActionsView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @Binding var selectedTab: Int
     @Binding var showingAIWorkout: Bool
     @State private var showingCreateWorkout = false
@@ -191,6 +193,7 @@ struct QuickActionsView: View {
         }
         .sheet(isPresented: $showingCreateWorkout) {
             CreateWorkoutView(sourceView: .quickActions)
+                .environmentObject(exerciseDatabase)
         }
     }
 }

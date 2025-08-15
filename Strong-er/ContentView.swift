@@ -87,5 +87,9 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(UserProfileService.shared)
+        .environmentObject(WorkoutManager())
+        .environmentObject(ExerciseDatabase.shared)
 }
