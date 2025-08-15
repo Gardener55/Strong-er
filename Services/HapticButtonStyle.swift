@@ -3,6 +3,7 @@ import SwiftUI
 struct HapticButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .sensoryFeedback(.impact(weight: .heavy, intensity: 1.0), trigger: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }

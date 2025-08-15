@@ -18,6 +18,11 @@ private struct RestTimeEditorView: View {
         _newRestTime = State(initialValue: String(Int(set.wrappedValue.restTime)))
     }
 
+    private func triggerHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+    }
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
@@ -30,6 +35,7 @@ private struct RestTimeEditorView: View {
                     .frame(width: 100)
 
                 Button("Save") {
+                    triggerHapticFeedback()
                     if let time = TimeInterval(newRestTime) {
                         set.restTime = time
                     }
@@ -38,7 +44,7 @@ private struct RestTimeEditorView: View {
                 .buttonStyle(HapticButtonStyle())
             }
             .navigationTitle("Edit Rest Time")
-            .navigationBarItems(trailing: Button("Cancel") { dismiss() }.buttonStyle(HapticButtonStyle()))
+            .navigationBarItems(trailing: Button("Cancel") { triggerHapticFeedback(); dismiss() }.buttonStyle(HapticButtonStyle()))
         }
     }
 }
@@ -53,6 +59,11 @@ private struct ExerciseRestTimeEditorView: View {
         _newRestTime = State(initialValue: String(Int(exercise.wrappedValue.restTime ?? 60)))
     }
 
+    private func triggerHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+    }
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
@@ -65,6 +76,7 @@ private struct ExerciseRestTimeEditorView: View {
                     .frame(width: 100)
 
                 Button("Save") {
+                    triggerHapticFeedback()
                     if let time = TimeInterval(newRestTime) {
                         exercise.restTime = time
                         // Also update all existing sets for this exercise
@@ -77,7 +89,7 @@ private struct ExerciseRestTimeEditorView: View {
                 .buttonStyle(HapticButtonStyle())
             }
             .navigationTitle("Edit Exercise Rest Time")
-            .navigationBarItems(trailing: Button("Cancel") { dismiss() }.buttonStyle(HapticButtonStyle()))
+            .navigationBarItems(trailing: Button("Cancel") { triggerHapticFeedback(); dismiss() }.buttonStyle(HapticButtonStyle()))
         }
     }
 }
@@ -96,9 +108,8 @@ private struct ActiveWorkoutSetRow: View {
     var onToggleCompletion: () -> Void
     var onEditRestTime: () -> Void
     var onDelete: () -> Void
-    let isResting: Bool
-    let restTimeRemaining: TimeInterval
 
+    @EnvironmentObject var restTimerViewModel: RestTimerViewModel
     @State private var weightInput: String = ""
 
     private var repsProxy: Binding<String> {
@@ -169,16 +180,16 @@ private struct ActiveWorkoutSetRow: View {
                 }
             }
 
-            if isResting {
+            if restTimerViewModel.activeRestSetID == set.id {
                 VStack(spacing: 4) {
-                    ProgressView(value: set.restTime - restTimeRemaining, total: set.restTime)
+                    ProgressView(value: set.restTime - restTimerViewModel.restTimeRemaining, total: set.restTime)
                         .progressViewStyle(LinearProgressViewStyle())
-                        .animation(.linear, value: restTimeRemaining)
+                        .animation(.linear, value: restTimerViewModel.restTimeRemaining)
 
                     Button(action: onEditRestTime) {
                         HStack {
                             Image(systemName: "timer")
-                            Text(timeString(from: restTimeRemaining))
+                            Text(timeString(from: restTimerViewModel.restTimeRemaining))
                                 .font(.subheadline)
                                 .foregroundColor(.blue)
                         }
@@ -286,19 +297,17 @@ private struct ActiveWorkoutSetRow: View {
 
 private struct ExerciseSectionView: View {
     @Binding var exercise: WorkoutExercise
-    @Binding var activeRestSetID: UUID?
-    @Binding var restTimeRemaining: TimeInterval
     @Binding var setForRestTimeEdit: Binding<WorkoutSet>?
     @Binding var exerciseForRestTimeEdit: Binding<WorkoutExercise>?
     @Binding var exerciseToReplace: Binding<WorkoutExercise>?
     @Binding var activeSheet: ActiveWorkoutView.ActiveSheet?
 
-    var startRestTimer: (WorkoutSet) -> Void
-    var stopRestTimer: () -> Void
     var onDelete: () -> Void
+    var triggerHapticFeedback: () -> Void
 
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var userProfileService: UserProfileService
+    @EnvironmentObject var restTimerViewModel: RestTimerViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -309,11 +318,13 @@ private struct ExerciseSectionView: View {
                 .background(Color(.systemGroupedBackground))
                 .swipeActions {
                     Button(role: .destructive) {
+                        triggerHapticFeedback()
                         onDelete()
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
                     Button {
+                        triggerHapticFeedback()
                         exerciseForRestTimeEdit = $exercise
                         activeSheet = .exerciseRestTimeEditor
                     } label: {
@@ -321,6 +332,7 @@ private struct ExerciseSectionView: View {
                     }
                     .tint(.blue)
                     Button {
+                        triggerHapticFeedback()
                         exerciseToReplace = $exercise
                         activeSheet = .exercisePicker
                     } label: {
@@ -329,40 +341,44 @@ private struct ExerciseSectionView: View {
                     .tint(.orange)
                 }
 
-            ForEach(0..<exercise.sets.count, id: \.self) { index in
-                ActiveWorkoutSetRow(
-                    set: $exercise.sets[index],
-                    setNumber: index + 1,
-                    previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
-                    weightUnit: userProfileService.userProfile.weightUnit,
-                    onToggleCompletion: {
-                        if exercise.sets[index].completed {
-                            startRestTimer(exercise.sets[index])
-                            // Autopopulate next set
-                            let currentSet = exercise.sets[index]
-                            let nextSetIndex = index + 1
-                            if nextSetIndex < exercise.sets.count {
-                                exercise.sets[nextSetIndex].weight = currentSet.weight
-                                exercise.sets[nextSetIndex].reps = currentSet.reps
+            ForEach($exercise.sets) { $set in
+                if let index = exercise.sets.firstIndex(where: { $0.id == $set.id }) {
+                    ActiveWorkoutSetRow(
+                        set: $set,
+                        setNumber: index + 1,
+                        previousSet: workoutManager.getPreviousSet(for: exercise.exercise, setIndex: index),
+                        weightUnit: userProfileService.userProfile.weightUnit,
+                        onToggleCompletion: {
+                            triggerHapticFeedback()
+                            if $set.wrappedValue.completed {
+                                restTimerViewModel.startTimer(for: $set.wrappedValue)
+                                // Autopopulate next set
+                                let currentSet = $set.wrappedValue
+                                let nextSetIndex = index + 1
+                                if nextSetIndex < exercise.sets.count {
+                                    exercise.sets[nextSetIndex].weight = currentSet.weight
+                                    exercise.sets[nextSetIndex].reps = currentSet.reps
+                                }
+                            } else {
+                                restTimerViewModel.stopTimer()
                             }
-                        } else {
-                            stopRestTimer()
+                        },
+                        onEditRestTime: {
+                            triggerHapticFeedback()
+                            setForRestTimeEdit = $set
+                            activeSheet = .restTimeEditor
+                        },
+                        onDelete: {
+                            triggerHapticFeedback()
+                            exercise.sets.removeAll { $0.id == $set.id }
                         }
-                    },
-                    onEditRestTime: {
-                        setForRestTimeEdit = $exercise.sets[index]
-                        activeSheet = .restTimeEditor
-                    },
-                    onDelete: {
-                        deleteSet(at: IndexSet(integer: index))
-                    },
-                    isResting: activeRestSetID == exercise.sets[index].id,
-                    restTimeRemaining: restTimeRemaining
-                )
-                .padding(.horizontal)
+                    )
+                    .padding(.horizontal)
+                }
             }
 
             Button(action: {
+                triggerHapticFeedback()
                 withAnimation {
                     let newSetRestTime = exercise.restTime ?? userProfileService.userProfile.defaultRestTimer
                     exercise.sets.append(WorkoutSet(restTime: newSetRestTime))
@@ -391,16 +407,9 @@ struct ActiveWorkoutView: View {
     @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @Environment(\.dismiss) private var dismiss
 
-    // Timer states
-    @State private var workoutTimer: Timer?
-    @State private var workoutDuration: TimeInterval = 0
-    @State private var isTimerRunning = false
+    @StateObject private var restTimerViewModel = RestTimerViewModel()
 
     // Rest timer states
-    @State private var restTimer: Timer?
-    @State private var restTimeRemaining: TimeInterval = 0
-    @State private var activeRestSetID: UUID?
-    @State private var audioPlayer: AVAudioPlayer?
 
     enum ActiveSheet: Identifiable {
         case datePicker, exercisePicker, restTimeEditor, exerciseRestTimeEditor
@@ -458,8 +467,7 @@ struct ActiveWorkoutView: View {
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear(perform: startWorkoutTimer)
-            .onDisappear(perform: stopWorkoutTimer)
+            .onAppear(perform: initializeWorkout)
             .sheet(item: $activeSheet) { sheet in
                 sheetView(for: sheet)
             }
@@ -504,7 +512,7 @@ struct ActiveWorkoutView: View {
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(timeString(from: workoutDuration))
+                WorkoutTimerView(startDate: workoutStartDate)
                     .font(.title)
                     .fontWeight(.semibold)
                     .onTapGesture {
@@ -523,8 +531,6 @@ struct ActiveWorkoutView: View {
             ForEach($workout.exercises) { $exercise in
                 ExerciseSectionView(
                     exercise: $exercise,
-                    activeRestSetID: $activeRestSetID,
-                    restTimeRemaining: $restTimeRemaining,
                     setForRestTimeEdit: $setForRestTimeEdit,
                     exerciseForRestTimeEdit: $exerciseForRestTimeEdit,
                     exerciseToReplace: $exerciseToReplace,
@@ -535,28 +541,26 @@ struct ActiveWorkoutView: View {
                         if let index = workout.exercises.firstIndex(where: { $0.id == exercise.id }) {
                             workout.exercises.remove(at: index)
                         }
-                    }
+                    },
+                    triggerHapticFeedback: triggerHapticFeedback
                 )
             }
 
             addExerciseButtonSection
         }
+        .environmentObject(restTimerViewModel)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Done") {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-                .buttonStyle(HapticButtonStyle())
+                Button("Done", action: doneButtonAction)
+                    .buttonStyle(HapticButtonStyle())
             }
         }
     }
 
     private var addExerciseButtonSection: some View {
         Section {
-            Button(action: {
-                activeSheet = .exercisePicker
-            }) {
+            Button(action: addExercise) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                     Text("Add Exercise")
@@ -568,17 +572,7 @@ struct ActiveWorkoutView: View {
 
     private var bottomButtonsView: some View {
         HStack(spacing: 16) {
-            Button(action: {
-                self.alertInfo = AlertInfo(
-                    title: "Cancel Workout",
-                    message: "Are you sure you want to cancel this workout? This action cannot be undone.",
-                    primaryButton: .destructive(Text("Confirm")) {
-                        cancelWorkout()
-                    },
-                    secondaryButton: .cancel()
-                )
-                self.showingAlert = true
-            }) {
+            Button(action: cancelWorkoutAction) {
                 Text("Cancel Workout")
                     .font(.headline)
                     .foregroundColor(.white)
@@ -589,30 +583,7 @@ struct ActiveWorkoutView: View {
             }
             .buttonStyle(HapticButtonStyle())
 
-            Button(action: {
-                if hasUnfinishedSets {
-                    self.alertInfo = AlertInfo(
-                        title: "Unfinished Sets",
-                        message: "You have unfinished sets. How would you like to proceed?",
-                        primaryButton: .default(Text("Complete Unfinished Sets")) {
-                            finishWorkout(completionType: .autocomplete)
-                        },
-                        secondaryButton: .destructive(Text("Discard Unfinished Sets")) {
-                            finishWorkout(completionType: .discard)
-                        }
-                    )
-                } else {
-                    self.alertInfo = AlertInfo(
-                        title: "Finish Workout",
-                        message: "Are you sure you want to finish this workout?",
-                        primaryButton: .default(Text("Finish")) {
-                            finishWorkout(completionType: .standard)
-                        },
-                        secondaryButton: .cancel()
-                    )
-                }
-                self.showingAlert = true
-            }) {
+            Button(action: finishWorkoutAction) {
                 Text("Finish Workout")
                     .font(.headline)
                     .foregroundColor(.white)
@@ -656,8 +627,9 @@ struct ActiveWorkoutView: View {
             if let setBinding = setForRestTimeEdit {
                 RestTimeEditorView(set: setBinding)
                     .onDisappear {
-                        if activeRestSetID == setBinding.wrappedValue.id {
-                            restTimeRemaining = setBinding.wrappedValue.restTime
+                        if restTimerViewModel.activeRestSetID == setBinding.wrappedValue.id {
+                            // If the timer is active for this set, restart it with the new time
+                            restTimerViewModel.startTimer(for: setBinding.wrappedValue)
                         }
                         setForRestTimeEdit = nil
                     }
@@ -686,8 +658,8 @@ struct ActiveWorkoutView: View {
                 if workoutStartDate > Date() {
                     workoutStartDate = Date()
                 }
+                workout.date = workoutStartDate
                 activeSheet = nil
-                recalculateDuration()
             }
             .buttonStyle(HapticButtonStyle())
             .padding()
@@ -700,58 +672,8 @@ struct ActiveWorkoutView: View {
 
     // MARK: - Timer Functions
 
-    private func timeString(from interval: TimeInterval) -> String {
-        let hours = Int(interval) / 3600
-        let minutes = Int(interval) / 60 % 60
-        let seconds = Int(interval) % 60
-        return String(format: "%02i:%02i:%02i", hours, minutes, seconds)
-    }
-
-    private func startWorkoutTimer() {
-        if !isTimerRunning {
-            workout.date = workoutStartDate
-            workoutTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                workoutDuration = Date().timeIntervalSince(workoutStartDate)
-            }
-            isTimerRunning = true
-        }
-    }
-
-    private func stopWorkoutTimer() {
-        workoutTimer?.invalidate()
-        isTimerRunning = false
-    }
-
-    private func recalculateDuration() {
-        workoutDuration = Date().timeIntervalSince(workoutStartDate)
-        if isTimerRunning {
-            stopWorkoutTimer()
-            startWorkoutTimer()
-        }
-    }
-
-    private func startRestTimer(for set: WorkoutSet) {
-        stopRestTimer()
-        restTimeRemaining = set.restTime
-        activeRestSetID = set.id
-        restTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            if self.restTimeRemaining > 1 {
-                self.restTimeRemaining -= 1
-                if Int(self.restTimeRemaining.rounded()) == 10 {
-                    self.playSound(named: "timer-warning")
-                }
-            } else {
-                self.playSound(named: "timer-finished")
-                self.stopRestTimer()
-            }
-        }
-    }
-
-    private func stopRestTimer() {
-        restTimer?.invalidate()
-        restTimer = nil
-        activeRestSetID = nil
-        restTimeRemaining = 0
+    private func initializeWorkout() {
+        workout.date = workoutStartDate
     }
 
     private enum WorkoutCompletionType {
@@ -784,8 +706,8 @@ struct ActiveWorkoutView: View {
             }
         }
 
-        stopWorkoutTimer()
-        workout.duration = workoutDuration
+        restTimerViewModel.stopTimer()
+        workout.duration = Date().timeIntervalSince(workout.date)
 
         let summary = workoutManager.completeWorkout()
 
@@ -805,6 +727,95 @@ struct ActiveWorkoutView: View {
         workout.exercises.remove(atOffsets: offsets)
     }
 
+    private func triggerHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+    }
+}
+
+private extension ActiveWorkoutView {
+    func addExercise() {
+        triggerHapticFeedback()
+        activeSheet = .exercisePicker
+    }
+
+    func finishWorkoutAction() {
+        triggerHapticFeedback()
+        if hasUnfinishedSets {
+            self.alertInfo = AlertInfo(
+                title: "Unfinished Sets",
+                message: "You have unfinished sets. How would you like to proceed?",
+                primaryButton: .default(Text("Complete Unfinished Sets")) {
+                    finishWorkout(completionType: .autocomplete)
+                },
+                secondaryButton: .destructive(Text("Discard Unfinished Sets")) {
+                    finishWorkout(completionType: .discard)
+                }
+            )
+        } else {
+            self.alertInfo = AlertInfo(
+                title: "Finish Workout",
+                message: "Are you sure you want to finish this workout?",
+                primaryButton: .default(Text("Finish")) {
+                    finishWorkout(completionType: .standard)
+                },
+                secondaryButton: .cancel()
+            )
+        }
+        self.showingAlert = true
+    }
+
+    func cancelWorkoutAction() {
+        triggerHapticFeedback()
+        self.alertInfo = AlertInfo(
+            title: "Cancel Workout",
+            message: "Are you sure you want to cancel this workout? This action cannot be undone.",
+            primaryButton: .destructive(Text("Confirm")) {
+                cancelWorkout()
+            },
+            secondaryButton: .cancel()
+        )
+        self.showingAlert = true
+    }
+
+    func doneButtonAction() {
+        triggerHapticFeedback()
+        hideKeyboard()
+    }
+}
+
+class RestTimerViewModel: ObservableObject {
+    @Published var restTimeRemaining: TimeInterval = 0
+    @Published var activeRestSetID: UUID?
+
+    private var restTimer: Timer?
+    private var audioPlayer: AVAudioPlayer?
+
+    func startTimer(for set: WorkoutSet) {
+        stopTimer()
+        restTimeRemaining = set.restTime
+        activeRestSetID = set.id
+        restTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            if self.restTimeRemaining > 1 {
+                self.restTimeRemaining -= 1
+                if Int(self.restTimeRemaining.rounded()) == 10 {
+                    self.playSound(named: "timer-warning")
+                }
+            } else {
+                self.playSound(named: "timer-finished")
+                self.stopTimer()
+            }
+        }
+    }
+
+    func stopTimer() {
+        restTimer?.invalidate()
+        restTimer = nil
+        activeRestSetID = nil
+        restTimeRemaining = 0
+    }
+
     private func playSound(named: String) {
         guard let url = Bundle.main.url(forResource: named, withExtension: "wav") else {
             print("Error: Sound file `\(named).wav` not found in bundle.")
@@ -816,23 +827,28 @@ struct ActiveWorkoutView: View {
             try AVAudioSession.sharedInstance().setActive(true)
 
             audioPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
-
-            // Optional: Set a delegate to handle playback finishing
-            // audioPlayer?.delegate = self
-
             audioPlayer?.prepareToPlay()
-            let didPlay = audioPlayer?.play()
+            audioPlayer?.play()
 
-            if didPlay == false {
-                print("Error: Audio playback failed for `\(named).wav`.")
-            }
-
-        } catch let error as NSError {
-            print("Error setting up audio session: \(error.localizedDescription)")
-            print("Error code: \(error.code)")
-            print("Error domain: \(error.domain)")
         } catch {
             print("An unexpected error occurred while trying to play sound: \(error.localizedDescription)")
         }
+    }
+}
+
+private struct WorkoutTimerView: View {
+    let startDate: Date
+    @State private var timeString: String = "00:00:00"
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Text(timeString)
+            .onReceive(timer) { _ in
+                let interval = Date().timeIntervalSince(startDate)
+                let hours = Int(interval) / 3600
+                let minutes = Int(interval) / 60 % 60
+                let seconds = Int(interval) % 60
+                timeString = String(format: "%02i:%02i:%02i", hours, minutes, seconds)
+            }
     }
 }
