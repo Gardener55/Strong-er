@@ -11,6 +11,7 @@ import SwiftUI
 
 struct TemplatesView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @State private var showingCreateTemplate = false
     
     var body: some View {
@@ -34,6 +35,7 @@ struct TemplatesView: View {
             }
             .sheet(isPresented: $showingCreateTemplate) {
                 CreateWorkoutView(sourceView: .templates)
+                    .environmentObject(exerciseDatabase)
             }
         }
     }
