@@ -388,6 +388,7 @@ struct ActiveWorkoutView: View {
     @Binding var workout: Workout
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var userProfileService: UserProfileService
+    @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @Environment(\.dismiss) private var dismiss
 
     // Timer states
@@ -650,6 +651,7 @@ struct ActiveWorkoutView: View {
                 }
                 activeSheet = nil
             }
+            .environmentObject(exerciseDatabase)
         case .restTimeEditor:
             if let setBinding = setForRestTimeEdit {
                 RestTimeEditorView(set: setBinding)
