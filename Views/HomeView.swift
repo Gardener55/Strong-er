@@ -19,7 +19,6 @@ struct HomeView: View {
     @State private var showingThisWeekHistory = false
     @State private var isQuickWorkoutActive = false
 
-
     var body: some View {
         NavigationView {
             ScrollView {
@@ -37,9 +36,16 @@ struct HomeView: View {
                     }
                     
                     // Quick Actions
-
-                    NavigationLink(destination: ActiveWorkoutView(), isActive: $isQuickWorkoutActive) {
-                        EmptyView()
+                    if workoutManager.currentWorkout != nil {
+                        NavigationLink(
+                            destination: ActiveWorkoutView(workout: Binding(
+                                get: { workoutManager.currentWorkout! },
+                                set: { workoutManager.currentWorkout = $0 }
+                            )),
+                            isActive: $isQuickWorkoutActive
+                        ) {
+                            EmptyView()
+                        }
                     }
 
                     QuickActionsView(
