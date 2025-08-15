@@ -205,6 +205,7 @@
 		F05104F82E4851A200BC0247 /* DetailedChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedChartView.swift; sourceTree = "<group>"; };
 		F0AADDFF1122334455667788 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		F0AADDFFDEADBEEF12345677 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		F0AADDFFDEADBEEF98765433 /* Strong-er.entitlements */ = {isa = PBXFileReference; lastKnownFileType = "text.plist.xml"; path = "Strong-er/Strong-er.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -263,6 +264,7 @@
 		F05103E62E465CED00BC0247 = {
 			isa = PBXGroup;
 			children = (
+				F0AADDFFDEADBEEF98765433 /* Strong-er.entitlements */,
 				F05104202E465D1800BC0247 /* Views */,
 				F051041F2E465D1300BC0247 /* Services */,
 				F051041E2E465D0F00BC0247 /* Models */,
@@ -440,10 +442,20 @@
 					F05104002E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = F05103EE2E465CED00BC0247;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 					F051040A2E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = F05103EE2E465CED00BC0247;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -805,6 +817,9 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
+				CODE_SIGN_ENTITLEMENTS = "Strong-er/Strong-er.entitlements";
 			};
 			name = Debug;
 		};
@@ -833,6 +848,9 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
+				CODE_SIGN_ENTITLEMENTS = "Strong-er/Strong-er.entitlements";
 			};
 			name = Release;
 		};
