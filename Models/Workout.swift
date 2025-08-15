@@ -9,7 +9,7 @@
 // Models/Workout.swift
 import Foundation
 
-struct Workout: Identifiable, Codable {
+struct Workout: Identifiable, Codable, Equatable {
     var id = UUID()
     var name: String
     var exercises: [WorkoutExercise]
