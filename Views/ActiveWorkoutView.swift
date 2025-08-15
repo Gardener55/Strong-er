@@ -198,6 +198,13 @@ private struct ActiveWorkoutSetRow: View {
         }
     }
 
+    private func formatWeight(_ weight: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2 // Adjust as needed
+        return formatter.string(from: NSNumber(value: weight)) ?? "\(weight)"
+    }
+
     private func updateWeightInput(fromModel: Bool = false) {
         // This function is called when the view appears or when the model value changes.
         // It formats the weight from the model (which is always in kg) to the correct display unit.
@@ -209,7 +216,7 @@ private struct ActiveWorkoutSetRow: View {
         let displayWeight = weightUnit == .pounds ? weight * 2.20462 : weight
 
         // To prevent infinite loops, we check if the new value is different before updating.
-        let newWeightString = String(format: "%.2f", displayWeight)
+        let newWeightString = formatWeight(displayWeight)
 
         if let currentInputWeight = Double(weightInput) {
              let currentStoredWeight = weightUnit == .pounds ? currentInputWeight / 2.20462 : currentInputWeight
@@ -262,9 +269,9 @@ private struct ActiveWorkoutSetRow: View {
 
         if weightUnit == .pounds {
             let weightInLbs = weight * 2.20462
-            displayText += "\(String(format: "%.1f", weightInLbs)) lbs"
+            displayText += "\(formatWeight(weightInLbs)) lbs"
         } else {
-            displayText += "\(String(format: "%.1f", weight)) kg"
+            displayText += "\(formatWeight(weight)) kg"
         }
 
         return displayText
@@ -455,20 +462,17 @@ struct ActiveWorkoutView: View {
             .sheet(item: $activeSheet) { sheet in
                 sheetView(for: sheet)
             }
-            .background(
-                NavigationLink(
-                    destination: PostWorkoutSummaryView(
-                        workout: workoutToSummarize ?? workout,
-                        summaryData: summaryData ?? ([], []),
-                        dismissAction: {
-                            self.showSummary = false
-                            self.dismiss()
-                        }
-                    ),
-                    isActive: $showSummary,
-                    label: { EmptyView() }
+            .sheet(isPresented: $showSummary) {
+                PostWorkoutSummaryView(
+                    workout: workoutToSummarize ?? workout,
+                    summaryData: summaryData ?? ([], []),
+                    dismissAction: {
+                        self.showSummary = false
+                        // This will dismiss the ActiveWorkoutView
+                        self.dismiss()
+                    }
                 )
-            )
+            }
             .onTapGesture {
                 hideKeyboard()
             }
@@ -801,16 +805,32 @@ struct ActiveWorkoutView: View {
 
     private func playSound(named: String) {
         guard let url = Bundle.main.url(forResource: named, withExtension: "wav") else {
-            print("Error: Sound file not found (\(named).wav)")
+            print("Error: Sound file `\(named).wav` not found in bundle.")
             return
         }
+
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setCategory(.playback, options: .mixWithOthers)
             try AVAudioSession.sharedInstance().setActive(true)
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
-        } catch let error {
-            print("Error playing sound: \(error.localizedDescription)")
+
+            audioPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
+
+            // Optional: Set a delegate to handle playback finishing
+            // audioPlayer?.delegate = self
+
+            audioPlayer?.prepareToPlay()
+            let didPlay = audioPlayer?.play()
+
+            if didPlay == false {
+                print("Error: Audio playback failed for `\(named).wav`.")
+            }
+
+        } catch let error as NSError {
+            print("Error setting up audio session: \(error.localizedDescription)")
+            print("Error code: \(error.code)")
+            print("Error domain: \(error.domain)")
+        } catch {
+            print("An unexpected error occurred while trying to play sound: \(error.localizedDescription)")
         }
     }
 }
