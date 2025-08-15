@@ -141,8 +141,15 @@ struct VitalsPageView: View {
                             .multilineTextAlignment(.trailing)
                     }
 
-                    Picker("Units", selection: $profile.weightUnit) {
+                    Picker("Weight Units", selection: $profile.weightUnit) {
                         ForEach(UserProfile.WeightUnit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue).tag(unit)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+
+                    Picker("Height Units", selection: $profile.heightUnit) {
+                        ForEach(UserProfile.HeightUnit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
                     }
