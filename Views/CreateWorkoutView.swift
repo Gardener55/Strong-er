@@ -10,6 +10,10 @@
 import SwiftUI
 
 struct CreateWorkoutView: View {
+    enum SourceView {
+        case quickActions, templates
+    }
+
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var exerciseDatabase: ExerciseDatabase
@@ -18,6 +22,8 @@ struct CreateWorkoutView: View {
     @State private var selectedExercises: [WorkoutExercise] = []
     @State private var showingExercisePicker = false
     
+    let sourceView: SourceView
+
     var body: some View {
         NavigationView {
             VStack {
@@ -55,7 +61,7 @@ struct CreateWorkoutView: View {
                 
                 Spacer()
             }
-            .navigationTitle("Create Workout")
+            .navigationTitle("New Workout")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

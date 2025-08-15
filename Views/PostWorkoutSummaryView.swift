@@ -87,11 +87,6 @@ struct PostWorkoutSummaryView: View {
         }
         .padding()
         .navigationBarHidden(true)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                dismissAction()
-            }
-        }
     }
 
     private func formatDuration(_ duration: TimeInterval) -> String {
