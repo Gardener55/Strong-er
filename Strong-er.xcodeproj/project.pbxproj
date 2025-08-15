@@ -46,6 +46,12 @@
 		F03C14C22E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
 		F03C14C32E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */; };
 		F03C14C42E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */; };
+		F03C166F2E4FA89F00C0AC3F /* timer-warning.wav in Resources */ = {isa = PBXBuildFile; fileRef = F03C166D2E4FA89F00C0AC3F /* timer-warning.wav */; };
+		F03C16702E4FA89F00C0AC3F /* timer-finished.wav in Resources */ = {isa = PBXBuildFile; fileRef = F03C166C2E4FA89F00C0AC3F /* timer-finished.wav */; };
+		F03C16712E4FA89F00C0AC3F /* timer-warning.wav in Resources */ = {isa = PBXBuildFile; fileRef = F03C166D2E4FA89F00C0AC3F /* timer-warning.wav */; };
+		F03C16722E4FA89F00C0AC3F /* timer-finished.wav in Resources */ = {isa = PBXBuildFile; fileRef = F03C166C2E4FA89F00C0AC3F /* timer-finished.wav */; };
+		F03C16732E4FA89F00C0AC3F /* timer-warning.wav in Resources */ = {isa = PBXBuildFile; fileRef = F03C166D2E4FA89F00C0AC3F /* timer-warning.wav */; };
+		F03C16742E4FA89F00C0AC3F /* timer-finished.wav in Resources */ = {isa = PBXBuildFile; fileRef = F03C166C2E4FA89F00C0AC3F /* timer-finished.wav */; };
 		F05104262E465D4A00BC0247 /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104252E465D4A00BC0247 /* WorkoutSet.swift */; };
 		F05104272E465D4A00BC0247 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104222E465D4A00BC0247 /* UserProfile.swift */; };
 		F05104282E465D4A00BC0247 /* WorkoutExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05104242E465D4A00BC0247 /* WorkoutExercise.swift */; };
@@ -170,6 +176,8 @@
 		F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCompletionService.swift; sourceTree = "<group>"; };
 		F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutExporter.swift; sourceTree = "<group>"; };
 		F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutScience.swift; sourceTree = "<group>"; };
+		F03C166C2E4FA89F00C0AC3F /* timer-finished.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "timer-finished.wav"; sourceTree = "<group>"; };
+		F03C166D2E4FA89F00C0AC3F /* timer-warning.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "timer-warning.wav"; sourceTree = "<group>"; };
 		F05103EF2E465CED00BC0247 /* Strong-er.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Strong-er.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05104012E465CEE00BC0247 /* Strong-erTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Strong-erTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F051040B2E465CEE00BC0247 /* Strong-erUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Strong-erUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -205,7 +213,7 @@
 		F05104F82E4851A200BC0247 /* DetailedChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedChartView.swift; sourceTree = "<group>"; };
 		F0AADDFF1122334455667788 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		F0AADDFFDEADBEEF12345677 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		F0AADDFFDEADBEEF98765433 /* Strong-er.entitlements */ = {isa = PBXFileReference; lastKnownFileType = "text.plist.xml"; path = "Strong-er/Strong-er.entitlements"; sourceTree = "<group>"; };
+		F0AADDFFDEADBEEF98765433 /* Strong-er/Strong-er.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Strong-er/Strong-er.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -261,10 +269,19 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		F03C166E2E4FA89F00C0AC3F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F03C166C2E4FA89F00C0AC3F /* timer-finished.wav */,
+				F03C166D2E4FA89F00C0AC3F /* timer-warning.wav */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		F05103E62E465CED00BC0247 = {
 			isa = PBXGroup;
 			children = (
-				F0AADDFFDEADBEEF98765433 /* Strong-er.entitlements */,
+				F0AADDFFDEADBEEF98765433 /* Strong-er/Strong-er.entitlements */,
 				F05104202E465D1800BC0247 /* Views */,
 				F051041F2E465D1300BC0247 /* Services */,
 				F051041E2E465D0F00BC0247 /* Models */,
@@ -273,6 +290,7 @@
 				F051040E2E465CEE00BC0247 /* Strong-erUITests */,
 				F05103F02E465CED00BC0247 /* Products */,
 				F03C14812E4ABE9900C0AC3F /* Recovered References */,
+				F03C166E2E4FA89F00C0AC3F /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -441,21 +459,21 @@
 					};
 					F05104002E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
-						TestTargetID = F05103EE2E465CED00BC0247;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
 							};
 						};
+						TestTargetID = F05103EE2E465CED00BC0247;
 					};
 					F051040A2E465CEE00BC0247 = {
 						CreatedOnToolsVersion = 16.4;
-						TestTargetID = F05103EE2E465CED00BC0247;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
 							};
 						};
+						TestTargetID = F05103EE2E465CED00BC0247;
 					};
 				};
 			};
@@ -485,6 +503,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F03C16732E4FA89F00C0AC3F /* timer-warning.wav in Resources */,
+				F03C16742E4FA89F00C0AC3F /* timer-finished.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +512,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F03C16712E4FA89F00C0AC3F /* timer-warning.wav in Resources */,
+				F03C16722E4FA89F00C0AC3F /* timer-finished.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +521,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F03C166F2E4FA89F00C0AC3F /* timer-warning.wav in Resources */,
+				F03C16702E4FA89F00C0AC3F /* timer-finished.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -797,11 +821,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Strong-er/Strong-er.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4KVKHCP928;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -817,9 +844,6 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
-				CODE_SIGN_ENTITLEMENTS = "Strong-er/Strong-er.entitlements";
 			};
 			name = Debug;
 		};
@@ -828,11 +852,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Strong-er/Strong-er.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4KVKHCP928;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -848,9 +875,6 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your workout data will be saved to Apple Health.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We need to read your workout data to provide you with detailed analysis and history.";
-				CODE_SIGN_ENTITLEMENTS = "Strong-er/Strong-er.entitlements";
 			};
 			name = Release;
 		};
