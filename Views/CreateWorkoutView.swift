@@ -84,6 +84,7 @@ struct CreateWorkoutView: View {
                     let workoutExercise = WorkoutExercise(exercise: exercise)
                     selectedExercises.append(workoutExercise)
                 }
+                .environmentObject(exerciseDatabase)
             }
         }
     }
