@@ -22,6 +22,7 @@ struct UserProfile: Codable {
     var sessionDuration: Int = 60 // minutes
     var defaultRestTimer: TimeInterval = 60 // seconds
     var weightUnit: WeightUnit = .pounds
+    var heightUnit: HeightUnit = .feetInches
     var personalRecords: [PersonalRecord] = []
     var achievements: [Achievement] = []
     var watchedExercises: [String] = []
@@ -33,6 +34,11 @@ struct UserProfile: Codable {
     enum WeightUnit: String, CaseIterable, Codable, Equatable {
         case kilograms = "kg"
         case pounds = "lbs"
+    }
+
+    enum HeightUnit: String, CaseIterable, Codable, Equatable {
+        case centimeters = "cm"
+        case feetInches = "ft/in"
     }
     
     enum FitnessLevel: String, CaseIterable, Codable, Equatable {
