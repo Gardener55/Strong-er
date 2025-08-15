@@ -12,6 +12,7 @@ import SwiftUI
 struct WorkoutListView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var userProfileService: UserProfileService
+    @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @State private var showingCreateWorkout = false
     
     var body: some View {
@@ -34,7 +35,8 @@ struct WorkoutListView: View {
                 }
             }
             .sheet(isPresented: $showingCreateWorkout) {
-                CreateWorkoutView()
+                CreateWorkoutView(sourceView: .quickActions)
+                    .environmentObject(exerciseDatabase)
             }
         }
     }

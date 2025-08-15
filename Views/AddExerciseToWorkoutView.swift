@@ -13,6 +13,7 @@ struct AddExerciseToWorkoutView: View {
     let exercise: Exercise
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     
     @State private var selectedTemplate: Workout?
     @State private var showingNewWorkout = false
@@ -76,7 +77,8 @@ struct AddExerciseToWorkoutView: View {
             }
         }
         .sheet(isPresented: $showingNewWorkout) {
-            CreateWorkoutView()
+            CreateWorkoutView(sourceView: .quickActions)
+                .environmentObject(exerciseDatabase)
         }
     }
     
