@@ -133,8 +133,10 @@ private struct ActiveWorkoutSetRow: View {
 
             HStack(spacing: 16) {
                 Button(action: {
-                    set.completed.toggle()
-                    onToggleCompletion()
+                    withAnimation {
+                        set.completed.toggle()
+                        onToggleCompletion()
+                    }
                 }) {
                     Image(systemName: set.completed ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(set.completed ? .green : .gray)
@@ -354,8 +356,10 @@ private struct ExerciseSectionView: View {
             }
 
             Button(action: {
-                let newSetRestTime = exercise.restTime ?? userProfileService.userProfile.defaultRestTimer
-                exercise.sets.append(WorkoutSet(restTime: newSetRestTime))
+                withAnimation {
+                    let newSetRestTime = exercise.restTime ?? userProfileService.userProfile.defaultRestTimer
+                    exercise.sets.append(WorkoutSet(restTime: newSetRestTime))
+                }
             }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
@@ -624,19 +628,21 @@ struct ActiveWorkoutView: View {
             datePickerSheet
         case .exercisePicker:
             ExercisePickerView { selectedExercise in
-                if let exerciseToReplaceBinding = exerciseToReplace {
-                    if let index = workout.exercises.firstIndex(where: { $0.id == exerciseToReplaceBinding.wrappedValue.id }) {
-                        let newExercise = WorkoutExercise(exercise: selectedExercise)
-                        workout.exercises[index] = newExercise
+                withAnimation {
+                    if let exerciseToReplaceBinding = exerciseToReplace {
+                        if let index = workout.exercises.firstIndex(where: { $0.id == exerciseToReplaceBinding.wrappedValue.id }) {
+                            let newExercise = WorkoutExercise(exercise: selectedExercise)
+                            workout.exercises[index] = newExercise
+                        }
+                        exerciseToReplace = nil
+                    } else {
+                        let defaultRest = userProfileService.userProfile.defaultRestTimer
+                        var newExercise = WorkoutExercise(exercise: selectedExercise, restTime: defaultRest)
+                        if !newExercise.sets.isEmpty {
+                            newExercise.sets[0].restTime = defaultRest
+                        }
+                        workout.exercises.append(newExercise)
                     }
-                    exerciseToReplace = nil
-                } else {
-                    let defaultRest = userProfileService.userProfile.defaultRestTimer
-                    var newExercise = WorkoutExercise(exercise: selectedExercise, restTime: defaultRest)
-                    if !newExercise.sets.isEmpty {
-                        newExercise.sets[0].restTime = defaultRest
-                    }
-                    workout.exercises.append(newExercise)
                 }
                 activeSheet = nil
             }
