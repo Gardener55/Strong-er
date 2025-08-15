@@ -37,21 +37,6 @@ struct HomeView: View {
                     }
                     
                     // Quick Actions
-                    if workoutManager.currentWorkout != nil {
-                        NavigationLink(
-                            destination: ActiveWorkoutView(workout: Binding(
-                                get: { workoutManager.currentWorkout! },
-                                set: { workoutManager.currentWorkout = $0 }
-                            ))
-                            .environmentObject(workoutManager)
-                            .environmentObject(exerciseDatabase)
-                            .environmentObject(userProfileService),
-                            isActive: $isQuickWorkoutActive
-                        ) {
-                            EmptyView()
-                        }
-                    }
-
                     QuickActionsView(
                         selectedTab: $selectedTab,
                         showingAIWorkout: $showingAIWorkout,
@@ -67,6 +52,15 @@ struct HomeView: View {
                     Spacer()
                 }
                 .padding()
+            }
+            .fullScreenCover(isPresented: $isQuickWorkoutActive) {
+                ActiveWorkoutView(workout: Binding(
+                    get: { workoutManager.currentWorkout! },
+                    set: { workoutManager.currentWorkout = $0 }
+                ))
+                .environmentObject(workoutManager)
+                .environmentObject(exerciseDatabase)
+                .environmentObject(userProfileService)
             }
             .navigationTitle("Home")
             .toolbar {
