@@ -33,7 +33,7 @@ struct TemplatesView: View {
                 }
             }
             .sheet(isPresented: $showingCreateTemplate) {
-                CreateWorkoutView()
+                CreateWorkoutView(sourceView: .templates)
             }
         }
     }
