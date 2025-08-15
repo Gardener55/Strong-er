@@ -70,6 +70,13 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
+
+                    Picker("Height", selection: $userProfileService.userProfile.heightUnit) {
+                        ForEach(UserProfile.HeightUnit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue).tag(unit)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                 }
 
                 Section(header: Text("Workout Settings")) {

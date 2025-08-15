@@ -108,11 +108,11 @@ struct ProfileView: View {
 
     private var heightString: String {
         let height = userProfileService.userProfile.height
-        let unit = userProfileService.userProfile.weightUnit // Assuming height unit is tied to weight unit
-        if unit == .pounds {
+        let unit = userProfileService.userProfile.heightUnit
+        if unit == .feetInches {
             let heightInInches = height / 2.54
             let feet = Int(heightInInches / 12)
-            let inches = Int(heightInInches.truncatingRemainder(dividingBy: 12))
+            let inches = Int(round(heightInInches.truncatingRemainder(dividingBy: 12)))
             return "\(feet) ft \(inches) in"
         } else {
             return String(format: "%.0f cm", height)
@@ -149,6 +149,12 @@ struct ProfileStatCard: View {
 struct ProfileEditView: View {
     @Binding var profile: UserProfile
     @Environment(\.dismiss) private var dismiss
+
+    // State for text fields
+    @State private var weightString: String = ""
+    @State private var heightCmString: String = ""
+    @State private var heightFeetString: String = ""
+    @State private var heightInchesString: String = ""
     
     var body: some View {
         NavigationView {
@@ -165,19 +171,36 @@ struct ProfileEditView: View {
                     }
                     
                     HStack {
-                        Text("Weight (kg)")
+                        Text("Weight (\(profile.weightUnit.rawValue))")
                         Spacer()
-                        TextField("Weight", value: $profile.weight, format: .number)
+                        TextField("Weight", text: $weightString)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                     }
                     
-                    HStack {
-                        Text("Height (cm)")
-                        Spacer()
-                        TextField("Height", value: $profile.height, format: .number)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
+                    if profile.heightUnit == .centimeters {
+                        HStack {
+                            Text("Height (cm)")
+                            Spacer()
+                            TextField("Height", text: $heightCmString)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    } else {
+                        HStack {
+                            Text("Height (ft)")
+                            Spacer()
+                            TextField("Feet", text: $heightFeetString)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
+                        HStack {
+                            Text("Height (in)")
+                            Spacer()
+                            TextField("Inches", text: $heightInchesString)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
                     }
                 }
                 
@@ -229,11 +252,57 @@ struct ProfileEditView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
+                        saveProfileData()
                         dismiss()
                     }
                     .buttonStyle(HapticButtonStyle())
                 }
             }
+            .onAppear(perform: setupTextFields)
+        }
+    }
+
+    private func setupTextFields() {
+        // Weight
+        if profile.weightUnit == .pounds {
+            let weightInLbs = profile.weight * 2.20462
+            weightString = String(format: "%.1f", weightInLbs)
+        } else {
+            weightString = String(format: "%.1f", profile.weight)
+        }
+
+        // Height
+        if profile.heightUnit == .centimeters {
+            heightCmString = String(format: "%.0f", profile.height)
+        } else {
+            let heightInInches = profile.height / 2.54
+            let feet = Int(heightInInches / 12)
+            let inches = Int(round(heightInInches.truncatingRemainder(dividingBy: 12)))
+            heightFeetString = "\(feet)"
+            heightInchesString = "\(inches)"
+        }
+    }
+
+    private func saveProfileData() {
+        // Save Weight
+        if let weightValue = Double(weightString) {
+            if profile.weightUnit == .pounds {
+                profile.weight = weightValue / 2.20462
+            } else {
+                profile.weight = weightValue
+            }
+        }
+
+        // Save Height
+        if profile.heightUnit == .centimeters {
+            if let heightValue = Double(heightCmString) {
+                profile.height = heightValue
+            }
+        } else {
+            let feet = Double(heightFeetString) ?? 0
+            let inches = Double(heightInchesString) ?? 0
+            let totalInches = (feet * 12) + inches
+            profile.height = totalInches * 2.54
         }
     }
 }
