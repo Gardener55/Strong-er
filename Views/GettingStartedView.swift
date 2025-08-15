@@ -115,6 +115,7 @@ struct PersonalInfoPageView: View {
 struct VitalsPageView: View {
     @Binding var selection: Int
     @Binding var profile: UserProfile
+    @State private var displayedWeight: Double = 70.0
 
     var body: some View {
         VStack {
@@ -128,7 +129,7 @@ struct VitalsPageView: View {
                     HStack {
                         Text("Weight")
                         Spacer()
-                        TextField("Weight", value: $profile.weight, format: .number)
+                        TextField("Weight", value: $displayedWeight, format: .number)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                     }
@@ -160,6 +161,11 @@ struct VitalsPageView: View {
             Spacer()
 
             Button(action: {
+                if profile.weightUnit == .pounds {
+                    profile.weight = displayedWeight / 2.20462
+                } else {
+                    profile.weight = displayedWeight
+                }
                 withAnimation {
                     selection = 3
                 }
