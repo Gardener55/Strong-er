@@ -18,7 +18,6 @@ struct HomeView: View {
     @State private var showingSettings = false
     @State private var showingWorkoutStats = false
     @State private var showingThisWeekHistory = false
-    @State private var isQuickWorkoutActive = false
 
     var body: some View {
         NavigationView {
@@ -39,8 +38,7 @@ struct HomeView: View {
                     // Quick Actions
                     QuickActionsView(
                         selectedTab: $selectedTab,
-                        showingAIWorkout: $showingAIWorkout,
-                        isQuickWorkoutActive: $isQuickWorkoutActive
+                        showingAIWorkout: $showingAIWorkout
                     )
                     
                     // Workout Stats
@@ -52,15 +50,6 @@ struct HomeView: View {
                     Spacer()
                 }
                 .padding()
-            }
-            .fullScreenCover(isPresented: $isQuickWorkoutActive) {
-                ActiveWorkoutView(workout: Binding(
-                    get: { workoutManager.currentWorkout! },
-                    set: { workoutManager.currentWorkout = $0 }
-                ))
-                .environmentObject(workoutManager)
-                .environmentObject(exerciseDatabase)
-                .environmentObject(userProfileService)
             }
             .navigationTitle("Home")
             .toolbar {
@@ -137,7 +126,6 @@ struct QuickActionsView: View {
     @EnvironmentObject var exerciseDatabase: ExerciseDatabase
     @Binding var selectedTab: Int
     @Binding var showingAIWorkout: Bool
-    @Binding var isQuickWorkoutActive: Bool
     @State private var showingCreateWorkout = false
     
     var body: some View {
@@ -167,7 +155,6 @@ struct QuickActionsView: View {
                 
                 Button(action: {
                     workoutManager.startQuickWorkout()
-                    isQuickWorkoutActive = true
                 }) {
                     QuickActionButton(
                         title: "Quick Start",
