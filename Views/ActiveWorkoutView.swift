@@ -127,6 +127,42 @@ private struct ActiveWorkoutSetRow: View {
         )
     }
 
+    private var weightInputProxy: Binding<String> {
+        Binding<String>(
+            get: { weightInput },
+            set: { newValue in
+                var filtered = newValue.filter { "0123456789.".contains($0) }
+
+                if let dotIndex = filtered.firstIndex(of: ".") {
+                    let components = filtered.split(separator: ".")
+                    if components.count > 1 {
+                        let decimalPart = components[1]
+                        if decimalPart.count > 2 {
+                            let truncatedDecimal = decimalPart.prefix(2)
+                            filtered = "\(components[0]).\(truncatedDecimal)"
+                        }
+                    }
+                    if components.count > 2 {
+                         let firstPart = components[0]
+                         let secondPart = components[1]
+                         filtered = "\(firstPart).\(secondPart)"
+                    }
+                }
+
+                weightInput = filtered
+
+                if let value = Double(filtered) {
+                    let storedWeight = weightUnit == .pounds ? value / 2.20462 : value
+                    if abs((set.weight ?? 0) - storedWeight) > 0.001 {
+                        set.weight = storedWeight
+                    }
+                } else {
+                    set.weight = nil
+                }
+            }
+        )
+    }
+
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -157,7 +193,7 @@ private struct ActiveWorkoutSetRow: View {
 
                 VStack {
                     Text("Weight (\(weightUnit.rawValue))").font(.caption)
-                    TextField("0", text: $weightInput)
+                    TextField("0", text: weightInputProxy)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .keyboardType(.decimalPad)
                         .frame(width: 80)
@@ -165,7 +201,6 @@ private struct ActiveWorkoutSetRow: View {
                         .onAppear {
                             updateWeightInput()
                         }
-                        .onChange(of: weightInput) { handleWeightChange() }
                         .onChange(of: set.weight) { updateWeightInput(fromModel: true) }
 
                 }
@@ -237,41 +272,6 @@ private struct ActiveWorkoutSetRow: View {
         }
 
         weightInput = newWeightString
-    }
-
-    private func handleWeightChange() {
-        // This function is called whenever the user types in the weight field.
-        // It validates the input and updates the model (in kg).
-        var filtered = weightInput.filter { "0123456789.".contains($0) }
-
-        if let dotIndex = filtered.firstIndex(of: ".") {
-            let components = filtered.split(separator: ".")
-            if components.count > 1 {
-                let decimalPart = components[1]
-                if decimalPart.count > 2 {
-                    let truncatedDecimal = decimalPart.prefix(2)
-                    filtered = "\(components[0]).\(truncatedDecimal)"
-                }
-            }
-            if components.count > 2 {
-                 let firstPart = components[0]
-                 let secondPart = components[1]
-                 filtered = "\(firstPart).\(secondPart)"
-            }
-        }
-
-        if filtered != weightInput {
-            weightInput = filtered
-        }
-
-        if let value = Double(filtered) {
-            let storedWeight = weightUnit == .pounds ? value / 2.20462 : value
-            if abs((set.weight ?? 0) - storedWeight) > 0.001 {
-                set.weight = storedWeight
-            }
-        } else {
-            set.weight = nil
-        }
     }
 
     private func previousSetText(for set: WorkoutSet) -> String {
@@ -842,17 +842,22 @@ class RestTimerViewModel: ObservableObject {
 
 private struct WorkoutTimerView: View {
     let startDate: Date
-    @State private var timeString: String = "00:00:00"
+    @State private var now = Date()
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    private var timeString: String {
+        let interval = now.timeIntervalSince(startDate)
+        guard interval >= 0 else { return "00:00:00" }
+        let hours = Int(interval) / 3600
+        let minutes = Int(interval) / 60 % 60
+        let seconds = Int(interval) % 60
+        return String(format: "%02i:%02i:%02i", hours, minutes, seconds)
+    }
 
     var body: some View {
         Text(timeString)
-            .onReceive(timer) { _ in
-                let interval = Date().timeIntervalSince(startDate)
-                let hours = Int(interval) / 3600
-                let minutes = Int(interval) / 60 % 60
-                let seconds = Int(interval) % 60
-                timeString = String(format: "%02i:%02i:%02i", hours, minutes, seconds)
+            .onReceive(timer) { newDate in
+                self.now = newDate
             }
     }
 }
