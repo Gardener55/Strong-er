@@ -535,8 +535,6 @@ struct ActiveWorkoutView: View {
                     exerciseForRestTimeEdit: $exerciseForRestTimeEdit,
                     exerciseToReplace: $exerciseToReplace,
                     activeSheet: $activeSheet,
-                    startRestTimer: startRestTimer,
-                    stopRestTimer: stopRestTimer,
                     onDelete: {
                         if let index = workout.exercises.firstIndex(where: { $0.id == exercise.id }) {
                             workout.exercises.remove(at: index)

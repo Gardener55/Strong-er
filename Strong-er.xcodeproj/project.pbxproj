@@ -28,19 +28,16 @@
 		F03C14AA2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149B2E4ABEAE00C0AC3F /* ThisWeekHistoryView.swift */; };
 		F03C14AB2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */; };
 		F03C14AC2E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14992E4ABEAE00C0AC3F /* GettingStartedView.swift */; };
-		F03C14B32E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */; };
 		F03C14B42E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */; };
 		F03C14B52E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */; };
 		F03C14B62E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
 		F03C14B72E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */; };
 		F03C14B82E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */; };
-		F03C14B92E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */; };
 		F03C14BA2E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */; };
 		F03C14BB2E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */; };
 		F03C14BC2E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
 		F03C14BD2E4ABEB900C0AC3F /* WorkoutExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */; };
 		F03C14BE2E4ABEB900C0AC3F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */; };
-		F03C14BF2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */; };
 		F03C14C02E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B22E4ABEB900C0AC3F /* WorkoutScience.swift */; };
 		F03C14C12E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */; };
 		F03C14C22E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */; };
@@ -171,7 +168,6 @@
 		F03C149C2E4ABEAE00C0AC3F /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
 		F03C149D2E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStatisticsView.swift; sourceTree = "<group>"; };
 		F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticButtonStyle.swift; sourceTree = "<group>"; };
-		F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackModifier.swift; sourceTree = "<group>"; };
 		F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCompletionService.swift; sourceTree = "<group>"; };
 		F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutExporter.swift; sourceTree = "<group>"; };
@@ -322,7 +318,6 @@
 			isa = PBXGroup;
 			children = (
 				F03C14AD2E4ABEB900C0AC3F /* HapticButtonStyle.swift */,
-				F03C14AE2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift */,
 				F03C14AF2E4ABEB900C0AC3F /* HealthKitManager.swift */,
 				F03C14B02E4ABEB900C0AC3F /* WorkoutCompletionService.swift */,
 				F03C14B12E4ABEB900C0AC3F /* WorkoutExporter.swift */,
@@ -534,7 +529,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F051047D2E4683D700BC0247 /* ThemeManager.swift in Sources */,
-				F03C14BF2E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */,
 				F03C14C02E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */,
 				F03C14C12E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */,
 				F03C14C22E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */,
@@ -602,7 +596,6 @@
 				F051047F2E4683D700BC0247 /* ThemeManager.swift in Sources */,
 				F03C13CB2E48E12800C0AC3F /* MotivationalMessageService.swift in Sources */,
 				F05104B62E46F0B500BC0247 /* WorkoutImporter.swift in Sources */,
-				F03C14B92E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */,
 				F03C14BA2E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */,
 				F03C14BB2E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */,
 				F03C14BC2E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */,
@@ -660,7 +653,6 @@
 				F03C14A12E4ABEAE00C0AC3F /* WorkoutStatisticsView.swift in Sources */,
 				F03C14A22E4ABEAE00C0AC3F /* GettingStartedView.swift in Sources */,
 				F05104632E465D7B00BC0247 /* AddExerciseToWorkoutView.swift in Sources */,
-				F03C14B32E4ABEB900C0AC3F /* HapticFeedbackModifier.swift in Sources */,
 				F03C14B42E4ABEB900C0AC3F /* WorkoutScience.swift in Sources */,
 				F03C14B52E4ABEB900C0AC3F /* HapticButtonStyle.swift in Sources */,
 				F03C14B62E4ABEB900C0AC3F /* WorkoutCompletionService.swift in Sources */,
