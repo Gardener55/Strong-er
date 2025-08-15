@@ -148,6 +148,13 @@ struct VitalsPageView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
+
+                    Picker("Height Units", selection: $profile.heightUnit) {
+                        ForEach(UserProfile.HeightUnit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue).tag(unit)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                 }
             }
 
@@ -176,13 +183,6 @@ struct VitalsPageView: View {
         }
         .onTapGesture {
             hideKeyboard()
-        }
-        .onAppear {
-            if profile.weightUnit == .pounds {
-                displayedWeight = profile.weight * 2.20462
-            } else {
-                displayedWeight = profile.weight
-            }
         }
     }
 
