@@ -77,6 +77,8 @@ struct ContentView: View {
                     get: { workoutManager.currentWorkout ?? workout },
                     set: { newWorkout in workoutManager.currentWorkout = newWorkout }
                 ))
+                .environmentObject(workoutManager)
+                .environmentObject(userProfileService)
                 .environmentObject(exerciseDatabase)
             } else {
                 // This view should ideally not be shown when workout is nil.
