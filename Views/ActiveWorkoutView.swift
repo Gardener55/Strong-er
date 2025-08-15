@@ -430,6 +430,7 @@ struct ActiveWorkoutView: View {
 
     // For summary view navigation
     @State private var showSummary = false
+    @State private var isFinishingWorkout = false
     @State private var workoutToSummarize: Workout?
     @State private var summaryData: (brokenPRs: [PersonalRecord], newAchievements: [Achievement])?
 
@@ -484,6 +485,11 @@ struct ActiveWorkoutView: View {
             }
             .onTapGesture {
                 hideKeyboard()
+            }
+            .onChange(of: showingAlert) { newValue in
+                if !newValue && isFinishingWorkout {
+                    showSummary = true
+                }
             }
             .alert(isPresented: $showingAlert) {
                 let primaryButton = alertInfo?.primaryButton ?? .default(Text("OK"))
@@ -711,7 +717,7 @@ struct ActiveWorkoutView: View {
 
         self.summaryData = summary
         self.workoutToSummarize = workout
-        self.showSummary = true
+        self.isFinishingWorkout = true
     }
 
     private func cancelWorkout() {

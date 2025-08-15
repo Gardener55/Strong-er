@@ -14,8 +14,17 @@ struct ContentView: View {
     @StateObject private var workoutManager = WorkoutManager()
     @StateObject private var exerciseDatabase = ExerciseDatabase.shared
     @State private var selectedTab = 0
-    @State private var showGettingStarted = false
-    @State private var showingActiveWorkout = false
+
+    // Enum to manage presentation states
+    enum ActiveSheet: Identifiable {
+        case gettingStarted, activeWorkout
+
+        var id: Int {
+            hashValue
+        }
+    }
+
+    @State private var activeSheet: ActiveSheet?
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -59,31 +68,41 @@ struct ContentView: View {
         .environmentObject(userProfileService)
         .environment(\.managedObjectContext, viewContext)
         .onAppear {
-            showGettingStarted = !userProfileService.userProfile.isProfileSetupComplete
+            if !userProfileService.userProfile.isProfileSetupComplete {
+                activeSheet = .gettingStarted
+            }
         }
-        .onChange(of: userProfileService.userProfile.isProfileSetupComplete) {
-            showGettingStarted = !userProfileService.userProfile.isProfileSetupComplete
+        .onChange(of: userProfileService.userProfile.isProfileSetupComplete) { isComplete in
+            if !isComplete {
+                activeSheet = .gettingStarted
+            } else if activeSheet == .gettingStarted {
+                activeSheet = nil
+            }
         }
-        .onChange(of: workoutManager.currentWorkout) {
-             showingActiveWorkout = workoutManager.currentWorkout != nil
+        .onChange(of: workoutManager.currentWorkout) { workout in
+            if workout != nil {
+                activeSheet = .activeWorkout
+            } else if activeSheet == .activeWorkout {
+                activeSheet = nil
+            }
         }
-        .fullScreenCover(isPresented: $showGettingStarted) {
-            GettingStartedView()
-                .environmentObject(userProfileService)
-        }
-        .fullScreenCover(isPresented: $showingActiveWorkout) {
-            if let workout = workoutManager.currentWorkout {
-                ActiveWorkoutView(workout: Binding(
-                    get: { workoutManager.currentWorkout ?? workout },
-                    set: { newWorkout in workoutManager.currentWorkout = newWorkout }
-                ))
-                .environmentObject(workoutManager)
-                .environmentObject(userProfileService)
-                .environmentObject(exerciseDatabase)
-            } else {
-                // This view should ideally not be shown when workout is nil.
-                // But fullScreenCover requires a view.
-                EmptyView()
+        .fullScreenCover(item: $activeSheet) { sheet in
+            switch sheet {
+            case .gettingStarted:
+                GettingStartedView()
+                    .environmentObject(userProfileService)
+            case .activeWorkout:
+                if let workout = workoutManager.currentWorkout {
+                    ActiveWorkoutView(workout: Binding(
+                        get: { workoutManager.currentWorkout ?? workout },
+                        set: { newWorkout in workoutManager.currentWorkout = newWorkout }
+                    ))
+                    .environmentObject(workoutManager)
+                    .environmentObject(userProfileService)
+                    .environmentObject(exerciseDatabase)
+                } else {
+                    EmptyView()
+                }
             }
         }
     }
