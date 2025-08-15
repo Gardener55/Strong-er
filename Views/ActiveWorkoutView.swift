@@ -388,7 +388,7 @@ struct ActiveWorkoutView: View {
     @State private var restTimer: Timer?
     @State private var restTimeRemaining: TimeInterval = 0
     @State private var activeRestSetID: UUID?
-    @State private var audioPlayer: AVPlayer?
+    @State private var audioPlayer: AVAudioPlayer?
 
     enum ActiveSheet: Identifiable {
         case datePicker, exercisePicker, restTimeEditor, exerciseRestTimeEditor
@@ -794,14 +794,14 @@ struct ActiveWorkoutView: View {
     }
 
     private func playSound(named: String) {
-        guard let url = Bundle.main.url(forResource: named, withExtension: "mov") else {
-            print("Error: Sound file not found (\(named).mov)")
+        guard let url = Bundle.main.url(forResource: named, withExtension: "wav") else {
+            print("Error: Sound file not found (\(named).wav)")
             return
         }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
-            audioPlayer = AVPlayer(url: url)
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.play()
         } catch let error {
             print("Error playing sound: \(error.localizedDescription)")

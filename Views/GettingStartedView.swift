@@ -53,6 +53,7 @@ struct WelcomePageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
@@ -98,6 +99,7 @@ struct PersonalInfoPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
@@ -156,6 +158,7 @@ struct VitalsPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
@@ -219,6 +222,7 @@ struct GoalsPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
@@ -262,6 +266,7 @@ struct WeeklyGoalsPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }

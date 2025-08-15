@@ -93,7 +93,7 @@ struct CurrentWorkoutCard: View {
                 Button("Continue") {
                     // Navigate to workout
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(HapticButtonStyle())
             }
             
             Text(workout.name)
