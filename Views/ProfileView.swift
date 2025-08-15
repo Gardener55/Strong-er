@@ -39,8 +39,8 @@ struct ProfileView: View {
                     
                     // Stats Cards
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                        ProfileStatCard(title: "Weight", value: String(format: "%.1f", userProfileService.userProfile.weight) + " kg", icon: "scalemass")
-                        ProfileStatCard(title: "Height", value: String(format: "%.0f", userProfileService.userProfile.height) + " cm", icon: "ruler")
+                        ProfileStatCard(title: "Weight", value: weightString, icon: "scalemass")
+                        ProfileStatCard(title: "Height", value: heightString, icon: "ruler")
                         ProfileStatCard(title: "Age", value: "\(userProfileService.userProfile.age)", icon: "calendar")
                         ProfileStatCard(title: "Weekly Goals", value: "\(userProfileService.userProfile.workoutDaysPerWeek) days", icon: "target")
                     }
@@ -92,6 +92,30 @@ struct ProfileView: View {
             .sheet(isPresented: $showingSettings) {
                 ProfileEditView(profile: $userProfileService.userProfile)
             }
+        }
+    }
+
+    private var weightString: String {
+        let weight = userProfileService.userProfile.weight
+        let unit = userProfileService.userProfile.weightUnit
+        if unit == .pounds {
+            let weightInLbs = weight * 2.20462
+            return String(format: "%.1f lbs", weightInLbs)
+        } else {
+            return String(format: "%.1f kg", weight)
+        }
+    }
+
+    private var heightString: String {
+        let height = userProfileService.userProfile.height
+        let unit = userProfileService.userProfile.weightUnit // Assuming height unit is tied to weight unit
+        if unit == .pounds {
+            let heightInInches = height / 2.54
+            let feet = Int(heightInInches / 12)
+            let inches = Int(heightInInches.truncatingRemainder(dividingBy: 12))
+            return "\(feet) ft \(inches) in"
+        } else {
+            return String(format: "%.0f cm", height)
         }
     }
 }
