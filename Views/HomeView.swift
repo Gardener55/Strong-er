@@ -11,9 +11,9 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @Binding var selectedTab: Int
     @State private var showingAIWorkout = false
     @State private var showingSettings = false
-    @State private var showingActiveWorkout = false
     @State private var showingWorkoutStats = false
     @State private var showingThisWeekHistory = false
 
@@ -25,14 +25,19 @@ struct HomeView: View {
                     MotivationalMessageView()
 
                     if let currentWorkout = workoutManager.currentWorkout {
-                        Button(action: { showingActiveWorkout = true }) {
+                        Button(action: {
+                            // The ContentView now handles showing the active workout
+                        }) {
                             CurrentWorkoutCard(workout: currentWorkout)
                         }
                         .buttonStyle(HapticButtonStyle())
                     }
                     
                     // Quick Actions
-                    QuickActionsView(showingAIWorkout: $showingAIWorkout, showingActiveWorkout: $showingActiveWorkout)
+                    QuickActionsView(
+                        selectedTab: $selectedTab,
+                        showingAIWorkout: $showingAIWorkout
+                    )
                     
                     // Workout Stats
                     WorkoutStatsView(showingWorkoutStats: $showingWorkoutStats, showingThisWeekHistory: $showingThisWeekHistory)
@@ -44,7 +49,7 @@ struct HomeView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Fitness Tracker")
+            .navigationTitle("Home")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -60,15 +65,6 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
-            }
-            .sheet(isPresented: $showingActiveWorkout) {
-                if let workout = workoutManager.currentWorkout {
-                    ActiveWorkoutView(workout: Binding(
-                        get: { workoutManager.currentWorkout ?? workout },
-                        set: { newWorkout in workoutManager.currentWorkout = newWorkout }
-                    ))
-                    .environmentObject(workoutManager)
-                }
             }
             .sheet(isPresented: $showingWorkoutStats) {
                 WorkoutStatisticsView()
@@ -93,7 +89,7 @@ struct CurrentWorkoutCard: View {
                 Button("Continue") {
                     // Navigate to workout
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(HapticButtonStyle())
             }
             
             Text(workout.name)
@@ -125,8 +121,8 @@ struct CurrentWorkoutCard: View {
 
 struct QuickActionsView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @Binding var selectedTab: Int
     @Binding var showingAIWorkout: Bool
-    @Binding var showingActiveWorkout: Bool
     @State private var showingCreateWorkout = false
     
     var body: some View {
@@ -147,7 +143,7 @@ struct QuickActionsView: View {
                 
                 Button(action: { showingCreateWorkout = true }) {
                     QuickActionButton(
-                        title: "Create Workout",
+                        title: "New Workout",
                         icon: "plus.circle",
                         color: Color("ActionBlue")
                     )
@@ -156,7 +152,6 @@ struct QuickActionsView: View {
                 
                 Button(action: {
                     workoutManager.startQuickWorkout()
-                    showingActiveWorkout = true
                 }) {
                     QuickActionButton(
                         title: "Quick Start",
@@ -166,7 +161,7 @@ struct QuickActionsView: View {
                 }
                 .buttonStyle(HapticButtonStyle())
                 
-                NavigationLink(destination: TemplatesView()) {
+                Button(action: { selectedTab = 3 }) {
                     QuickActionButton(
                         title: "Templates",
                         icon: "folder",
@@ -175,7 +170,7 @@ struct QuickActionsView: View {
                 }
                 .buttonStyle(HapticButtonStyle())
 
-                NavigationLink(destination: WorkoutHistoryView()) {
+                Button(action: { selectedTab = 1 }) {
                     QuickActionButton(
                         title: "History",
                         icon: "calendar",
@@ -195,7 +190,7 @@ struct QuickActionsView: View {
             }
         }
         .sheet(isPresented: $showingCreateWorkout) {
-            CreateWorkoutView()
+            CreateWorkoutView(sourceView: .quickActions)
         }
     }
 }
@@ -306,7 +301,7 @@ struct RecentWorkoutsView: View {
             }
             .padding(.bottom, 8)
             
-            LazyVStack(spacing: 12) {
+            VStack(spacing: 12) {
                 ForEach(workoutManager.workoutHistory.sorted { $0.date > $1.date }.prefix(3)) { workout in
                     NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                         RecentWorkoutRow(workout: workout)

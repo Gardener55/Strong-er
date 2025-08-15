@@ -43,14 +43,25 @@ class WorkoutManager: ObservableObject {
     
     func startWorkout(_ workout: Workout) {
         var newWorkout = workout
+        newWorkout.id = UUID() // Assign a new UUID to the new workout
         newWorkout.date = Date()
         newWorkout.isTemplate = false
-        // Reset completion status
-        for i in 0..<newWorkout.exercises.count {
-            for j in 0..<newWorkout.exercises[i].sets.count {
-                newWorkout.exercises[i].sets[j].completed = false
+
+        // Create new exercises with new UUIDs
+        newWorkout.exercises = newWorkout.exercises.map { exercise in
+            var newExercise = exercise
+            newExercise.id = UUID()
+
+            // Create new sets with new UUIDs
+            newExercise.sets = newExercise.sets.map { set in
+                var newSet = set
+                newSet.id = UUID()
+                newSet.completed = false // Reset completion status for the set
+                return newSet
             }
+            return newExercise
         }
+
         currentWorkout = newWorkout
     }
 
@@ -187,9 +198,10 @@ class WorkoutManager: ObservableObject {
         let sortedHistory = workoutHistory.sorted { $0.date < $1.date }
         guard let firstWorkoutDate = sortedHistory.first?.date else { return 0 }
 
-        let weeks = Calendar.current.dateComponents([.weekOfYear], from: firstWorkoutDate, to: Date()).weekOfYear ?? 0
+        let days = Calendar.current.dateComponents([.day], from: firstWorkoutDate, to: Date()).day ?? 0
+        let weeks = (Double(days) / 7.0).rounded(.up)
 
-        return weeks > 0 ? Double(workoutHistory.count) / Double(weeks) : Double(workoutHistory.count)
+        return weeks > 0 ? Double(workoutHistory.count) / weeks : Double(workoutHistory.count)
     }
 
     private func calculateMostCompletedExercise() -> (name: String, count: Int)? {

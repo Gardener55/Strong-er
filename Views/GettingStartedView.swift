@@ -53,6 +53,7 @@ struct WelcomePageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
@@ -98,14 +99,23 @@ struct PersonalInfoPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
 struct VitalsPageView: View {
     @Binding var selection: Int
     @Binding var profile: UserProfile
+    @State private var displayedWeight: Double = 70.0
 
     var body: some View {
         VStack {
@@ -119,7 +129,7 @@ struct VitalsPageView: View {
                     HStack {
                         Text("Weight")
                         Spacer()
-                        TextField("Weight", value: $profile.weight, format: .number)
+                        TextField("Weight", value: $displayedWeight, format: .number)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                     }
@@ -132,8 +142,15 @@ struct VitalsPageView: View {
                             .multilineTextAlignment(.trailing)
                     }
 
-                    Picker("Units", selection: $profile.weightUnit) {
+                    Picker("Weight Units", selection: $profile.weightUnit) {
                         ForEach(UserProfile.WeightUnit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue).tag(unit)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+
+                    Picker("Height Units", selection: $profile.heightUnit) {
+                        ForEach(UserProfile.HeightUnit.allCases, id: \.self) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
                     }
@@ -144,6 +161,11 @@ struct VitalsPageView: View {
             Spacer()
 
             Button(action: {
+                if profile.weightUnit == .pounds {
+                    profile.weight = displayedWeight / 2.20462
+                } else {
+                    profile.weight = displayedWeight
+                }
                 withAnimation {
                     selection = 3
                 }
@@ -156,8 +178,16 @@ struct VitalsPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
@@ -219,6 +249,7 @@ struct GoalsPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
@@ -262,6 +293,7 @@ struct WeeklyGoalsPageView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            .buttonStyle(HapticButtonStyle())
             .padding()
         }
     }
