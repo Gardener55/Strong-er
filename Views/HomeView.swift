@@ -12,6 +12,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @EnvironmentObject var exerciseDatabase: ExerciseDatabase
+    @EnvironmentObject var userProfileService: UserProfileService
     @Binding var selectedTab: Int
     @State private var showingAIWorkout = false
     @State private var showingSettings = false
@@ -41,7 +42,10 @@ struct HomeView: View {
                             destination: ActiveWorkoutView(workout: Binding(
                                 get: { workoutManager.currentWorkout! },
                                 set: { workoutManager.currentWorkout = $0 }
-                            )),
+                            ))
+                            .environmentObject(workoutManager)
+                            .environmentObject(exerciseDatabase)
+                            .environmentObject(userProfileService),
                             isActive: $isQuickWorkoutActive
                         ) {
                             EmptyView()
