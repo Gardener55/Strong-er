@@ -25,61 +25,61 @@ struct CreateWorkoutView: View {
     let sourceView: SourceView
 
     var body: some View {
-        NavigationView {
-            VStack {
-                // Workout Name
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Workout Name")
-                        .font(.headline)
-                    
-                    TextField("Enter workout name", text: $workoutName)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                .padding()
+        VStack {
+            // Workout Name
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Workout Name")
+                    .font(.headline)
                 
-                // Exercise List
-                List {
-                    ForEach(selectedExercises) { exercise in
-                        WorkoutExerciseRow(workoutExercise: exercise) { updatedExercise in
-                            if let index = selectedExercises.firstIndex(where: { $0.id == exercise.id }) {
-                                selectedExercises[index] = updatedExercise
-                            }
+                TextField("Enter workout name", text: $workoutName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding()
+
+            // Exercise List
+            List {
+                ForEach(selectedExercises) { exercise in
+                    WorkoutExerciseRow(workoutExercise: exercise) { updatedExercise in
+                        if let index = selectedExercises.firstIndex(where: { $0.id == exercise.id }) {
+                            selectedExercises[index] = updatedExercise
                         }
                     }
-                    .onDelete(perform: removeExercises)
-                    
-                    // Add Exercise Button
-                    Button(action: { showingExercisePicker = true }) {
-                        HStack {
-                            Image(systemName: "plus.circle")
-                            Text("Add Exercise")
-                        }
-                        .foregroundColor(.blue)
-                    }
-                    .buttonStyle(HapticButtonStyle())
                 }
+                .onDelete(perform: removeExercises)
                 
-                Spacer()
-            }
-            .navigationTitle("New Workout")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
+                // Add Exercise Button
+                Button(action: { showingExercisePicker = true }) {
+                    HStack {
+                        Image(systemName: "plus.circle")
+                        Text("Add Exercise")
                     }
-                    .buttonStyle(HapticButtonStyle())
+                    .foregroundColor(.blue)
                 }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Start") {
-                        startWorkout()
-                    }
-                    .disabled(workoutName.isEmpty || selectedExercises.isEmpty)
-                    .buttonStyle(HapticButtonStyle())
-                }
+                .buttonStyle(HapticButtonStyle())
             }
-            .sheet(isPresented: $showingExercisePicker) {
+
+            Spacer()
+        }
+        .navigationTitle("New Workout")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel") {
+                    dismiss()
+                }
+                .buttonStyle(HapticButtonStyle())
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Start") {
+                    startWorkout()
+                }
+                .disabled(workoutName.isEmpty || selectedExercises.isEmpty)
+                .buttonStyle(HapticButtonStyle())
+            }
+        }
+        .sheet(isPresented: $showingExercisePicker) {
+            NavigationView {
                 ExercisePickerView { exercise in
                     let workoutExercise = WorkoutExercise(exercise: exercise)
                     selectedExercises.append(workoutExercise)
@@ -146,29 +146,27 @@ struct ExercisePickerView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
-                SearchBar(text: $searchText)
-                
-                List(filteredExercises) { exercise in
-                    Button(action: {
-                        onExerciseSelected(exercise)
-                        dismiss()
-                    }) {
-                        ExerciseRow(exercise: exercise)
-                    }
-                    .buttonStyle(HapticButtonStyle())
+        VStack {
+            SearchBar(text: $searchText)
+
+            List(filteredExercises) { exercise in
+                Button(action: {
+                    onExerciseSelected(exercise)
+                    dismiss()
+                }) {
+                    ExerciseRow(exercise: exercise)
                 }
+                .buttonStyle(HapticButtonStyle())
             }
-            .navigationTitle("Select Exercise")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .buttonStyle(HapticButtonStyle())
+        }
+        .navigationTitle("Select Exercise")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Done") {
+                    dismiss()
                 }
+                .buttonStyle(HapticButtonStyle())
             }
         }
     }
@@ -185,42 +183,40 @@ struct ExerciseSetupView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
-                List {
-                    ForEach(Array(workoutExercise.sets.enumerated()), id: \.offset) { index, set in
-                        SetRow(
-                            setNumber: index + 1,
-                            set: set
-                        ) { updatedSet in
-                            workoutExercise.sets[index] = updatedSet
-                        }
+        VStack {
+            List {
+                ForEach(Array(workoutExercise.sets.enumerated()), id: \.offset) { index, set in
+                    SetRow(
+                        setNumber: index + 1,
+                        set: set
+                    ) { updatedSet in
+                        workoutExercise.sets[index] = updatedSet
                     }
-                    .onDelete(perform: removeSets)
-                    
-                    Button("Add Set") {
-                        workoutExercise.sets.append(WorkoutSet())
-                    }
-                    .buttonStyle(HapticButtonStyle())
                 }
+                .onDelete(perform: removeSets)
+
+                Button("Add Set") {
+                    workoutExercise.sets.append(WorkoutSet())
+                }
+                .buttonStyle(HapticButtonStyle())
             }
-            .navigationTitle(workoutExercise.exercise.name)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .buttonStyle(HapticButtonStyle())
+        }
+        .navigationTitle(workoutExercise.exercise.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel") {
+                    dismiss()
                 }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        onSave(workoutExercise)
-                        dismiss()
-                    }
-                    .buttonStyle(HapticButtonStyle())
+                .buttonStyle(HapticButtonStyle())
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Save") {
+                    onSave(workoutExercise)
+                    dismiss()
                 }
+                .buttonStyle(HapticButtonStyle())
             }
         }
     }
