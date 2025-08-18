@@ -24,27 +24,33 @@ private struct RestTimeEditorView: View {
     }
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Text("Update rest time for this set.")
-                    .font(.headline)
+        VStack(spacing: 20) {
+            Text("Update rest time for this set.")
+                .font(.headline)
 
-                TextField("Seconds", text: $newRestTime)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .keyboardType(.numberPad)
-                    .frame(width: 100)
+            TextField("Seconds", text: $newRestTime)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.numberPad)
+                .frame(width: 100)
 
-                Button("Save") {
+            Button("Save") {
+                triggerHapticFeedback()
+                if let time = TimeInterval(newRestTime) {
+                    set.restTime = time
+                }
+                dismiss()
+            }
+            .buttonStyle(HapticButtonStyle())
+        }
+        .navigationTitle("Edit Rest Time")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Cancel") {
                     triggerHapticFeedback()
-                    if let time = TimeInterval(newRestTime) {
-                        set.restTime = time
-                    }
                     dismiss()
                 }
                 .buttonStyle(HapticButtonStyle())
             }
-            .navigationTitle("Edit Rest Time")
-            .navigationBarItems(trailing: Button("Cancel") { triggerHapticFeedback(); dismiss() }.buttonStyle(HapticButtonStyle()))
         }
     }
 }
@@ -65,31 +71,37 @@ private struct ExerciseRestTimeEditorView: View {
     }
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Text("Update rest time for all sets in this exercise.")
-                    .font(.headline)
+        VStack(spacing: 20) {
+            Text("Update rest time for all sets in this exercise.")
+                .font(.headline)
 
-                TextField("Seconds", text: $newRestTime)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .keyboardType(.numberPad)
-                    .frame(width: 100)
+            TextField("Seconds", text: $newRestTime)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.numberPad)
+                .frame(width: 100)
 
-                Button("Save") {
-                    triggerHapticFeedback()
-                    if let time = TimeInterval(newRestTime) {
-                        exercise.restTime = time
-                        // Also update all existing sets for this exercise
-                        for i in 0..<exercise.sets.count {
-                            exercise.sets[i].restTime = time
-                        }
+            Button("Save") {
+                triggerHapticFeedback()
+                if let time = TimeInterval(newRestTime) {
+                    exercise.restTime = time
+                    // Also update all existing sets for this exercise
+                    for i in 0..<exercise.sets.count {
+                        exercise.sets[i].restTime = time
                     }
+                }
+                dismiss()
+            }
+            .buttonStyle(HapticButtonStyle())
+        }
+        .navigationTitle("Edit Exercise Rest Time")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Cancel") {
+                    triggerHapticFeedback()
                     dismiss()
                 }
                 .buttonStyle(HapticButtonStyle())
             }
-            .navigationTitle("Edit Exercise Rest Time")
-            .navigationBarItems(trailing: Button("Cancel") { triggerHapticFeedback(); dismiss() }.buttonStyle(HapticButtonStyle()))
         }
     }
 }
@@ -460,46 +472,46 @@ struct ActiveWorkoutView: View {
     }
 
     var body: some View {
-        NavigationView {
-            VStack {
-                headerView
-                exerciseListView
-                bottomButtonsView
-            }
-            .navigationTitle("Active Workout")
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear(perform: initializeWorkout)
-            .sheet(item: $activeSheet) { sheet in
+        VStack {
+            headerView
+            exerciseListView
+            bottomButtonsView
+        }
+        .navigationTitle("Active Workout")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: initializeWorkout)
+        .sheet(item: $activeSheet) { sheet in
+            NavigationView {
                 sheetView(for: sheet)
             }
-            .sheet(isPresented: $showSummary) {
-                PostWorkoutSummaryView(
-                    workout: workoutToSummarize ?? workout,
-                    summaryData: summaryData ?? ([], []),
-                    dismissAction: {
-                        self.showSummary = false
-                        // This will dismiss the ActiveWorkoutView
-                        self.dismiss()
-                    }
-                )
-            }
-            .onTapGesture {
-                hideKeyboard()
-            }
-            .onChange(of: showingAlert) { newValue in
-                if !newValue && isFinishingWorkout {
-                    showSummary = true
+        }
+        .sheet(isPresented: $showSummary) {
+            PostWorkoutSummaryView(
+                workout: workoutToSummarize ?? workout,
+                summaryData: summaryData ?? ([], []),
+                dismissAction: {
+                    self.showSummary = false
+                    // This will dismiss the ActiveWorkoutView
+                    self.dismiss()
                 }
+            )
+        }
+        .onTapGesture {
+            hideKeyboard()
+        }
+        .onChange(of: showingAlert) { newValue in
+            if !newValue && isFinishingWorkout {
+                showSummary = true
             }
-            .alert(isPresented: $showingAlert) {
-                let primaryButton = alertInfo?.primaryButton ?? .default(Text("OK"))
-                let secondaryButton = alertInfo?.secondaryButton
+        }
+        .alert(isPresented: $showingAlert) {
+            let primaryButton = alertInfo?.primaryButton ?? .default(Text("OK"))
+            let secondaryButton = alertInfo?.secondaryButton
 
-                if let secondaryButton = secondaryButton {
-                    return Alert(title: Text(alertInfo?.title ?? ""), message: Text(alertInfo?.message ?? ""), primaryButton: primaryButton, secondaryButton: secondaryButton)
-                } else {
-                    return Alert(title: Text(alertInfo?.title ?? ""), message: Text(alertInfo?.message ?? ""), dismissButton: primaryButton)
-                }
+            if let secondaryButton = secondaryButton {
+                return Alert(title: Text(alertInfo?.title ?? ""), message: Text(alertInfo?.message ?? ""), primaryButton: primaryButton, secondaryButton: secondaryButton)
+            } else {
+                return Alert(title: Text(alertInfo?.title ?? ""), message: Text(alertInfo?.message ?? ""), dismissButton: primaryButton)
             }
         }
     }
